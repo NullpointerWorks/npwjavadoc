@@ -29,8 +29,9 @@ public class Field
 		adds=new ArrayList<Additional>();
 		setAdditional("Value",v);
 	}
-	
+
 	public void setModifier(String m) {mods=m;}
+	public void setValue(String v) {value=v;}
 	public void setDescription(String d) {desc = d;}
 	public void setAdditional(String t, String s) 
 	{

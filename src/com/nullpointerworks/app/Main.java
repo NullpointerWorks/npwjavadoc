@@ -1,4 +1,16 @@
-package com.nullpointerworks.javadoc.core;
+package com.nullpointerworks.app;
+
+import com.nullpointerworks.javadoc.core.DrawCanvas;
+import com.nullpointerworks.javadoc.core.Key;
+import com.nullpointerworks.javadoc.core.ModuleCore;
+import com.nullpointerworks.javadoc.core.Monitor;
+import com.nullpointerworks.javadoc.core.PackageCore;
+import com.nullpointerworks.javadoc.core.PackageCoreBuffer;
+import com.nullpointerworks.javadoc.core.PackageCoreBufferCon;
+import com.nullpointerworks.javadoc.core.PackageCoreInput;
+import com.nullpointerworks.javadoc.core.PanelCanvas;
+import com.nullpointerworks.javadoc.core.Window;
+import com.nullpointerworks.javadoc.core.WindowMode;
 
 public class Main
 {
