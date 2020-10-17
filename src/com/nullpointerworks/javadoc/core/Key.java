@@ -56,7 +56,6 @@ public class Key implements GenericMaker
 		fm.addField(getRIGHT());
 		fm.addField(getUP());
 		fm.addField(getLEFT());
-		
 		fm.addField(getNum0());
 		fm.addField(getNum1());
 		fm.addField(getNum2());
@@ -67,6 +66,33 @@ public class Key implements GenericMaker
 		fm.addField(getNum7());
 		fm.addField(getNum8());
 		fm.addField(getNum9());
+
+		fm.addField(getA());
+		fm.addField(getB());
+		fm.addField(getC());
+		fm.addField(getD());
+		fm.addField(getE());
+		fm.addField(getF());
+		fm.addField(getG());
+		fm.addField(getH());
+		fm.addField(getI());
+		fm.addField(getJ());
+		fm.addField(getK());
+		fm.addField(getL());
+		fm.addField(getM());
+		fm.addField(getN());
+		fm.addField(getO());
+		fm.addField(getP());
+		fm.addField(getQ());
+		fm.addField(getR());
+		fm.addField(getS());
+		fm.addField(getT());
+		fm.addField(getU());
+		fm.addField(getV());
+		fm.addField(getW());
+		fm.addField(getX());
+		fm.addField(getY());
+		fm.addField(getZ());
 		
 		try
 		{
@@ -387,6 +413,239 @@ public class Key implements GenericMaker
 		return f;
 	}
 	
+	Field getA()
+	{
+		Field f = new Field("int", "A", "65");
+		f.setModifier("final static");
+		f.setDescription("");
+		f.setSince("1.0.0");
+		return f;
+	}
+	
+	Field getB()
+	{
+		Field f = new Field("int", "B", "66");
+		f.setModifier("final static");
+		f.setDescription("");
+		f.setSince("1.0.0");
+		return f;
+	}
+	
+	Field getC()
+	{
+		Field f = new Field("int", "C", "67");
+		f.setModifier("final static");
+		f.setDescription("");
+		f.setSince("1.0.0");
+		return f;
+	}
+	
+	Field getD()
+	{
+		Field f = new Field("int", "D", "68");
+		f.setModifier("final static");
+		f.setDescription("");
+		f.setSince("1.0.0");
+		return f;
+	}
+	
+	Field getE()
+	{
+		Field f = new Field("int", "E", "69");
+		f.setModifier("final static");
+		f.setDescription("");
+		f.setSince("1.0.0");
+		return f;
+	}
+	
+	Field getF()
+	{
+		Field f = new Field("int", "F", "70");
+		f.setModifier("final static");
+		f.setDescription("");
+		f.setSince("1.0.0");
+		return f;
+	}
+	
+	Field getG()
+	{
+		Field f = new Field("int", "G", "71");
+		f.setModifier("final static");
+		f.setDescription("");
+		f.setSince("1.0.0");
+		return f;
+	}
+	
+	Field getH()
+	{
+		Field f = new Field("int", "H", "72");
+		f.setModifier("final static");
+		f.setDescription("");
+		f.setSince("1.0.0");
+		return f;
+	}
+	
+	Field getI()
+	{
+		Field f = new Field("int", "I", "73");
+		f.setModifier("final static");
+		f.setDescription("");
+		f.setSince("1.0.0");
+		return f;
+	}
+	
+	Field getJ()
+	{
+		Field f = new Field("int", "J", "74");
+		f.setModifier("final static");
+		f.setDescription("");
+		f.setSince("1.0.0");
+		return f;
+	}
+	
+	Field getK()
+	{
+		Field f = new Field("int", "K", "75");
+		f.setModifier("final static");
+		f.setDescription("");
+		f.setSince("1.0.0");
+		return f;
+	}
+	
+	Field getL()
+	{
+		Field f = new Field("int", "L", "76");
+		f.setModifier("final static");
+		f.setDescription("");
+		f.setSince("1.0.0");
+		return f;
+	}
+	
+	Field getM()
+	{
+		Field f = new Field("int", "M", "77");
+		f.setModifier("final static");
+		f.setDescription("");
+		f.setSince("1.0.0");
+		return f;
+	}
+	
+	Field getN()
+	{
+		Field f = new Field("int", "N", "78");
+		f.setModifier("final static");
+		f.setDescription("");
+		f.setSince("1.0.0");
+		return f;
+	}
+	
+	Field getO()
+	{
+		Field f = new Field("int", "O", "79");
+		f.setModifier("final static");
+		f.setDescription("");
+		f.setSince("1.0.0");
+		return f;
+	}
+	
+	Field getP()
+	{
+		Field f = new Field("int", "P", "80");
+		f.setModifier("final static");
+		f.setDescription("");
+		f.setSince("1.0.0");
+		return f;
+	}
+	
+	Field getQ()
+	{
+		Field f = new Field("int", "Q", "81");
+		f.setModifier("final static");
+		f.setDescription("");
+		f.setSince("1.0.0");
+		return f;
+	}
+	
+	Field getR()
+	{
+		Field f = new Field("int", "R", "82");
+		f.setModifier("final static");
+		f.setDescription("");
+		f.setSince("1.0.0");
+		return f;
+	}
+	
+	Field getS()
+	{
+		Field f = new Field("int", "S", "83");
+		f.setModifier("final static");
+		f.setDescription("");
+		f.setSince("1.0.0");
+		return f;
+	}
+	
+	Field getT()
+	{
+		Field f = new Field("int", "T", "84");
+		f.setModifier("final static");
+		f.setDescription("");
+		f.setSince("1.0.0");
+		return f;
+	}
+	
+	Field getU()
+	{
+		Field f = new Field("int", "U", "85");
+		f.setModifier("final static");
+		f.setDescription("");
+		f.setSince("1.0.0");
+		return f;
+	}
+	
+	Field getV()
+	{
+		Field f = new Field("int", "V", "86");
+		f.setModifier("final static");
+		f.setDescription("");
+		f.setSince("1.0.0");
+		return f;
+	}
+	
+	Field getW()
+	{
+		Field f = new Field("int", "W", "87");
+		f.setModifier("final static");
+		f.setDescription("");
+		f.setSince("1.0.0");
+		return f;
+	}
+	
+	Field getX()
+	{
+		Field f = new Field("int", "X", "88");
+		f.setModifier("final static");
+		f.setDescription("");
+		f.setSince("1.0.0");
+		return f;
+	}
+	
+	Field getY()
+	{
+		Field f = new Field("int", "Y", "89");
+		f.setModifier("final static");
+		f.setDescription("");
+		f.setSince("1.0.0");
+		return f;
+	}
+	
+	Field getZ()
+	{
+		Field f = new Field("int", "Z", "90");
+		f.setModifier("final static");
+		f.setDescription("");
+		f.setSince("1.0.0");
+		return f;
+	}
 	
 	
 	
