@@ -2,6 +2,7 @@ package com.nullpointerworks.app;
 
 import com.nullpointerworks.javadoc.core.DrawCanvas;
 import com.nullpointerworks.javadoc.core.Key;
+import com.nullpointerworks.javadoc.core.KeyboardInput;
 import com.nullpointerworks.javadoc.core.ModuleCore;
 import com.nullpointerworks.javadoc.core.Monitor;
 import com.nullpointerworks.javadoc.core.PackageCore;
@@ -38,8 +39,8 @@ public class Main
 		PackageCoreBufferCon.build(core);	// package	com.nullpointerworks.core.buffer.concurrency
 		
 		PackageCoreInput.build(core);		// package	com.nullpointerworks.core.input
-			Key.build(core);		// todo
-		
+			Key.build(core);		// done
+			KeyboardInput.build(core);
 		
 		
 		
