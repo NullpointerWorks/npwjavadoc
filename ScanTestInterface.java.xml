@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<source>
+	<name>ScanTestInterface.java</name>
+	<package>com.nullpointerworks.scanner</package>
+	<commentary>
+		<author>Michiel</author>
+	</commentary>
+	<interface>
+		<name>ScanTestInterface</name>
+		<commentary>
+			valid commentary
+			<return></return>
+		</commentary>
+		<method>
+			<name>getWidth</name>
+			<returns>int</returns>
+		</method>
+		<method>
+			<name>getHeight</name>
+			<returns>int</returns>
+		</method>
+		<commentary>
+			a default method
+			<return></return>
+		</commentary>
+		<method>
+			<name>getDepth</name>
+			<returns>int</returns>
+			<modifiers>default</modifiers>
+		</method>
+	</interface>
+</source>

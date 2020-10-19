@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<source>
+	<name>ScanTestEnum.java</name>
+	<package>com.nullpointerworks.scanner</package>
+	<commentary>
+		<author>Michiel</author>
+	</commentary>
+	<enum>
+		<name>ScanTestEnum</name>
+		<commentary/>
+		<commentary/>
+	</enum>
+</source>

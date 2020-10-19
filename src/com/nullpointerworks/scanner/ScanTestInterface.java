@@ -1,5 +1,10 @@
 package com.nullpointerworks.scanner;
 
+/**
+ * 
+ * @author Michiel
+ *
+ */
 public interface ScanTestInterface 
 {
 	/**

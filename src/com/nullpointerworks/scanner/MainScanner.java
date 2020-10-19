@@ -19,7 +19,9 @@ public class MainScanner
 	{
 		//args = new String[] {JAVA_GIT+"libcore/src/module-info.java"};
 		//args = new String[] {JAVA_GIT+"libcore/src/com/nullpointerworks/core/DrawCanvas.java"};
-		args = new String[] {"/src/com/nullpointerworks/scanner/ScanTestInterface.java"};
+		args = new String[] {"src/com/nullpointerworks/scanner/ScanTestInterface.java", 
+							 "src/com/nullpointerworks/scanner/ScanTestClass.java", 
+							 "src/com/nullpointerworks/scanner/ScanTestEnum.java"};
 		
 		new MainScanner(args);
 	}
@@ -27,21 +29,36 @@ public class MainScanner
 	boolean isCommentary;
 	boolean isModule;
 	boolean isInterface;
+	boolean isClass;
+	boolean isEnum;
+	boolean isField;
+	boolean isMethod;
 	Document doc;
 	Element root;
 	
 	public MainScanner(String[] args) 
 	{
-		/*
-		 * prepare xml document
-		 */
-		doc = new Document();
-		root = new Element("source");
-		doc.setRootElement(root);
+		for (String file : args)
+		{
+			doc = new Document();
+			root = new Element("source");
+			doc.setRootElement(root);
+			
+			isCommentary = false;
+			isModule = false;
+			isInterface = false;
+			isClass = false;
+			isEnum = false;
+			isField = false;
+			isMethod = false;
+			
+			scanFile(file);
+		}
+	}
+	
+	public void scanFile(String args)
+	{
 		Element construct = null;
-		isCommentary = false;
-		isModule = false;
-		isInterface = false;
 		
 		/*
 		 * read text file
@@ -49,7 +66,7 @@ public class MainScanner
 		TextFile tf = null;
 		try 
 		{
-			tf = TextFileParser.file(args[0]);
+			tf = TextFileParser.file(args);
 		} 
 		catch (FileNotFoundException e) 
 		{
@@ -59,11 +76,27 @@ public class MainScanner
 		String[] lines = tf.getLines();
 		
 		/*
+		 * store filename
+		 */
+		int lastindex = args.lastIndexOf("/");
+		String filename = args.substring(lastindex+1);
+		root.addChild(new Element("name").setText(filename));
+		
+		/*
 		 * loop through source code
 		 */
 		for (int i=0,l=lines.length; i<l; i++)
 		{
 			String line = lines[i].trim();
+			
+			/*
+			 * check for package
+			 */
+			if (line.startsWith("package "))
+			{
+				String pack = line.substring( 8, line.length()-1 );
+				root.addChild(new Element("package").setText(pack));
+			}
 			
 			/*
 			 * commentary block
@@ -73,16 +106,6 @@ public class MainScanner
 				isCommentary=true;
 				construct = new Element("commentary");
 				root.addChild(construct);
-			}
-			if (isCommentary)
-			{
-				if (line.endsWith("*/"))
-				{
-					construct = null;
-					isCommentary = false;
-					continue;
-				}
-				checkCommentLine(construct, line);
 			}
 			
 			/*
@@ -94,6 +117,62 @@ public class MainScanner
 				construct = new Element("module");
 				construct.addChild(new Element("name").setText(line.substring(7)));
 				root.addChild(construct);
+			}
+			
+			if (line.startsWith("public "))
+			{
+				String pub = line.substring(7);
+				/*
+				 * class block
+				 */
+				if (pub.contains("class "))
+				{
+					isClass = true;
+					construct = new Element("class");
+					int lastIndex = pub.lastIndexOf(" ")+1;
+					construct.addChild(new Element("name").setText(pub.substring(lastIndex)));
+					
+					int firstIndex = pub.indexOf(" ");
+					construct.addChild(new Element("modifiers").setText(pub.substring(0,firstIndex)));
+					
+					root.addChild(construct);
+				}
+				
+				/*
+				 * interface block
+				 */
+				if (pub.contains("interface "))
+				{
+					isInterface = true;
+					construct = new Element("interface");
+					int lastIndex = pub.lastIndexOf(" ")+1;
+					construct.addChild(new Element("name").setText(pub.substring(lastIndex)));
+					root.addChild(construct);
+				}
+				
+				/*
+				 * enum block
+				 */
+				if (pub.contains("enum "))
+				{
+					isEnum = true;
+					construct = new Element("enum");
+					int lastIndex = line.lastIndexOf(" ")+1;
+					construct.addChild(new Element("name").setText(line.substring(lastIndex)));
+					root.addChild(construct);
+				}
+				
+			}
+			
+			if (isCommentary)
+			{
+				if (line.endsWith("*/"))
+				{
+					construct = null;
+					isCommentary = false;
+					continue;
+				}
+				checkCommentLine(construct, line);
 			}
 			if (isModule)
 			{
@@ -121,26 +200,21 @@ public class MainScanner
 					construct.addChild(exp);
 				}
 			}
-			
-			/*
-			 * interface block
-			 */
-			if (line.startsWith("public interface "))
-			{
-				isInterface = true;
-				construct = new Element("interface");
-				construct.addChild(new Element("name").setText(line.substring(17)));
-				root.addChild(construct);
-			}
 			if (isInterface)
 			{
-				i = scanInterface(construct, i, lines);
+				i = scanCodeBlock(construct, i, lines);
+				isInterface = false;
 			}
-			
-			
-			
-			
-			
+			if (isClass)
+			{
+				i = scanCodeBlock(construct, i, lines);
+				isClass = false;
+			}
+			if (isEnum)
+			{
+				i = scanEnum(construct, i, lines);
+				isEnum = false;
+			}
 			
 		} // end line loop
 		
@@ -149,15 +223,50 @@ public class MainScanner
 		 */
 		try 
 		{
-			DocumentIO.write(doc, "test.xml", FormatBuilder.getPrettyFormat());
+			DocumentIO.write(doc, filename+".xml", FormatBuilder.getPrettyFormat());
 		} 
 		catch (IOException e) 
 		{
 			e.printStackTrace();
 		}
 	}
+	
+	private int scanEnum(Element root, int i, String[] lines) 
+	{
+		Element construct = null;
+		for (int l=lines.length; i<l; i++)
+		{
+			String line = lines[i].trim();
+			if (line.startsWith("//")) continue;
+			
+			/*
+			 * commentary block
+			 */
+			if (line.startsWith("/**"))
+			{
+				isCommentary = true;
+				construct = new Element("commentary");
+				root.addChild(construct);
+			}
+			if (isCommentary)
+			{
+				if (line.endsWith("*/"))
+				{
+					construct = null;
+					isCommentary = false;
+					continue;
+				}
+				checkCommentLine(construct, line);
+			}
+			
+			
+			
+			
+		}
+		return i;
+	}
 
-	private int scanInterface(Element root, int i, String[] lines) 
+	private int scanCodeBlock(Element root, int i, String[] lines) 
 	{
 		Element construct = null;
 		int braceTracker = 1; // account for first opening brace
@@ -165,6 +274,7 @@ public class MainScanner
 		{
 			String line = lines[i].trim();
 			
+			if (line.startsWith("//")) continue;
 			if (line.contains("{")) braceTracker++;
 			if (line.contains("}")) braceTracker--;
 			if (braceTracker<1) break;
@@ -192,38 +302,52 @@ public class MainScanner
 			/*
 			 * method scan
 			 */
-			if ( hasPrimitive(line) )
+			if (line.contains("(") && line.contains(")"))
 			{
+				isMethod = true;
+				construct = new Element("method");
+				String[] tokens = line.split("\\(");
 				
+				/*
+				 * check modifiers
+				 */
+				String modifiers = tokens[0];
+				// find method name
+				int lastindex = modifiers.lastIndexOf(" ");
+				String name = modifiers.substring(lastindex+1);
+				construct.addChild(new Element("name").setText(name));
 				
+				// find method return type
+				modifiers = modifiers.substring(0,lastindex).trim();
+				lastindex = modifiers.lastIndexOf(" ");
+				String ret = modifiers.substring(lastindex+1);
+				construct.addChild(new Element("returns").setText(ret));
+				
+				// find modifiers
+				if (lastindex > 0)
+				{
+					modifiers = modifiers.substring(0,lastindex);
+					construct.addChild(new Element("modifiers").setText(modifiers));
+				}
+				
+				/*
+				 * check parameters
+				 */
+				lastindex = tokens[1].indexOf(")");
+				String parameters = tokens[1].substring(0,lastindex);
+				if (parameters.length()>0)
+				{
+					String[] params = parameters.split(",");
+					for (String p : params)
+					{
+						construct.addChild(new Element("param").setText(p));
+					}
+				}
+				root.addChild(construct);
 			}
 			
 		}
 		return i;
-	}
-
-	private boolean hasPrimitive(String line) 
-	{
-		// primitive data types
-		if (line.startsWith("void ")) return true;
-		if (line.startsWith("char ")) return true;
-		if (line.startsWith("byte ")) return true;
-		if (line.startsWith("short ")) return true;
-		if (line.startsWith("int ")) return true;
-		if (line.startsWith("long ")) return true;
-		if (line.startsWith("float ")) return true;
-		if (line.startsWith("double ")) return true;
-		
-		// not really primitives, but still relevant
-		if (line.startsWith("Void ")) return true;
-		if (line.startsWith("Byte ")) return true;
-		if (line.startsWith("Short ")) return true;
-		if (line.startsWith("Integer ")) return true;
-		if (line.startsWith("Long ")) return true;
-		if (line.startsWith("Float ")) return true;
-		if (line.startsWith("Double ")) return true;
-		
-		return false;
 	}
 	
 	private void checkCommentLine(Element construct, String line) 
@@ -233,6 +357,9 @@ public class MainScanner
 		
 		if (line.startsWith("* "))
 			line = line.substring(2);
+		else
+		if (line.startsWith("*"))
+			line = line.substring(1);
 		
 		if (line.contains("<br>"))
 			line = line.replace("<br>", "");
@@ -285,3 +412,4 @@ public class MainScanner
 		}
 	}
 }
+
