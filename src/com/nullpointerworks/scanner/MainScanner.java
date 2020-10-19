@@ -258,12 +258,25 @@ public class MainScanner
 				}
 				checkCommentLine(construct, line);
 			}
-			
-			
-			
-			
+			else
+			if (line.length()>0)
+			{
+				String[] enums = line.split(",");
+				for (String e : enums)
+				{
+					if (!validLettering(e)) continue;
+					Element en = new Element("value");
+					en.setText(e);
+					root.addChild(en);
+				}
+			}
 		}
 		return i;
+	}
+	
+	private boolean validLettering(String line)
+	{
+		return line.matches("^[a-zA-Z_0-9]+$");
 	}
 
 	private int scanCodeBlock(Element root, int i, String[] lines) 

@@ -8,6 +8,8 @@
 	<enum>
 		<name>ScanTestEnum</name>
 		<commentary/>
+		<value>ONE</value>
 		<commentary/>
+		<value>TWO</value>
 	</enum>
 </source>
