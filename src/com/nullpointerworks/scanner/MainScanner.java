@@ -18,11 +18,12 @@ public class MainScanner
 	public static void main(String[] args) 
 	{
 		//args = new String[] {JAVA_GIT+"libcore/src/module-info.java"};
-		args = new String[] {JAVA_GIT+"libcore/src/com/nullpointerworks/core/DrawCanvas.java"};
+		//args = new String[] {JAVA_GIT+"libcore/src/com/nullpointerworks/core/DrawCanvas.java"};
+		args = new String[] {"/src/com/nullpointerworks/scanner/ScanTestInterface.java"};
 		
 		new MainScanner(args);
 	}
-
+	
 	boolean isCommentary;
 	boolean isModule;
 	boolean isInterface;
