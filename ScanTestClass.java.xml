@@ -5,6 +5,11 @@
 	<class>
 		<name>ScanTestClass</name>
 		<modifiers>abstract</modifiers>
+		<commentary>a variable</commentary>
+		<commentary>
+			main
+			<param>args</param>
+		</commentary>
 		<method>
 			<name>main</name>
 			<returns>void</returns>

@@ -359,6 +359,21 @@ public class MainScanner
 				root.addChild(construct);
 			}
 			
+			/*
+			 * field scan
+			 */
+			else
+			{
+				
+				
+				
+				
+				
+				
+				
+				
+			}
+			
 		}
 		return i;
 	}
