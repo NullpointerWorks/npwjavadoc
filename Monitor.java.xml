@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<source>
+	<name>Monitor.java</name>
+	<package>com.nullpointerworks.core</package>
+	<commentary>
+		Provides access the host PC's graphics environment to gain access to its connected monitors.
+		<author>Michiel Drost - Nullpointer Works</author>
+		<since>1.0.0</since>
+	</commentary>
+	<class>
+		<name>Monitor</name>
+		<modifiers>class</modifiers>
+		<commentary>
+			Returns a Monitor object with the details of the selected display device.
+			<param>id is the monitor identity on the host OS. Provide the identity - 1.</param>
+			<return>a Monitor object with the details of the selected display device</return>
+			<since>1.0.0</since>
+		</commentary>
+		<method>
+			<name>getDisplay</name>
+			<returns>Monitor</returns>
+			<modifiers>public static</modifiers>
+			<param>int id</param>
+		</method>
+		<commentary>
+			Returns an array of Monitor objects for each connected monitor.
+			<return>an array of Monitor objects for each connected monitor</return>
+			<since>1.0.0</since>
+		</commentary>
+		<method>
+			<name>getDisplay</name>
+			<returns>Monitor[]</returns>
+			<modifiers>public static</modifiers>
+		</method>
+		<commentary>
+			Returns the host's graphics environment associated with the monitor.
+			<return>the host's graphics environment associated with the monitor</return>
+			<since>1.0.0</since>
+		</commentary>
+		<method>
+			<name>getGraphicsEnvironment</name>
+			<returns>GraphicsEnvironment</returns>
+			<modifiers>public</modifiers>
+		</method>
+		<commentary>
+			Returns the host's graphics device associated with the monitor.
+			<return>the host's graphics device associated with the monitor</return>
+			<since>1.0.0</since>
+		</commentary>
+		<method>
+			<name>getGraphicsDevice</name>
+			<returns>GraphicsDevice</returns>
+			<modifiers>public</modifiers>
+		</method>
+		<commentary>
+			Returns the display mode for this monitor. This contains bit depth, width, height, etc.
+			<return>the display mode for this monitor</return>
+			<since>1.0.0</since>
+		</commentary>
+		<method>
+			<name>getDisplayMode</name>
+			<returns>DisplayMode</returns>
+			<modifiers>public</modifiers>
+		</method>
+		<commentary>
+			Returns the width in pixels of the display.
+			<return>the width in pixels</return>
+			<since>1.0.0</since>
+		</commentary>
+		<method>
+			<name>getWidth</name>
+			<returns>int</returns>
+			<modifiers>public</modifiers>
+		</method>
+		<method>
+			<name>dm.getWidth</name>
+			<returns>{return</returns>
+		</method>
+		<commentary>
+			Returns the height in pixels of the display.
+			<return>the height in pixels</return>
+			<since>1.0.0</since>
+		</commentary>
+		<method>
+			<name>getHeight</name>
+			<returns>int</returns>
+			<modifiers>public</modifiers>
+		</method>
+		<method>
+			<name>dm.getHeight</name>
+			<returns>{return</returns>
+		</method>
+		<commentary>
+			Returns the device ID on the host OS.
+			<return>the device ID on the host OS</return>
+			<since>1.0.0</since>
+		</commentary>
+		<method>
+			<name>getDeviceID</name>
+			<returns>int</returns>
+			<modifiers>public</modifiers>
+		</method>
+	</class>
+</source>

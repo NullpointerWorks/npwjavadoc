@@ -6,6 +6,23 @@
 		<name>ScanTestClass</name>
 		<modifiers>abstract</modifiers>
 		<commentary>a variable</commentary>
+		<field>
+			<name>testInteger1</name>
+			<type>double</type>
+			<modifiers>public static</modifiers>
+			<data>0d</data>
+		</field>
+		<field>
+			<name>testInteger2</name>
+			<type>int</type>
+			<modifiers>public static</modifiers>
+			<data>0xff</data>
+		</field>
+		<field>
+			<name>testInteger3</name>
+			<type>int</type>
+			<modifiers>public</modifiers>
+		</field>
 		<commentary>
 			main
 			<param>args</param>

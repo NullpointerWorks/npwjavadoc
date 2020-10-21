@@ -6,7 +6,9 @@ public abstract class ScanTestClass
 	/**
 	 * a variable
 	 */
-	public static int testInteger = 0;
+	public static double testInteger1 = 0d;
+	public static int testInteger2 = 0xff;
+	public int testInteger3;
 	
 	/**
 	 * main
@@ -14,7 +16,7 @@ public abstract class ScanTestClass
 	 */
 	public static void main(String[] args) 
 	{
-		
+		int var = 0;
 	}
 	
 	/**
@@ -27,7 +29,7 @@ public abstract class ScanTestClass
 	 */
 	public void someOtherMethod()
 	{
-		
+		return;
 	}
 	
 }

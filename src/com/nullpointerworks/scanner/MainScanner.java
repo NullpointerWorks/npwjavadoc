@@ -18,10 +18,13 @@ public class MainScanner
 	public static void main(String[] args) 
 	{
 		//args = new String[] {JAVA_GIT+"libcore/src/module-info.java"};
-		//args = new String[] {JAVA_GIT+"libcore/src/com/nullpointerworks/core/DrawCanvas.java"};
+		args = new String[] {JAVA_GIT+"libcore/src/com/nullpointerworks/core/Monitor.java"};
+		
+		/*
 		args = new String[] {"src/com/nullpointerworks/scanner/ScanTestInterface.java", 
 							 "src/com/nullpointerworks/scanner/ScanTestClass.java", 
 							 "src/com/nullpointerworks/scanner/ScanTestEnum.java"};
+		//*/
 		
 		new MainScanner(args);
 	}
@@ -282,7 +285,7 @@ public class MainScanner
 	private int scanCodeBlock(Element root, int i, String[] lines) 
 	{
 		Element construct = null;
-		int braceTracker = 1; // account for first opening brace
+		int braceTracker = 0; // account for first opening brace
 		for (int l=lines.length; i<l; i++)
 		{
 			String line = lines[i].trim();
@@ -290,7 +293,7 @@ public class MainScanner
 			if (line.startsWith("//")) continue;
 			if (line.contains("{")) braceTracker++;
 			if (line.contains("}")) braceTracker--;
-			if (braceTracker<1) break;
+			if (braceTracker<0) break;
 			
 			/*
 			 * commentary block
@@ -315,9 +318,10 @@ public class MainScanner
 			/*
 			 * method scan
 			 */
-			if (line.contains("(") && line.contains(")"))
+			if (line.contains("(") && line.contains(")") && braceTracker==1)
 			{
-				isMethod = true;
+				if (line.contains("private")) continue;
+				
 				construct = new Element("method");
 				String[] tokens = line.split("\\(");
 				
@@ -358,20 +362,37 @@ public class MainScanner
 				}
 				root.addChild(construct);
 			}
-			
+			else
 			/*
 			 * field scan
 			 */
-			else
+			if (line.endsWith(";") && braceTracker==1)
 			{
+				line = line.substring(0,line.length()-1);
+				String[] fielddata = line.split("=");
+				String fieldtype = fielddata[0].trim();
 				
+				int lastindex = fieldtype.lastIndexOf(" ");
+				String varName = fieldtype.substring(lastindex+1);
+				fieldtype = fieldtype.substring(0,lastindex);
+				lastindex = fieldtype.lastIndexOf(" ");
+				String varType = fieldtype.substring(lastindex+1);
+				String varMod = fieldtype.substring(0,lastindex);
 				
+				if (varMod.contains("private")) continue;
 				
+				construct = new Element("field");
+				construct.addChild( new Element("name").setText(varName) );
+				construct.addChild( new Element("type").setText(varType) );
+				construct.addChild( new Element("modifiers").setText(varMod) );
 				
-				
-				
-				
-				
+				// parse data
+				if (fielddata.length > 1)
+				{
+					String data = fielddata[1].trim();
+					construct.addChild( new Element("data").setText(data) );
+				}
+				root.addChild(construct);
 			}
 			
 		}
