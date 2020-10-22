@@ -11,6 +11,19 @@ public abstract class ScanTestClass
 	public int testInteger3;
 	
 	/**
+	 * 
+	 */
+	public ScanTestClass()
+	{
+		
+	}
+	
+	protected ScanTestClass(int t)
+	{
+		
+	}
+	
+	/**
 	 * main
 	 * @param args
 	 */

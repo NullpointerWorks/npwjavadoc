@@ -72,10 +72,6 @@
 			<returns>int</returns>
 			<modifiers>public</modifiers>
 		</method>
-		<method>
-			<name>dm.getWidth</name>
-			<returns>{return</returns>
-		</method>
 		<commentary>
 			Returns the height in pixels of the display.
 			<return>the height in pixels</return>
@@ -85,10 +81,6 @@
 			<name>getHeight</name>
 			<returns>int</returns>
 			<modifiers>public</modifiers>
-		</method>
-		<method>
-			<name>dm.getHeight</name>
-			<returns>{return</returns>
 		</method>
 		<commentary>
 			Returns the device ID on the host OS.

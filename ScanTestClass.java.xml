@@ -23,6 +23,16 @@
 			<type>int</type>
 			<modifiers>public</modifiers>
 		</field>
+		<commentary/>
+		<method>
+			<name>ScanTestClass</name>
+			<returns>public</returns>
+		</method>
+		<method>
+			<name>ScanTestClass</name>
+			<returns>protected</returns>
+			<param>int t</param>
+		</method>
 		<commentary>
 			main
 			<param>args</param>

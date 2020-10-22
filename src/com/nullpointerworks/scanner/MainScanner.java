@@ -18,9 +18,9 @@ public class MainScanner
 	public static void main(String[] args) 
 	{
 		//args = new String[] {JAVA_GIT+"libcore/src/module-info.java"};
-		args = new String[] {JAVA_GIT+"libcore/src/com/nullpointerworks/core/Monitor.java"};
+		//args = new String[] {JAVA_GIT+"libcore/src/com/nullpointerworks/core/Monitor.java"};
 		
-		/*
+		//*
 		args = new String[] {"src/com/nullpointerworks/scanner/ScanTestInterface.java", 
 							 "src/com/nullpointerworks/scanner/ScanTestClass.java", 
 							 "src/com/nullpointerworks/scanner/ScanTestEnum.java"};
@@ -397,6 +397,13 @@ public class MainScanner
 			
 		}
 		return i;
+	}
+	
+	private boolean isModifier(String token)
+	{
+		if (token.equals("public")) return true;
+		if (token.equals("protected")) return true;
+		return false;
 	}
 	
 	private void checkCommentLine(Element construct, String line) 
