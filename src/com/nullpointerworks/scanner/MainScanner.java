@@ -1,8 +1,11 @@
 package com.nullpointerworks.scanner;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
+import com.nullpointerworks.util.FileUtil;
+import com.nullpointerworks.util.Log;
 import com.nullpointerworks.util.file.textfile.TextFile;
 import com.nullpointerworks.util.file.textfile.TextFileParser;
 
@@ -15,10 +18,12 @@ import exp.nullpointerworks.xml.io.DocumentIO;
 public class MainScanner 
 {
 	static final String JAVA_GIT = "D:/Development/Java/workspaces/git/";
+	static final String JAVA_OUT = "D:/Development/Web/workspaces/git/Build/";
+	
 	public static void main(String[] args) 
 	{
 		//args = new String[] {JAVA_GIT+"libcore/src/module-info.java"};
-		args = new String[] {JAVA_GIT+"libcore/src/com/nullpointerworks/core/Monitor.java"};
+		//args = new String[] {JAVA_GIT+"libcore/src/com/nullpointerworks/core/Monitor.java"};
 		
 		/*
 		args = new String[] {"src/com/nullpointerworks/scanner/ScanTestInterface.java", 
@@ -26,7 +31,7 @@ public class MainScanner
 							 "src/com/nullpointerworks/scanner/ScanTestEnum.java"};
 		//*/
 		
-		new MainScanner(args);
+		new MainScanner("D:/Development/Java/workspaces/git/libcore/src");
 	}
 	
 	boolean isCommentary;
@@ -39,28 +44,47 @@ public class MainScanner
 	Document doc;
 	Element root;
 	
-	public MainScanner(String[] args) 
+	public MainScanner(String modulePath)
 	{
-		for (String file : args)
+		sourceScanner(modulePath);
+	}
+	
+	public void sourceScanner(String modulePath)
+	{
+		File dir = new File(modulePath);
+		File[] files = dir.listFiles();
+		for (File f : files)
 		{
-			doc = new Document();
-			root = new Element("source");
-			doc.setRootElement(root);
-			
-			isCommentary = false;
-			isModule = false;
-			isInterface = false;
-			isClass = false;
-			isEnum = false;
-			isField = false;
-			isMethod = false;
-			
-			scanFile(file);
+			if (f.isFile())
+			{
+				String absPath = f.getAbsolutePath().replace("\\", "/");;
+				if (!absPath.endsWith(".java")) continue;
+				Log.out(absPath);
+				
+				scanFile(absPath);
+			}
+			else
+			{
+				sourceScanner(modulePath+"/"+f.getName());
+			}
 		}
 	}
 	
 	public void scanFile(String args)
 	{
+		/*
+		 * prepare
+		 */
+		doc = new Document();
+		root = new Element("source");
+		doc.setRootElement(root);
+		isCommentary = false;
+		isModule = false;
+		isInterface = false;
+		isClass = false;
+		isEnum = false;
+		isField = false;
+		isMethod = false;
 		Element construct = null;
 		
 		/*
@@ -226,7 +250,9 @@ public class MainScanner
 		 */
 		try 
 		{
-			DocumentIO.write(doc, filename+".xml", FormatBuilder.getPrettyFormat());
+			String name = FileUtil.getFileNameFromPath(filename);
+			String path = JAVA_OUT + name + ".xml";
+			DocumentIO.write(doc, path, FormatBuilder.getPrettyFormat());
 		} 
 		catch (IOException e) 
 		{
