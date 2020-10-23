@@ -24,15 +24,15 @@
 			<modifiers>public</modifiers>
 		</field>
 		<commentary/>
-		<method>
+		<constructor>
 			<name>ScanTestClass</name>
-			<returns>public</returns>
-		</method>
-		<method>
+			<modifiers>public</modifiers>
+		</constructor>
+		<constructor>
 			<name>ScanTestClass</name>
-			<returns>protected</returns>
+			<modifiers>protected</modifiers>
 			<param>int t</param>
-		</method>
+		</constructor>
 		<commentary>
 			main
 			<param>args</param>

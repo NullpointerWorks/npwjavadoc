@@ -18,9 +18,9 @@ public class MainScanner
 	public static void main(String[] args) 
 	{
 		//args = new String[] {JAVA_GIT+"libcore/src/module-info.java"};
-		//args = new String[] {JAVA_GIT+"libcore/src/com/nullpointerworks/core/Monitor.java"};
+		args = new String[] {JAVA_GIT+"libcore/src/com/nullpointerworks/core/Monitor.java"};
 		
-		//*
+		/*
 		args = new String[] {"src/com/nullpointerworks/scanner/ScanTestInterface.java", 
 							 "src/com/nullpointerworks/scanner/ScanTestClass.java", 
 							 "src/com/nullpointerworks/scanner/ScanTestEnum.java"};
@@ -338,7 +338,18 @@ public class MainScanner
 				modifiers = modifiers.substring(0,lastindex).trim();
 				lastindex = modifiers.lastIndexOf(" ");
 				String ret = modifiers.substring(lastindex+1);
-				construct.addChild(new Element("returns").setText(ret));
+				
+				// is the return type
+				if ( !isModifier(ret) )
+				{
+					construct.addChild(new Element("returns").setText(ret));
+				}
+				// else, constructor
+				else
+				{
+					construct.setName("constructor");
+					construct.addChild(new Element("modifiers").setText(ret));
+				}
 				
 				// find modifiers
 				if (lastindex > 0)
@@ -468,4 +479,3 @@ public class MainScanner
 		}
 	}
 }
-
