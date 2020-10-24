@@ -3,6 +3,8 @@ package com.nullpointerworks.scanner;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.nullpointerworks.util.FileUtil;
 import com.nullpointerworks.util.Log;
@@ -17,8 +19,9 @@ import exp.nullpointerworks.xml.io.DocumentIO;
 
 public class MainScanner 
 {
-	static final String JAVA_GIT = "D:/Development/Java/workspaces/git/";
-	static final String JAVA_OUT = "D:/Development/Web/workspaces/git/Build/";
+	static final String JAVA_GIT = "D:/Development/Java/workspaces/git/libcore/src";
+	static final String JAVA_XML = "D:/Development/Web/workspaces/git/Build/core/";
+	static final String JAVA_WEB = "D:/Development/Web/workspaces/git/NullpointerWorksAPI/core/";
 	
 	public static void main(String[] args) 
 	{
@@ -31,8 +34,14 @@ public class MainScanner
 							 "src/com/nullpointerworks/scanner/ScanTestEnum.java"};
 		//*/
 		
-		new MainScanner("D:/Development/Java/workspaces/git/libcore/src");
+		new MainScanner(JAVA_GIT);
 	}
+	
+	/*
+	 * track module info
+	 */
+	String moduleName;
+	List<String> exported;
 	
 	boolean isCommentary;
 	boolean isModule;
@@ -46,11 +55,44 @@ public class MainScanner
 	
 	public MainScanner(String modulePath)
 	{
+		exported = new ArrayList<String>();
+		moduleName = "";
+		
 		sourceScanner(modulePath);
+		
+		File dir = new File(JAVA_XML);
+		File[] files = dir.listFiles();
+		
+		/*
+		Log.out("");
+		Log.out("module: "+moduleName);
+		for (String ex : exported)
+		{
+			Log.out("exports "+ex);
+		}
+		Log.out("");
+		//*/
+		
+		/*
+		 * generate HTML
+		 */
+		for (File f : files)
+		{
+			if (f.isFile())
+			{
+				String absPath = f.getAbsolutePath().replace("\\", "/");
+				Log.out(absPath);
+				
+				
+			}
+		}
 	}
 	
 	public void sourceScanner(String modulePath)
 	{
+		/*
+		 * generate XML
+		 */
 		File dir = new File(modulePath);
 		File[] files = dir.listFiles();
 		for (File f : files)
@@ -59,8 +101,7 @@ public class MainScanner
 			{
 				String absPath = f.getAbsolutePath().replace("\\", "/");;
 				if (!absPath.endsWith(".java")) continue;
-				Log.out(absPath);
-				
+				//Log.out(absPath);
 				scanFile(absPath);
 			}
 			else
@@ -106,7 +147,7 @@ public class MainScanner
 		 * store filename
 		 */
 		int lastindex = args.lastIndexOf("/");
-		String filename = args.substring(lastindex+1);
+		String filename = args.substring(lastindex+1, args.length()-5);
 		root.addChild(new Element("name").setText(filename));
 		
 		/*
@@ -142,7 +183,8 @@ public class MainScanner
 			{
 				isModule = true;
 				construct = new Element("module");
-				construct.addChild(new Element("name").setText(line.substring(7)));
+				moduleName = line.substring(7);
+				construct.addChild(new Element("name").setText(moduleName));
 				root.addChild(construct);
 			}
 			
@@ -223,7 +265,9 @@ public class MainScanner
 					Element exp = new Element("exports");
 					String name = line.substring(8);
 					int index = name.indexOf(";");
-					exp.setText(name.substring(0,index));
+					String export = name.substring(0,index);
+					exp.setText(export);
+					exported.add(export); // add to memory
 					construct.addChild(exp);
 				}
 			}
@@ -251,7 +295,7 @@ public class MainScanner
 		try 
 		{
 			String name = FileUtil.getFileNameFromPath(filename);
-			String path = JAVA_OUT + name + ".xml";
+			String path = JAVA_XML + name + ".xml";
 			DocumentIO.write(doc, path, FormatBuilder.getPrettyFormat());
 		} 
 		catch (IOException e) 
@@ -394,7 +438,7 @@ public class MainScanner
 					String[] params = parameters.split(",");
 					for (String p : params)
 					{
-						construct.addChild(new Element("param").setText(p));
+						construct.addChild(new Element("param").setText(p.trim()));
 					}
 				}
 				root.addChild(construct);
