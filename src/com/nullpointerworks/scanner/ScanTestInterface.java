@@ -5,7 +5,7 @@ package com.nullpointerworks.scanner;
  * @author Michiel
  *
  */
-public interface ScanTestInterface 
+public interface ScanTestInterface extends ScanTestInterface2 
 {
 	/**
 	 * valid commentary
@@ -15,15 +15,4 @@ public interface ScanTestInterface
 	
 	// no valid commentary
 	int getHeight();
-	
-	/**
-	 * a default method
-	 * @return
-	 */
-	default int getDepth()
-	{
-		return 0;
-	}
-	
-	
 }

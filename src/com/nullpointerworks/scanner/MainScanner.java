@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.nullpointerworks.generate.FileMaker;
 import com.nullpointerworks.util.FileUtil;
 import com.nullpointerworks.util.Log;
 import com.nullpointerworks.util.file.textfile.TextFile;
@@ -28,13 +29,14 @@ public class MainScanner
 		//args = new String[] {JAVA_GIT+"libcore/src/module-info.java"};
 		//args = new String[] {JAVA_GIT+"libcore/src/com/nullpointerworks/core/Monitor.java"};
 		
-		/*
+		//*
 		args = new String[] {"src/com/nullpointerworks/scanner/ScanTestInterface.java", 
 							 "src/com/nullpointerworks/scanner/ScanTestClass.java", 
 							 "src/com/nullpointerworks/scanner/ScanTestEnum.java"};
 		//*/
+		new MainScanner(args);
 		
-		new MainScanner(JAVA_GIT);
+		//new MainScanner(JAVA_GIT);
 	}
 	
 	/*
@@ -82,9 +84,28 @@ public class MainScanner
 			{
 				String absPath = f.getAbsolutePath().replace("\\", "/");
 				Log.out(absPath);
+				int lastindex = absPath.lastIndexOf("/");
+				String filename = absPath.substring(lastindex+1, absPath.length()-5);
 				
+				FileMaker fm = new FileMaker();
 				
+				try
+				{
+					fm.save(JAVA_WEB+"inter-drawcanvas.html");
+				} 
+				catch (IOException e)
+				{
+					e.printStackTrace();
+				}
 			}
+		}
+	}
+	
+	public MainScanner(String[] args)
+	{
+		for (String f : args)
+		{
+			scanFile(f);
 		}
 	}
 	
@@ -99,7 +120,7 @@ public class MainScanner
 		{
 			if (f.isFile())
 			{
-				String absPath = f.getAbsolutePath().replace("\\", "/");;
+				String absPath = f.getAbsolutePath().replace("\\", "/");
 				if (!absPath.endsWith(".java")) continue;
 				//Log.out(absPath);
 				scanFile(absPath);
@@ -111,6 +132,9 @@ public class MainScanner
 		}
 	}
 	
+	/*
+	 * scans a file for commentary and determines if its a class, interface or enum
+	 */
 	public void scanFile(String args)
 	{
 		/*
@@ -295,7 +319,7 @@ public class MainScanner
 		try 
 		{
 			String name = FileUtil.getFileNameFromPath(filename);
-			String path = JAVA_XML + name + ".xml";
+			String path = name + ".xml";
 			DocumentIO.write(doc, path, FormatBuilder.getPrettyFormat());
 		} 
 		catch (IOException e) 
@@ -304,6 +328,9 @@ public class MainScanner
 		}
 	}
 	
+	/*
+	 * used to scan enum files
+	 */
 	private int scanEnum(Element root, int i, String[] lines) 
 	{
 		Element construct = null;
@@ -347,11 +374,9 @@ public class MainScanner
 		return i;
 	}
 	
-	private boolean validLettering(String line)
-	{
-		return line.matches("^[a-zA-Z_0-9]+$");
-	}
-
+	/*
+	 * used to scan classes and interfaces
+	 */
 	private int scanCodeBlock(Element root, int i, String[] lines) 
 	{
 		Element construct = null;
@@ -480,13 +505,9 @@ public class MainScanner
 		return i;
 	}
 	
-	private boolean isModifier(String token)
-	{
-		if (token.equals("public")) return true;
-		if (token.equals("protected")) return true;
-		return false;
-	}
-	
+	/*
+	 * used to check annotations inside the comment block
+	 */
 	private void checkCommentLine(Element construct, String line) 
 	{
 		if (line.startsWith("/**"))
@@ -547,5 +568,17 @@ public class MainScanner
 			if (line.length()>0)
 				construct.addChild(new Text(line));
 		}
+	}
+	
+	private boolean isModifier(String token)
+	{
+		if (token.equals("public")) return true;
+		if (token.equals("protected")) return true;
+		return false;
+	}
+	
+	private boolean validLettering(String line)
+	{
+		return line.matches("^[a-zA-Z_0-9]+$");
 	}
 }

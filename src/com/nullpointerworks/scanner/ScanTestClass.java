@@ -1,6 +1,6 @@
 package com.nullpointerworks.scanner;
 
-public abstract class ScanTestClass 
+public abstract class ScanTestClass implements ScanTestInterface
 {
 	
 	/**

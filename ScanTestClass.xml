@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <source>
-	<name>ScanTestClass.java</name>
+	<name>ScanTestClass</name>
 	<package>com.nullpointerworks.scanner</package>
 	<class>
-		<name>ScanTestClass</name>
+		<name>ScanTestInterface</name>
 		<modifiers>abstract</modifiers>
 		<commentary>a variable</commentary>
 		<field>

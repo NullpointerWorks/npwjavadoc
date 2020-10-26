@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <source>
-	<name>ScanTestInterface.java</name>
+	<name>ScanTestInterface</name>
 	<package>com.nullpointerworks.scanner</package>
 	<commentary>
 		<author>Michiel</author>
 	</commentary>
 	<interface>
-		<name>ScanTestInterface</name>
+		<name>ScanTestInterface2</name>
 		<commentary>
 			valid commentary
 			<return></return>
@@ -18,15 +18,6 @@
 		<method>
 			<name>getHeight</name>
 			<returns>int</returns>
-		</method>
-		<commentary>
-			a default method
-			<return></return>
-		</commentary>
-		<method>
-			<name>getDepth</name>
-			<returns>int</returns>
-			<modifiers>default</modifiers>
 		</method>
 	</interface>
 </source>
