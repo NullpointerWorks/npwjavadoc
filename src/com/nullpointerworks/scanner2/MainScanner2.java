@@ -2,6 +2,7 @@ package com.nullpointerworks.scanner2;
 
 import java.io.FileNotFoundException;
 
+import com.nullpointerworks.util.Log;
 import com.nullpointerworks.util.file.textfile.TextFile;
 import com.nullpointerworks.util.file.textfile.TextFileParser;
 
@@ -20,6 +21,8 @@ public class MainScanner2
 	{
 		for (String f : args)
 		{
+			Log.out("file: "+f);
+			
 			/*
 			 * prepare
 			 */
@@ -46,19 +49,8 @@ public class MainScanner2
 			for (int i=0,l=lines.length; i<l; i++)
 			{
 				String line = lines[i].trim();
-				characterStream(line);
+				parser.characterStream(line);
 			}
-		}
-	}
-
-	private void characterStream(String line) 
-	{
-		int leng = line.length()-1;
-		if (leng < 1) return;
-		for (int i=0; i<leng; i++)
-		{
-			String character = line.substring(i, i+1);
-			parser.nextCharacter(character);
 		}
 	}
 }
