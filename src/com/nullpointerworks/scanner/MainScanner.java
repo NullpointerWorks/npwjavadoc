@@ -42,27 +42,47 @@ public class MainScanner
 	/*
 	 * track module info
 	 */
-	String moduleName;
-	List<String> exported;
+	private String moduleName;
+	private List<String> exported;
 	
-	boolean isCommentary;
-	boolean isModule;
-	boolean isInterface;
-	boolean isClass;
-	boolean isEnum;
-	boolean isField;
-	boolean isMethod;
-	Document doc;
-	Element root;
+	/*
+	 * package preset
+	 */
+	private final String[][] pack = 
+	{
+		{"com.nullpointerworks.core", "pack-core.html"},
+		{"com.nullpointerworks.math", "pack-math.html"},
+		{"com.nullpointerworks.util", "pack-util.html"}
+	};
+	
+	private boolean isCommentary;
+	private boolean isModule;
+	private boolean isInterface;
+	private boolean isClass;
+	private boolean isEnum;
+	private Document doc;
+	private Element root;
 	
 	public MainScanner(String modulePath)
 	{
 		exported = new ArrayList<String>();
 		moduleName = "";
-		
 		sourceScanner(modulePath);
 		
-		File dir = new File(JAVA_XML);
+		//webGenerator(JAVA_XML, JAVA_WEB);
+	}
+	
+	public MainScanner(String[] args)
+	{
+		for (String f : args)
+		{
+			scanFile(f);
+		}
+	}
+	
+	public void webGenerator(String xmlPath, String webPath)
+	{
+		File dir = new File(xmlPath);
 		File[] files = dir.listFiles();
 		
 		/*
@@ -74,28 +94,23 @@ public class MainScanner
 			{
 				String absPath = f.getAbsolutePath().replace("\\", "/");
 				Log.out(absPath);
-				int lastindex = absPath.lastIndexOf("/");
-				String filename = absPath.substring(lastindex+1, absPath.length()-5);
+				
+				//int lastindex = absPath.lastIndexOf("/");
+				//String filename = absPath.substring(lastindex+1, absPath.length()-5);
 				
 				FileMaker fm = new FileMaker();
+				String type = "inter";
+				String name = "drawcanvas";
 				
 				try
 				{
-					fm.save(JAVA_WEB+"inter-drawcanvas.html");
+					fm.save(webPath+type+"-"+name+".html");
 				} 
 				catch (IOException e)
 				{
 					e.printStackTrace();
 				}
 			}
-		}
-	}
-	
-	public MainScanner(String[] args)
-	{
-		for (String f : args)
-		{
-			scanFile(f);
 		}
 	}
 	
@@ -138,8 +153,6 @@ public class MainScanner
 		isInterface = false;
 		isClass = false;
 		isEnum = false;
-		isField = false;
-		isMethod = false;
 		Element construct = null;
 		
 		/*
@@ -212,6 +225,41 @@ public class MainScanner
 				{
 					isClass = true;
 					construct = new Element("class");
+					
+					/*
+					 * implements first
+					 */
+					String[] implementation = pub.split("implements");
+					if (implementation.length > 1)
+					{
+						String imp = implementation[1].trim();
+						String[] list = imp.split(",");
+						for (String im : list)
+						{
+							Element el = new Element("implements");
+							el.setText(im.trim());
+							construct.addChild(el);
+						}
+					}
+					pub = implementation[0].trim();
+					
+					/*
+					 * then extends
+					 */
+					String[] extension = pub.split("extends");
+					if (extension.length > 1)
+					{
+						String ext = extension[1].trim();
+						String[] list = ext.split(",");
+						for (String extd : list)
+						{
+							Element el = new Element("extends");
+							el.setText(extd.trim());
+							construct.addChild(el);
+						}
+					}
+					pub = extension[0].trim();
+					
 					int lastIndex = pub.lastIndexOf(" ")+1;
 					construct.addChild(new Element("name").setText(pub.substring(lastIndex)));
 					
@@ -237,14 +285,12 @@ public class MainScanner
 					{
 						String ext = extension[1].trim();
 						String[] list = ext.split(",");
-						
 						for (String extd : list)
 						{
 							Element el = new Element("extends");
 							el.setText(extd.trim());
 							construct.addChild(el);
 						}
-						
 					}
 					pub = extension[0].trim();
 					
@@ -260,6 +306,7 @@ public class MainScanner
 				{
 					isEnum = true;
 					construct = new Element("enum");
+					// enums cannot extend nor implement
 					int lastIndex = line.lastIndexOf(" ")+1;
 					construct.addChild(new Element("name").setText(line.substring(lastIndex)));
 					root.addChild(construct);

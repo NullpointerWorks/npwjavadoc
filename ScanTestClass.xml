@@ -2,8 +2,15 @@
 <source>
 	<name>ScanTestClass</name>
 	<package>com.nullpointerworks.scanner</package>
+	<commentary>
+		<version>1.0.0</version>
+		<since>1.0.0</since>
+		<author>Michiel</author>
+	</commentary>
 	<class>
-		<name>ScanTestInterface</name>
+		<implements>ScanTestInterface</implements>
+		<extends>Thread</extends>
+		<name>ScanTestClass</name>
 		<modifiers>abstract</modifiers>
 		<commentary>a variable</commentary>
 		<field>

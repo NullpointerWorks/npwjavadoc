@@ -26,11 +26,9 @@ public class DrawCanvas implements GenericMaker
 		fm.setSourcePackage("pack-core.html", "com.nullpointerworks.core");
 		fm.setFileName(Java.INTERFACE, "DrawCanvas");
 		fm.setDescription("Drawing interface for a libnpw.core window.");
-		
 		fm.setVersion("1.0.0");
 		fm.setSince("1.0.0");
 		fm.setAuthor("Michiel Drost - Nullpointer Works");
-		
 		fm.addMethod(makeWidth());
 		fm.addMethod(makeHeight());
 		fm.addMethod(makeSwap());
