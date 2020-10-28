@@ -5,7 +5,7 @@ package com.nullpointerworks.scanner;
  * @author Michiel
  *
  */
-public interface ScanTestInterface extends ScanTestInterface2 
+public interface ScanTestInterface extends Runnable , ScanTestInterface2 
 {
 	/**
 	 * valid commentary

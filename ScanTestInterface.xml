@@ -6,7 +6,9 @@
 		<author>Michiel</author>
 	</commentary>
 	<interface>
-		<name>ScanTestInterface2</name>
+		<extends>Runnable</extends>
+		<extends>ScanTestInterface2</extends>
+		<name>ScanTestInterface</name>
 		<commentary>
 			valid commentary
 			<return></return>

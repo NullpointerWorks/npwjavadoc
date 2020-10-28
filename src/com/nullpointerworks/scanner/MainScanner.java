@@ -66,16 +66,6 @@ public class MainScanner
 		File[] files = dir.listFiles();
 		
 		/*
-		Log.out("");
-		Log.out("module: "+moduleName);
-		for (String ex : exported)
-		{
-			Log.out("exports "+ex);
-		}
-		Log.out("");
-		//*/
-		
-		/*
 		 * generate HTML
 		 */
 		for (File f : files)
@@ -238,6 +228,26 @@ public class MainScanner
 				{
 					isInterface = true;
 					construct = new Element("interface");
+					
+					/*
+					 * interfaces cannot implement
+					 */
+					String[] extension = pub.split("extends");
+					if (extension.length > 1)
+					{
+						String ext = extension[1].trim();
+						String[] list = ext.split(",");
+						
+						for (String extd : list)
+						{
+							Element el = new Element("extends");
+							el.setText(extd.trim());
+							construct.addChild(el);
+						}
+						
+					}
+					pub = extension[0].trim();
+					
 					int lastIndex = pub.lastIndexOf(" ")+1;
 					construct.addChild(new Element("name").setText(pub.substring(lastIndex)));
 					root.addChild(construct);
