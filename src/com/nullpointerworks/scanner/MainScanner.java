@@ -50,9 +50,15 @@ public class MainScanner
 	 */
 	private final String[][] pack = 
 	{
+		{"com.nullpointerworks.color", "pack-color.html"},
 		{"com.nullpointerworks.core", "pack-core.html"},
+		{"com.nullpointerworks.game", "pack-game.html"},
+		{"com.nullpointerworks.graphics", "pack-graphics.html"},
+		{"com.nullpointerworks.http", "pack-http.html"},
+		{"com.nullpointerworks.j2d", "pack-j2d.html"},
 		{"com.nullpointerworks.math", "pack-math.html"},
-		{"com.nullpointerworks.util", "pack-util.html"}
+		{"com.nullpointerworks.util", "pack-util.html"},
+		{"com.nullpointerworks.xml", "pack-xml.html"},
 	};
 	
 	private boolean isCommentary;
@@ -63,20 +69,38 @@ public class MainScanner
 	private Document doc;
 	private Element root;
 	
+	/* ====================================================
+	 * module source path scan
+	 * ==================================================== */
+	
 	public MainScanner(String modulePath)
 	{
 		exported = new ArrayList<String>();
 		moduleName = "";
 		sourceScanner(modulePath);
-		
 		//webGenerator(JAVA_XML, JAVA_WEB);
 	}
 	
-	public MainScanner(String[] args)
+	public void sourceScanner(String modulePath)
 	{
-		for (String f : args)
+		/*
+		 * generate XML
+		 */
+		File dir = new File(modulePath);
+		File[] files = dir.listFiles();
+		for (File f : files)
 		{
-			scanFile(f);
+			if (f.isFile())
+			{
+				String absPath = f.getAbsolutePath().replace("\\", "/");
+				if (!absPath.endsWith(".java")) continue;
+				//Log.out(absPath);
+				scanFile(absPath);
+			}
+			else
+			{
+				sourceScanner(modulePath+"/"+f.getName());
+			}
 		}
 	}
 	
@@ -114,26 +138,15 @@ public class MainScanner
 		}
 	}
 	
-	public void sourceScanner(String modulePath)
+	/* ====================================================
+	 * individual file scan
+	 * ==================================================== */
+	
+	public MainScanner(String[] args)
 	{
-		/*
-		 * generate XML
-		 */
-		File dir = new File(modulePath);
-		File[] files = dir.listFiles();
-		for (File f : files)
+		for (String f : args)
 		{
-			if (f.isFile())
-			{
-				String absPath = f.getAbsolutePath().replace("\\", "/");
-				if (!absPath.endsWith(".java")) continue;
-				//Log.out(absPath);
-				scanFile(absPath);
-			}
-			else
-			{
-				sourceScanner(modulePath+"/"+f.getName());
-			}
+			scanFile(f);
 		}
 	}
 	
