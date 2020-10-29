@@ -22,6 +22,9 @@ public class MainScanner
 	static final String JAVA_XML = "D:/Development/Web/workspaces/git/Build/core/";
 	static final String JAVA_WEB = "D:/Development/Web/workspaces/git/NullpointerWorksAPI/core/";
 	
+	static final String CORE = "D:/Development/Java/workspaces/git/libcore/src/com/nullpointerworks/core";
+	static final String CORE_OUT = "D:/Development/Web/workspaces/git/Build/core";
+	
 	public static void main(String[] args) 
 	{
 		//args = new String[] {JAVA_GIT+"libcore/src/module-info.java"};
@@ -33,9 +36,12 @@ public class MainScanner
 							 "src/com/nullpointerworks/scanner/ScanTestEnum.java"};
 		//*/
 		
-		args = new String[] {"src/com/nullpointerworks/scanner/ScanTestClass.java"};
-				 
+		
+		
+		args = new String[] {CORE+"/DrawCanvas.java"};
 		new MainScanner(args);
+		
+		
 		
 		//new MainScanner(JAVA_GIT);
 	}
@@ -43,7 +49,7 @@ public class MainScanner
 	/*
 	 * package preset
 	 */
-	private final String[][] pack = 
+	private final String[][] PACK = 
 	{
 		{"com.nullpointerworks.color", "pack-color.html", "libnpw.color", "module-color.html"},
 		{"com.nullpointerworks.core", "pack-core.html", "libnpw.core", "module-core.html"},
@@ -143,6 +149,28 @@ public class MainScanner
 		}
 	}
 	
+	public void makeWebFile(String file) 
+	{
+		String absPath = file.replace("\\", "/");
+		Log.out(absPath);
+		
+		//int lastindex = absPath.lastIndexOf("/");
+		//String filename = absPath.substring(lastindex+1, absPath.length()-5);
+		
+		FileMaker fm = new FileMaker();
+		String type = "inter";
+		String name = "drawcanvas";
+		
+		try
+		{
+			fm.save(type+"-"+name+".html");
+		} 
+		catch (IOException e)
+		{
+			e.printStackTrace();
+		}
+	}
+	
 	/*
 	 * scans a file for commentary and determines if its a class, interface or enum
 	 */
@@ -191,11 +219,13 @@ public class MainScanner
 			String line = lines[i].trim();
 			
 			/*
-			 * check for package
+			 * check for package and source module
 			 */
 			if (line.startsWith("package "))
 			{
 				String pack = line.substring( 8, line.length()-1 );
+				String[] info = getPackageInfo(pack);
+				root.addChild(new Element("module").setText(info[2]));
 				root.addChild(new Element("package").setText(pack));
 			}
 			
@@ -382,7 +412,7 @@ public class MainScanner
 		try 
 		{
 			String name = FileUtil.getFileNameFromPath(filename);
-			String path = name + ".xml";
+			String path = CORE_OUT + "/" + name + ".xml";
 			DocumentIO.write(doc, path, FormatBuilder.getPrettyFormat());
 		} 
 		catch (IOException e) 
@@ -647,6 +677,18 @@ public class MainScanner
 			if (line.length()>0)
 				construct.addChild(new Text(line));
 		}
+	}
+	
+	private String[] getPackageInfo(String packName)
+	{
+		for (String[] info : PACK)
+		{
+			if (packName.equalsIgnoreCase(info[0]))
+			{
+				return info;
+			}
+		}
+		return new String[] {"","","",""};
 	}
 	
 	private boolean isModifier(String token)
