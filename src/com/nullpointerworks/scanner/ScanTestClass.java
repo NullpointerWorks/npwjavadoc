@@ -1,5 +1,7 @@
 package com.nullpointerworks.scanner;
 
+import java.io.IOException;
+
 /**
  * 
  * @version 1.0.0
@@ -46,7 +48,16 @@ public abstract class ScanTestClass extends Thread implements ScanTestInterface
 	/**
 	 * 
 	 */
-	public void someOtherMethod()
+	public void someOtherMethod() throws IOException
+	{
+		return;
+	}
+	
+	/**
+	 * 
+	 */
+	@SuppressWarnings("unused")
+	private void somePrivateMethod()
 	{
 		return;
 	}

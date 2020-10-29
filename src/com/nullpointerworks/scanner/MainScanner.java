@@ -3,8 +3,6 @@ package com.nullpointerworks.scanner;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 import com.nullpointerworks.generate.FileMaker;
 import com.nullpointerworks.util.FileUtil;
@@ -29,36 +27,33 @@ public class MainScanner
 		//args = new String[] {JAVA_GIT+"libcore/src/module-info.java"};
 		//args = new String[] {JAVA_GIT+"libcore/src/com/nullpointerworks/core/Monitor.java"};
 		
-		//*
+		/*
 		args = new String[] {"src/com/nullpointerworks/scanner/ScanTestInterface.java", 
 							 "src/com/nullpointerworks/scanner/ScanTestClass.java", 
 							 "src/com/nullpointerworks/scanner/ScanTestEnum.java"};
 		//*/
+		
+		args = new String[] {"src/com/nullpointerworks/scanner/ScanTestClass.java"};
+				 
 		new MainScanner(args);
 		
 		//new MainScanner(JAVA_GIT);
 	}
 	
 	/*
-	 * track module info
-	 */
-	private String moduleName;
-	private List<String> exported;
-	
-	/*
 	 * package preset
 	 */
 	private final String[][] pack = 
 	{
-		{"com.nullpointerworks.color", "pack-color.html"},
-		{"com.nullpointerworks.core", "pack-core.html"},
-		{"com.nullpointerworks.game", "pack-game.html"},
-		{"com.nullpointerworks.graphics", "pack-graphics.html"},
-		{"com.nullpointerworks.http", "pack-http.html"},
-		{"com.nullpointerworks.j2d", "pack-j2d.html"},
-		{"com.nullpointerworks.math", "pack-math.html"},
-		{"com.nullpointerworks.util", "pack-util.html"},
-		{"com.nullpointerworks.xml", "pack-xml.html"},
+		{"com.nullpointerworks.color", "pack-color.html", "libnpw.color", "module-color.html"},
+		{"com.nullpointerworks.core", "pack-core.html", "libnpw.core", "module-core.html"},
+		{"com.nullpointerworks.game", "pack-game.html", "libnpw.game", "module-game.html"},
+		{"com.nullpointerworks.graphics", "pack-graphics.html", "libnpw.graphics", "module-graphics.html"},
+		{"exp.nullpointerworks.http", "pack-http.html", "libnpw.http", "module-http.html"},
+		{"com.nullpointerworks.j2d", "pack-j2d.html", "libnpw.j2d", "module-j2d.html"},
+		{"com.nullpointerworks.math", "pack-math.html", "libnpw.math", "module-math.html"},
+		{"com.nullpointerworks.util", "pack-util.html", "libnpw.util", "module-util.html"},
+		{"exp.nullpointerworks.xml", "pack-xml.html", "libnpw.xml", "module-xml.html"},
 	};
 	
 	private boolean isCommentary;
@@ -75,8 +70,6 @@ public class MainScanner
 	
 	public MainScanner(String modulePath)
 	{
-		exported = new ArrayList<String>();
-		moduleName = "";
 		sourceScanner(modulePath);
 		//webGenerator(JAVA_XML, JAVA_WEB);
 	}
@@ -223,7 +216,7 @@ public class MainScanner
 			{
 				isModule = true;
 				construct = new Element("module");
-				moduleName = line.substring(7);
+				String moduleName = line.substring(7);
 				construct.addChild(new Element("name").setText(moduleName));
 				root.addChild(construct);
 			}
@@ -361,7 +354,7 @@ public class MainScanner
 					int index = name.indexOf(";");
 					String export = name.substring(0,index);
 					exp.setText(export);
-					exported.add(export); // add to memory
+					//exported.add(export); // add to memory
 					construct.addChild(exp);
 				}
 			}
@@ -485,8 +478,8 @@ public class MainScanner
 			 */
 			if (line.contains("(") && line.contains(")") && braceTracker==1)
 			{
-				if (line.contains("private")) continue;
-				
+				if (line.startsWith("private")) continue;
+				if (line.startsWith("@")) continue;
 				construct = new Element("method");
 				String[] tokens = line.split("\\(");
 				
@@ -536,6 +529,22 @@ public class MainScanner
 						construct.addChild(new Element("param").setText(p.trim()));
 					}
 				}
+				
+				/*
+				 * check throws
+				 */
+				String throwers = tokens[1].substring(lastindex+1);
+				throwers = throwers.trim();
+				if (throwers.length()>7)
+				{
+					throwers = throwers.substring(7);
+					String[] exceptions = throwers.split(",");
+					for (String ex : exceptions)
+					{
+						construct.addChild(new Element("throws").setText(ex.trim()));
+					}
+				}
+				
 				root.addChild(construct);
 			}
 			else

@@ -61,6 +61,8 @@
 			<name>someOtherMethod</name>
 			<returns>void</returns>
 			<modifiers>public</modifiers>
+			<throws>IOException</throws>
 		</method>
+		<commentary/>
 	</class>
 </source>
