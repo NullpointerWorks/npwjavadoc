@@ -145,12 +145,19 @@ public class MainScanner
 	{
 		for (String f : args)
 		{
-			scanFile(f);
+			String xml = scanFile(f);
+			
+			
+			
+			
 		}
 	}
 	
 	public void makeWebFile(String file) 
 	{
+		
+		
+		
 		String absPath = file.replace("\\", "/");
 		Log.out(absPath);
 		
@@ -158,9 +165,17 @@ public class MainScanner
 		//String filename = absPath.substring(lastindex+1, absPath.length()-5);
 		
 		FileMaker fm = new FileMaker();
+		
+		
+		
+		
+		
+		
+		
+		
+		
 		String type = "inter";
 		String name = "drawcanvas";
-		
 		try
 		{
 			fm.save(type+"-"+name+".html");
@@ -174,7 +189,7 @@ public class MainScanner
 	/*
 	 * scans a file for commentary and determines if its a class, interface or enum
 	 */
-	public void scanFile(String args)
+	public String scanFile(String args)
 	{
 		/*
 		 * prepare
@@ -201,7 +216,7 @@ public class MainScanner
 		{
 			e.printStackTrace();
 		}
-		if (tf==null) return;
+		if (tf==null) return null;
 		String[] lines = tf.getLines();
 		
 		/*
@@ -409,16 +424,17 @@ public class MainScanner
 		/*
 		 * write to XML file
 		 */
+		String name = FileUtil.getFileNameFromPath(filename);
+		String path = CORE_OUT + "/" + name + ".xml";
 		try 
 		{
-			String name = FileUtil.getFileNameFromPath(filename);
-			String path = CORE_OUT + "/" + name + ".xml";
 			DocumentIO.write(doc, path, FormatBuilder.getPrettyFormat());
 		} 
 		catch (IOException e) 
 		{
 			e.printStackTrace();
 		}
+		return path;
 	}
 	
 	/*
