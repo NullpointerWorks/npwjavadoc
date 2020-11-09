@@ -5,14 +5,17 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 
 import com.nullpointerworks.generate.FileMaker;
+import com.nullpointerworks.generate.Java;
 import com.nullpointerworks.util.FileUtil;
 import com.nullpointerworks.util.Log;
 import com.nullpointerworks.util.file.textfile.TextFile;
 import com.nullpointerworks.util.file.textfile.TextFileParser;
 
 import exp.nullpointerworks.xml.Document;
+import exp.nullpointerworks.xml.DocumentBuilder;
 import exp.nullpointerworks.xml.Element;
 import exp.nullpointerworks.xml.Text;
+import exp.nullpointerworks.xml.XMLParseException;
 import exp.nullpointerworks.xml.format.FormatBuilder;
 import exp.nullpointerworks.xml.io.DocumentIO;
 
@@ -118,9 +121,15 @@ public class MainScanner
 				String absPath = f.getAbsolutePath().replace("\\", "/");
 				Log.out(absPath);
 				
+				
+				
+				
+				
+				
 				//int lastindex = absPath.lastIndexOf("/");
 				//String filename = absPath.substring(lastindex+1, absPath.length()-5);
 				
+				/*
 				FileMaker fm = new FileMaker();
 				String type = "inter";
 				String name = "drawcanvas";
@@ -133,6 +142,7 @@ public class MainScanner
 				{
 					e.printStackTrace();
 				}
+				//*/
 			}
 		}
 	}
@@ -146,36 +156,47 @@ public class MainScanner
 		for (String f : args)
 		{
 			String xml = scanFile(f);
-			
-			
-			
-			
+			makeWebFile(xml);
 		}
 	}
 	
 	public void makeWebFile(String file) 
 	{
-		
-		
-		
 		String absPath = file.replace("\\", "/");
 		Log.out(absPath);
 		
-		//int lastindex = absPath.lastIndexOf("/");
-		//String filename = absPath.substring(lastindex+1, absPath.length()-5);
+		var builder = DocumentBuilder.getDOMLoader();
+		Document doc = null;
+		
+		try 
+		{
+			doc = builder.parse(absPath);
+		} 
+		catch (FileNotFoundException | XMLParseException e) 
+		{
+			e.printStackTrace();
+		}
+		if (doc == null)
+		{
+			return; // throw error
+		}
+		
+		Element root = doc.getRootElement();
+		String name = root.getChild("name").getText().toLowerCase();
+		String module = root.getChild("module").getText();
+		String pack = root.getChild("package").getText();
+		Element code = root.getChild("code");
+		String type = code.getText();
 		
 		FileMaker fm = new FileMaker();
 		
 		
 		
+		fm.setSourceModule("module-core.html", module);
+		fm.setSourcePackage("pack-core.html", pack);
+		fm.setFileName(Java.INTERFACE, "DrawCanvas");
 		
 		
-		
-		
-		
-		
-		String type = "inter";
-		String name = "drawcanvas";
 		try
 		{
 			fm.save(type+"-"+name+".html");
@@ -275,7 +296,8 @@ public class MainScanner
 				if (pub.contains("class "))
 				{
 					isClass = true;
-					construct = new Element("class");
+					construct = new Element("code");
+					construct.addChild( new Element("type").setText("class"));
 					
 					/*
 					 * implements first
@@ -326,7 +348,8 @@ public class MainScanner
 				if (pub.contains("interface "))
 				{
 					isInterface = true;
-					construct = new Element("interface");
+					construct = new Element("code");
+					construct.addChild( new Element("type").setText("interface"));
 					
 					/*
 					 * interfaces cannot implement
@@ -356,7 +379,8 @@ public class MainScanner
 				if (pub.contains("enum "))
 				{
 					isEnum = true;
-					construct = new Element("enum");
+					construct = new Element("code");
+					construct.addChild( new Element("type").setText("enum"));
 					// enums cannot extend nor implement
 					int lastIndex = line.lastIndexOf(" ")+1;
 					construct.addChild(new Element("name").setText(line.substring(lastIndex)));
