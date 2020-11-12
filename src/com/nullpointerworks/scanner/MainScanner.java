@@ -182,24 +182,30 @@ public class MainScanner
 		}
 		
 		Element root = doc.getRootElement();
-		String name = root.getChild("name").getText().toLowerCase();
+		String name = root.getChild("name").getText();
 		String module = root.getChild("module").getText();
 		String pack = root.getChild("package").getText();
+		Element comment = root.getChild("commentary");
 		Element code = root.getChild("code");
-		String type = code.getText();
+		String type = code.getChild("type").getText();
+		String[] info = getPackageInfo(pack);
+		
+		Java jtype = Java.CLASS;
+		if (type.equalsIgnoreCase("interface")) jtype = Java.INTERFACE;
+		if (type.equalsIgnoreCase("enum")) jtype = Java.ENUM;
 		
 		FileMaker fm = new FileMaker();
-		
-		
-		
-		fm.setSourceModule("module-core.html", module);
-		fm.setSourcePackage("pack-core.html", pack);
-		fm.setFileName(Java.INTERFACE, "DrawCanvas");
-		
+		fm.setSourceModule(info[3], module);
+		fm.setSourcePackage(info[1], pack);
+		fm.setFileName(jtype, name);
+		fm.setDescription(comment.getText());
+		fm.setVersion("1.0.0");
+		fm.setSince("1.0.0");
+		fm.setAuthor("Michiel Drost - Nullpointer Works");
 		
 		try
 		{
-			fm.save(type+"-"+name+".html");
+			fm.save(type+"-"+name.toLowerCase()+".html");
 		} 
 		catch (IOException e)
 		{
