@@ -3,9 +3,12 @@ package com.nullpointerworks.scanner;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.List;
 
 import com.nullpointerworks.generate.FileMaker;
 import com.nullpointerworks.generate.Java;
+import com.nullpointerworks.generate.clazz.Method;
+import com.nullpointerworks.generate.func.Parameter;
 import com.nullpointerworks.util.FileUtil;
 import com.nullpointerworks.util.Log;
 import com.nullpointerworks.util.file.textfile.TextFile;
@@ -182,12 +185,16 @@ public class MainScanner
 		}
 		
 		Element root = doc.getRootElement();
-		String name = root.getChild("name").getText();
 		String module = root.getChild("module").getText();
 		String pack = root.getChild("package").getText();
 		Element comment = root.getChild("commentary");
+		Element version = comment.getChild("version");
+		Element author = comment.getChild("author");
+		Element since = comment.getChild("since");
+		
 		Element code = root.getChild("code");
 		String type = code.getChild("type").getText();
+		String name = code.getChild("name").getText();
 		String[] info = getPackageInfo(pack);
 		
 		Java jtype = Java.CLASS;
@@ -199,9 +206,78 @@ public class MainScanner
 		fm.setSourcePackage(info[1], pack);
 		fm.setFileName(jtype, name);
 		fm.setDescription(comment.getText());
-		fm.setVersion("1.0.0");
-		fm.setSince("1.0.0");
-		fm.setAuthor("Michiel Drost - Nullpointer Works");
+		if (version!=null)	fm.setVersion( version.getText() );
+		if (since!=null)	fm.setSince( since.getText() );
+		if (author!=null)	fm.setAuthor( author.getText() );
+		
+		/*
+		 * loop through comments, field and methods
+		 */
+		Element commentary = null;
+		List<Element> elements = code.getChildren();
+		for (int i=0,l=elements.size(); i<l; i++)
+		{
+			Element child = elements.get(i);
+			if (child.getName().equalsIgnoreCase("type")) continue;
+			if (child.getName().equalsIgnoreCase("name")) continue;
+			
+			if (child.getName().equalsIgnoreCase("commentary"))
+			{
+				commentary = child;
+				continue;
+			}
+			
+			if (child.getName().equalsIgnoreCase("method"))
+			{
+				/*
+				 * get method name
+				 */
+				String m_name;
+				var el = child.getChild("name");
+				if (el!=null) m_name = el.getText();
+				else continue;
+
+				Method method = new Method();
+				
+				/*
+				 * get method return value
+				 */
+				String m_returns;
+				el = child.getChild("returns");
+				if (el!=null) 
+				{
+					m_returns = el.getText();
+					if (!m_returns.equalsIgnoreCase("void"))
+					if (commentary!=null)
+					{
+						var ret = commentary.getChild("return");
+						if (ret!=null) method.setReturns(ret.getText());
+					}
+				}
+				else m_returns = "void";
+				
+				/*
+				 * set method details
+				 */
+				method.setDetails(m_returns,m_name);
+				if (commentary!=null)
+					method.setDescription(commentary.getText());
+				
+				
+				
+				//var p1 = new Parameter("int[]","pixels", "an integer array for the same size as the rendering surface");
+				//swap.setParameter( p1 );
+				
+				
+				//method.setSince("1.0.0");
+				
+				
+				
+				fm.addMethod(method);
+				continue;
+			}
+			
+		}
 		
 		try
 		{
@@ -251,7 +327,7 @@ public class MainScanner
 		 */
 		int lastindex = args.lastIndexOf("/");
 		String filename = args.substring(lastindex+1, args.length()-5);
-		root.addChild(new Element("name").setText(filename));
+		//root.addChild(new Element("name").setText(filename));
 		
 		/*
 		 * loop through source code
