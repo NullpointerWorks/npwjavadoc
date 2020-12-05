@@ -14,6 +14,7 @@ import com.nullpointerworks.util.Log;
 import com.nullpointerworks.util.file.textfile.TextFile;
 import com.nullpointerworks.util.file.textfile.TextFileParser;
 
+import exp.nullpointerworks.xml.Content;
 import exp.nullpointerworks.xml.Document;
 import exp.nullpointerworks.xml.DocumentBuilder;
 import exp.nullpointerworks.xml.Element;
@@ -256,8 +257,20 @@ public class MainScanner
 				if (commentary!=null)
 					method.setDescription(commentary.getText());
 				
-				
-				
+				/*
+				 * get parameters
+				 */
+				el = child.getChild("param");
+				if (el!=null)
+				{
+					
+					
+					
+					
+					
+					
+					
+				}
 				//var p1 = new Parameter("int[]","pixels", "an integer array for the same size as the rendering surface");
 				//swap.setParameter( p1 );
 				
@@ -498,7 +511,6 @@ public class MainScanner
 					int index = name.indexOf(";");
 					String export = name.substring(0,index);
 					exp.setText(export);
-					//exported.add(export); // add to memory
 					construct.addChild(exp);
 				}
 			}
@@ -537,6 +549,7 @@ public class MainScanner
 	}
 	
 	/*
+	 * TODO: enum can have methods and fields. need to be implemented
 	 * used to scan enum files
 	 */
 	private int scanEnum(Element root, int i, String[] lines) 
@@ -587,6 +600,7 @@ public class MainScanner
 	 */
 	private int scanCodeBlock(Element root, int i, String[] lines) 
 	{
+		Element prev_comment = null;
 		Element construct = null;
 		int braceTracker = 0; // account for first opening brace
 		for (int l=lines.length; i<l; i++)
@@ -605,12 +619,13 @@ public class MainScanner
 			{
 				isCommentary=true;
 				construct = new Element("commentary");
-				root.addChild(construct);
 			}
 			if (isCommentary)
 			{
 				if (line.endsWith("*/"))
 				{
+					root.addChild(construct);
+					prev_comment = construct;
 					construct = null;
 					isCommentary = false;
 					continue;
@@ -626,6 +641,8 @@ public class MainScanner
 				if (line.startsWith("private")) continue;
 				if (line.startsWith("@")) continue;
 				construct = new Element("method");
+				construct.addChild( new Element("commentary").setText(prev_comment.getText()) );
+				
 				String[] tokens = line.split("\\(");
 				
 				/*
@@ -671,7 +688,7 @@ public class MainScanner
 					String[] params = parameters.split(",");
 					for (String p : params)
 					{
-						construct.addChild(new Element("param").setText(p.trim()));
+						construct.addChild(createParam(prev_comment, p.trim()));
 					}
 				}
 				
@@ -730,6 +747,34 @@ public class MainScanner
 	}
 	
 	/*
+	 * creates a parameter element
+	 */
+	private Element createParam(Element comm, String p) 
+	{
+		String[] tokens = p.split(" ");
+		String type = tokens[0];
+		String name = tokens[1];
+		
+		var el = new Element("param");
+		el.addChild( new Element("type").setText(type) );
+		el.addChild( new Element("name").setText(name) );
+		
+		var list = comm.getChildren();
+		for (Element param : list)
+		{
+			var pname = param.getChild("name");
+			if (pname!=null)
+			if (pname.getText().equalsIgnoreCase(name))
+			{
+				el.addChild( new Element("comment").setText(param.getChild("text").getText()) );
+				break;
+			}
+		}
+		
+		return el;
+	}
+
+	/*
 	 * used to check annotations inside the comment block
 	 */
 	private void checkCommentLine(Element construct, String line) 
@@ -776,9 +821,15 @@ public class MainScanner
 		else
 		if (line.startsWith("@param"))
 		{
-			Element author = new Element("param");
-			author.setText(line.substring(6).trim());
-			construct.addChild(author);
+			Element param = new Element("param");
+			String paramline = line.substring(6).trim();
+			String paramname = paramline.split(" ")[0];
+			paramline = paramline.substring(paramname.length());
+			//param.setText(paramline);
+			param.addChild(new Element("name").setText(paramname));
+			param.addChild(new Element("text").setText(paramline));
+			
+			construct.addChild(param);
 		}
 		else
 		if (line.startsWith("@see"))
