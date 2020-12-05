@@ -1,0 +1,27 @@
+.rTable
+{
+    width: 100%;
+    display: table;
+}
+.rTableRow
+{
+    padding: 5px 10px;
+    display: table-row;
+    background: #f8f8f8;
+}
+.rTableRow:nth-of-type(odd)
+{
+    background: #e0e0e0;
+}
+.rTableBody { display: table-row-group; }
+.rTableFoot { display: table-footer-group; }
+.rTableHead
+{
+    padding: 5px 20px;
+    display: table-cell;
+}
+.rTableCell
+{
+    padding: 3px 20px;
+    display: table-cell;
+}

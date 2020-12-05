@@ -24,12 +24,8 @@ import exp.nullpointerworks.xml.io.DocumentIO;
 
 public class MainScanner 
 {
-	static final String JAVA_GIT = "D:/Development/Java/workspaces/git/libcore/src";
-	static final String JAVA_XML = "D:/Development/Web/workspaces/git/Build/core/";
-	static final String JAVA_WEB = "D:/Development/Web/workspaces/git/NullpointerWorksAPI/core/";
-	
-	static final String CORE = "D:/Development/Java/workspaces/git/libcore/src/com/nullpointerworks/core";
-	static final String CORE_OUT = "D:/Development/Web/workspaces/git/Build/core";
+	private static final String JAVA_GIT 	= "D:/Development/Java/workspaces/git";
+	private static final String CORE 		= JAVA_GIT+"/libcore/src/com/nullpointerworks/core";
 	
 	public static void main(String[] args) 
 	{
@@ -42,14 +38,8 @@ public class MainScanner
 							 "src/com/nullpointerworks/scanner/ScanTestEnum.java"};
 		//*/
 		
-		
-		
 		args = new String[] {CORE+"/DrawCanvas.java"};
 		new MainScanner(args);
-		
-		
-		
-		//new MainScanner(JAVA_GIT);
 	}
 	
 	/*
@@ -227,6 +217,9 @@ public class MainScanner
 				continue;
 			}
 			
+			/*
+			 * if method
+			 */
 			if (child.getName().equalsIgnoreCase("method"))
 			{
 				/*
@@ -281,7 +274,7 @@ public class MainScanner
 		
 		try
 		{
-			fm.save(type+"-"+name.toLowerCase()+".html");
+			fm.save("core/"+type+"-"+name.toLowerCase()+".html");
 		} 
 		catch (IOException e)
 		{
@@ -531,7 +524,7 @@ public class MainScanner
 		 * write to XML file
 		 */
 		String name = FileUtil.getFileNameFromPath(filename);
-		String path = CORE_OUT + "/" + name + ".xml";
+		String path = "xml/" + name + ".xml";
 		try 
 		{
 			DocumentIO.write(doc, path, FormatBuilder.getPrettyFormat());
