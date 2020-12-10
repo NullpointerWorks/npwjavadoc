@@ -10,34 +10,22 @@
 	<code>
 		<type>interface</type>
 		<name>DrawCanvas</name>
-		<commentary>
-			Returns the width in pixels of the drawing canvas.
-			<return>the width in pixels</return>
-			<since>1.0.0</since>
-		</commentary>
 		<method>
 			<commentary>Returns the width in pixels of the drawing canvas.</commentary>
 			<name>width</name>
-			<returns>int</returns>
+			<returns>
+				int
+				<comment>the width in pixels</comment>
+			</returns>
 		</method>
-		<commentary>
-			Returns the height in pixels of the drawing canvas.
-			<return>the height in pixels</return>
-			<since>1.0.0</since>
-		</commentary>
 		<method>
 			<commentary>Returns the height in pixels of the drawing canvas.</commentary>
 			<name>height</name>
-			<returns>int</returns>
+			<returns>
+				int
+				<comment>the height in pixels</comment>
+			</returns>
 		</method>
-		<commentary>
-			Swap the content of the provided array with the content held by the drawing canvas. The swapped content will be displayed when new frames are requested. Each integer is an ARGB color at 8 bit depth.
-			<param>
-				<name>pixels</name>
-				<text> - an integer array for the same size as the rendering surface</text>
-			</param>
-			<since>1.0.0</since>
-		</commentary>
 		<method>
 			<commentary>Swap the content of the provided array with the content held by the drawing canvas. The swapped content will be displayed when new frames are requested. Each integer is an ARGB color at 8 bit depth.</commentary>
 			<name>swap</name>
@@ -48,15 +36,13 @@
 				<comment> - an integer array for the same size as the rendering surface</comment>
 			</param>
 		</method>
-		<commentary>
-			Returns a java.awt.Component to which the canvas is drawing on. It can be added as a UI element to the {@code JFrame} in the window.
-			<return>the component for the window to display</return>
-			<since>1.0.0</since>
-		</commentary>
 		<method>
 			<commentary>Returns a java.awt.Component to which the canvas is drawing on. It can be added as a UI element to the {@code JFrame} in the window.</commentary>
 			<name>component</name>
-			<returns>Component</returns>
+			<returns>
+				Component
+				<comment>the component for the window to display</comment>
+			</returns>
 		</method>
 	</code>
 </source>

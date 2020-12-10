@@ -49,7 +49,7 @@ A rendering interface that provides a handle for a Window to display.
                     </div>
                     <div class="rTableRow">
                         <div class="rTableCell">void</div>
-                        <div class="rTableCell">swap()</div>
+                        <div class="rTableCell">swap(int[])</div>
                         <div class="rTableCell"></div>
                     </div>
                     <div class="rTableRow">
@@ -80,10 +80,13 @@ A rendering interface that provides a handle for a Window to display.
                         <div class="desc mark">Returns:<div class="marktext">the height in pixels</div></div>
                     </div>
                 </div>
-                <div class="header small blue spacer">void swap()</div>
+                <div class="header small blue spacer">void swap(int[] pixels)</div>
                 <div class="content midlight">
                     <div class="desc">
                         Swap the content of the provided array with the content held by the drawing canvas. The swapped content will be displayed when new frames are requested. Each integer is an ARGB color at 8 bit depth.
+                    </div>
+                    <div class="desc">
+                        <div class="desc mark">Parameters:<div class="marktext">pixels -  - an integer array for the same size as the rendering surface</div></div>
                     </div>
                 </div>
                 <div class="header small blue spacer">Component component()</div>

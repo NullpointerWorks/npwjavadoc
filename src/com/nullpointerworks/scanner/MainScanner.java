@@ -204,7 +204,6 @@ public class MainScanner
 		/*
 		 * loop through comments, field and methods
 		 */
-		Element commentary = null;
 		List<Element> elements = code.getChildren();
 		for (int i=0,l=elements.size(); i<l; i++)
 		{
@@ -212,11 +211,13 @@ public class MainScanner
 			if (child.getName().equalsIgnoreCase("type")) continue;
 			if (child.getName().equalsIgnoreCase("name")) continue;
 			
+			/*
 			if (child.getName().equalsIgnoreCase("commentary"))
 			{
 				commentary = child;
 				continue;
 			}
+			//*/
 			
 			/*
 			 * if method
@@ -242,41 +243,39 @@ public class MainScanner
 				{
 					m_returns = el.getText();
 					if (!m_returns.equalsIgnoreCase("void"))
-					if (commentary!=null)
 					{
-						var ret = commentary.getChild("return");
+						var ret = el.getChild("comment");
 						if (ret!=null) method.setReturns(ret.getText());
 					}
 				}
 				else m_returns = "void";
 				
 				/*
-				 * set method details
+				 * set method details and commentary
 				 */
 				method.setDetails(m_returns,m_name);
-				if (commentary!=null)
-					method.setDescription(commentary.getText());
+				Element commentary = child.getChild("commentary");
+				if (commentary!=null) method.setDescription(commentary.getText());
 				
 				/*
-				 * get parameters
+				 * set parameters
 				 */
-				el = child.getChild("param");
-				if (el!=null)
+				List<Element> params = child.getChildren("param");
+				if (params.size()>0)
 				{
-					
-					
-					
-					
-					
-					
-					
+					for (Element param : params)
+					{
+						String p_type = param.getChild("type").getText();
+						String p_name = param.getChild("name").getText();
+						String p_cmmt = param.getChild("comment").getText();
+						var p1 = new Parameter(p_type,p_name,p_cmmt);
+						method.setParameter( p1 );
+					}
 				}
-				//var p1 = new Parameter("int[]","pixels", "an integer array for the same size as the rendering surface");
-				//swap.setParameter( p1 );
 				
 				
+
 				//method.setSince("1.0.0");
-				
 				
 				
 				fm.addMethod(method);
@@ -624,7 +623,7 @@ public class MainScanner
 			{
 				if (line.endsWith("*/"))
 				{
-					root.addChild(construct);
+					//root.addChild(construct);
 					prev_comment = construct;
 					construct = null;
 					isCommentary = false;
@@ -659,19 +658,36 @@ public class MainScanner
 				lastindex = modifiers.lastIndexOf(" ");
 				String ret = modifiers.substring(lastindex+1);
 				
-				// is the return type
+				/*
+				 * is the return type
+				 */
 				if ( !isModifier(ret) )
 				{
-					construct.addChild(new Element("returns").setText(ret));
+					Element returns = new Element("returns").setText(ret);
+					
+					/*
+					 * if the method has a non-void return type, get the commentary
+					 */
+					Element returns_el = prev_comment.getChild("return");
+					if (returns_el != null)
+					{
+						String returns_comment = prev_comment.getChild("return").getText();
+						returns.addChild( new Element("comment").setText(returns_comment) );
+					}
+					construct.addChild(returns);
 				}
-				// else, constructor
+				/*
+				 * else, constructor
+				 */
 				else
 				{
 					construct.setName("constructor");
 					construct.addChild(new Element("modifiers").setText(ret));
 				}
 				
-				// find modifiers
+				/*
+				 * find modifiers
+				 */
 				if (lastindex > 0)
 				{
 					modifiers = modifiers.substring(0,lastindex);
