@@ -14,35 +14,41 @@
 			<commentary>Returns the width in pixels of the drawing canvas.</commentary>
 			<name>width</name>
 			<returns>
-				int
+				<type>int</type>
 				<comment>the width in pixels</comment>
 			</returns>
+			<since>1.0.0</since>
 		</method>
 		<method>
 			<commentary>Returns the height in pixels of the drawing canvas.</commentary>
 			<name>height</name>
 			<returns>
-				int
+				<type>int</type>
 				<comment>the height in pixels</comment>
 			</returns>
+			<since>1.0.0</since>
 		</method>
 		<method>
 			<commentary>Swap the content of the provided array with the content held by the drawing canvas. The swapped content will be displayed when new frames are requested. Each integer is an ARGB color at 8 bit depth.</commentary>
 			<name>swap</name>
-			<returns>void</returns>
+			<returns>
+				<type>void</type>
+			</returns>
 			<param>
 				<type>int[]</type>
 				<name>pixels</name>
 				<comment> - an integer array for the same size as the rendering surface</comment>
 			</param>
+			<since>1.0.0</since>
 		</method>
 		<method>
 			<commentary>Returns a java.awt.Component to which the canvas is drawing on. It can be added as a UI element to the {@code JFrame} in the window.</commentary>
 			<name>component</name>
 			<returns>
-				Component
+				<type>Component</type>
 				<comment>the component for the window to display</comment>
 			</returns>
+			<since>1.0.0</since>
 		</method>
 	</code>
 </source>

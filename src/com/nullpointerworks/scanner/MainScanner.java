@@ -241,7 +241,7 @@ public class MainScanner
 				el = child.getChild("returns");
 				if (el!=null) 
 				{
-					m_returns = el.getText();
+					m_returns = el.getChild("type").getText();
 					if (!m_returns.equalsIgnoreCase("void"))
 					{
 						var ret = el.getChild("comment");
@@ -273,10 +273,15 @@ public class MainScanner
 					}
 				}
 				
-				
-
-				//method.setSince("1.0.0");
-				
+				/*
+				 * add miscs.
+				 */
+				Element misc = child.getChild("since");
+				if (misc!=null) method.setSince(misc.getText());
+				misc = child.getChild("author");
+				if (misc!=null) method.setSince(misc.getText());
+				misc = child.getChild("version");
+				if (misc!=null) method.setSince(misc.getText());
 				
 				fm.addMethod(method);
 				continue;
@@ -663,7 +668,7 @@ public class MainScanner
 				 */
 				if ( !isModifier(ret) )
 				{
-					Element returns = new Element("returns").setText(ret);
+					Element returns = new Element("returns").addChild( new Element("type").setText(ret) );
 					
 					/*
 					 * if the method has a non-void return type, get the commentary
@@ -722,6 +727,16 @@ public class MainScanner
 						construct.addChild(new Element("throws").setText(ex.trim()));
 					}
 				}
+				
+				/*
+				 * add miscs.
+				 */
+				Element misc = prev_comment.getChild("since");
+				if (misc!=null) construct.addChild( misc );
+				misc = prev_comment.getChild("author");
+				if (misc!=null) construct.addChild( misc );
+				misc = prev_comment.getChild("version");
+				if (misc!=null) construct.addChild( misc );
 				
 				root.addChild(construct);
 			}
