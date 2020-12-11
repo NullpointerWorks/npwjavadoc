@@ -14,23 +14,21 @@ public class Field
 	private String desc = "";
 	private List<Additional> adds;
 	
-	public Field(String t, String n)
+	public Field()
 	{
-		type=t;
-		name=n;
 		adds=new ArrayList<Additional>();
 	}
 	
-	public Field(String t, String n, String v)
+	public Field(String t, String n)
 	{
-		type=t;
-		name=n;
-		value=v;
-		adds=new ArrayList<Additional>();
-		setAdditional("Value",v);
+		this();
+		setType(t);
+		setName(n);
 	}
-
+	
 	public void setModifier(String m) {mods=m;}
+	public void setType(String t) {type=t;}
+	public void setName(String n) {name=n;}
 	public void setValue(String v) {value=v;}
 	public void setDescription(String d) {desc = d;}
 	public void setAdditional(String t, String s) 

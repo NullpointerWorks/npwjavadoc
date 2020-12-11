@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<source>
+	<module></module>
+	<package>com.nullpointerworks.examples</package>
+	<commentary>
+		<author>Michiel</author>
+	</commentary>
+	<code>
+		<type>enum</type>
+		<name>ExampleEnum</name>
+		<commentary/>
+		<value>VALUE1</value>
+		<commentary/>
+		<value>VALUE2</value>
+	</code>
+</source>

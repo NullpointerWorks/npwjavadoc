@@ -605,14 +605,14 @@ public class FileMaker
 				if (params.size() > 0)
 				{
 					details += 
-					"                        <div class=\"desc mark\">Parameters:";
+							   "                        <div class=\"desc mark\">Parameters:\r\n";
 					
 					for (Parameter p : params)
 					{
 						details +=
-						"<div class=\"marktext\">"+p.getName()+" - "+p.getDescription()+"</div></div>\r\n";
+						"							<div class=\"marktext\">"+p.getName()+" - "+p.getDescription()+"</div>\r\n";
 					}
-					
+					details += "						</div>\r\n";
 				}
 				
 				// additional information, version, since, return, etc.

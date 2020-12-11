@@ -9,6 +9,12 @@ package com.nullpointerworks.examples;
 public interface ExampleInterface 
 {
 	/**
+	 * interface variables are automatically public, static and final.
+	 * no other modifiers are permitted
+	 */
+	int myVariable = 0;
+	
+	/**
 	 * public method
 	 */
 	public void myPublicMethod();

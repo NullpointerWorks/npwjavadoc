@@ -2,6 +2,11 @@
 <source>
 	<module></module>
 	<package>com.nullpointerworks.examples</package>
+	<commentary>
+		Testing class for file parsing
+		<version>1.0.0</version>
+		<author>Michiel</author>
+	</commentary>
 	<code>
 		<type>class</type>
 		<implements>ExampleInterface</implements>
@@ -11,7 +16,7 @@
 		<field>
 			<name>PI</name>
 			<type>Float</type>
-			<modifiers>public</modifiers>
+			<modifiers>public final</modifiers>
 			<data>3.1415F</data>
 		</field>
 		<field>
@@ -36,6 +41,7 @@
 			<commentary>public constructor</commentary>
 			<name>ExampleClass</name>
 			<modifiers>public</modifiers>
+			<since>1.0.0</since>
 		</constructor>
 		<constructor>
 			<commentary>protected constructor</commentary>

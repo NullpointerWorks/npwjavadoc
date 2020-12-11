@@ -1,5 +1,10 @@
 package com.nullpointerworks.examples;
 
+/**
+ * Testing class for file parsing
+ * @version 1.0.0
+ * @author Michiel
+ */
 public class ExampleClass extends Object implements ExampleInterface
 {
 
@@ -7,7 +12,10 @@ public class ExampleClass extends Object implements ExampleInterface
 	// FIELDS
 	// =====================================================
 	
-	public Float PI = 3.1415F;
+	/**
+	 * 
+	 */
+	public final Float PI = 3.1415F;
 	public static Float TAU = 6.283F;
 	private Float E = 2.17F;
 	Float SQ2 = 1.414F;
@@ -21,6 +29,7 @@ public class ExampleClass extends Object implements ExampleInterface
 	
 	/**
 	 * public constructor
+	 * @since 1.0.0
 	 */
 	public ExampleClass()
 	{

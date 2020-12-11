@@ -15,6 +15,11 @@ import exp.nullpointerworks.xml.io.DocumentIO;
 
 public class SourceScanner 
 {
+	static final int INTERFACE = 1;
+	static final int CLASS = 2;
+	static final int ENUM = 3;
+	static final int ANNOTATION = 4;
+	
 	private boolean isCommentary;
 	private boolean isModule;
 	private boolean isInterface;
@@ -252,12 +257,12 @@ public class SourceScanner
 			}
 			if (isInterface)
 			{
-				i = scanCodeBlock(construct, i, lines);
+				i = scanCodeBlock(construct, i, lines, INTERFACE);
 				isInterface = false;
 			}
 			if (isClass)
 			{
-				i = scanCodeBlock(construct, i, lines);
+				i = scanCodeBlock(construct, i, lines, CLASS);
 				isClass = false;
 			}
 			if (isEnum)
@@ -305,6 +310,11 @@ public class SourceScanner
 		if (token.equals("public")) return true;
 		if (token.equals("protected")) return true;
 		if (token.equals("private")) return true;
+		if (token.equals("default")) return true;
+		if (token.equals("abstract")) return true;
+		if (token.equals("final")) return true;
+		if (token.equals("strictfp")) return true;
+		if (token.equals("static")) return true;
 		return false;
 	}
 	
@@ -466,13 +476,17 @@ public class SourceScanner
 					continue;
 				}
 				checkCommentLine(construct, line);
+				continue;
 			}
-			else
+			
 			if (line.length()>0)
 			{
 				String[] enums = line.split(",");
 				for (String e : enums)
 				{
+					e = e.replace(";", "");
+					e = e.trim();
+					
 					if (!validLettering(e)) continue;
 					Element en = new Element("value");
 					en.setText(e);
@@ -486,7 +500,7 @@ public class SourceScanner
 	/*
 	 * used to scan classes and interfaces
 	 */
-	private int scanCodeBlock(Element root, int i, String[] lines) 
+	private int scanCodeBlock(Element root, int i, String[] lines, final int sourceType) 
 	{
 		Element prev_comment = null;
 		Element construct = null;
@@ -526,7 +540,8 @@ public class SourceScanner
 			 */
 			if (line.contains("(") && line.contains(")") && braceTracker==1)
 			{
-				scanMethodLine(line, root, construct, prev_comment);
+				Element e = scanMethodLine(line, construct, prev_comment);
+				if (e!=null) root.addChild(e);
 				prev_comment=null;
 			}
 			else
@@ -535,7 +550,8 @@ public class SourceScanner
 			 */
 			if (line.endsWith(";") && braceTracker==1)
 			{
-				scanFieldLine(line, root, construct, prev_comment);
+				Element e = scanFieldLine(line, construct, prev_comment, sourceType);
+				if (e!=null) root.addChild(e);
 				prev_comment=null;
 			}
 			
@@ -546,10 +562,10 @@ public class SourceScanner
 	/**
 	 * This method takes a line of code that indicates the start of a method or constructor
 	 */
-	private void scanMethodLine(String line, Element root, Element construct, Element commentary)
+	private Element scanMethodLine(String line, Element construct, Element commentary)
 	{
-		if (line.startsWith("private")) return;
-		if (line.startsWith("@")) return;
+		if (line.startsWith("private")) return null;
+		if (line.startsWith("@")) return null;
 		construct = new Element("method");
 		
 		/*
@@ -616,7 +632,7 @@ public class SourceScanner
 			else
 			{
 				// if private constructor, skip
-				return;
+				return null;
 			}
 		}
 		
@@ -675,48 +691,73 @@ public class SourceScanner
 			if (misc!=null) construct.addChild( misc );
 		}
 		
-		root.addChild(construct);
+		return construct;
 	}
 	
 	/**
 	 * 
 	 */
-	private void scanFieldLine(String line, Element root, Element construct, Element commentary) 
+	private Element scanFieldLine(String line, 
+									Element construct, 
+									Element commentary, 
+									final int sourceType) 
 	{
 		construct = new Element("field");
 		
+		/*
+		 * split the var definition in two at the = sign.
+		 */
 		line = line.substring(0,line.length()-1);
 		String[] fielddata = line.split("=");
 		String fieldtype = fielddata[0].trim();
 		
+		/*
+		 * derive the field's name
+		 */
 		int lastindex = fieldtype.lastIndexOf(" ");
 		String varName = fieldtype.substring(lastindex+1);
 		construct.addChild( new Element("name").setText(varName) );
 		
+		/*
+		 * the word before the name is the type
+		 */
 		fieldtype = fieldtype.substring(0,lastindex);
 		lastindex = fieldtype.lastIndexOf(" ");
 		String varType = fieldtype.substring(lastindex+1);
 		construct.addChild( new Element("type").setText(varType) );
 		
-		// package private doesn't have a modifier, should not be parsed
+		/*
+		 * everything before the type are modifiers.
+		 * 
+		 * package private doesn't have a modifier and should not be 
+		 * parsed when declared inside a class, unless declared inside 
+		 * an interface then the field is public static final by default
+		 */
 		if (lastindex>0)
 		{
 			String varMod = fieldtype.substring(0,lastindex);
-			if (varMod.contains("private")) return;
+			if (varMod.contains("private")) return null;
 			construct.addChild( new Element("modifiers").setText(varMod) );
 		}
 		else
 		{
-			return;
+			if (sourceType==INTERFACE)
+			{
+				construct.addChild( new Element("modifiers").setText("public static final") );
+			}
+			else
+			//if (sourceType==CLASS)
+				return null;
 		}
 		
-		// parse data
+		/*
+		 * if the variable was initialized, parse the value
+		 */
 		if (fielddata.length > 1)
 		{
 			String data = fielddata[1].trim();
 			construct.addChild( new Element("data").setText(data) );
 		}
-		root.addChild(construct);
+		return construct;
 	}
-	
 }

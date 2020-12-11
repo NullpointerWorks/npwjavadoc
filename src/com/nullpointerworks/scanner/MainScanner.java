@@ -7,6 +7,7 @@ import java.util.List;
 import com.nullpointerworks.generator.FileMaker;
 import com.nullpointerworks.generator.Java;
 import com.nullpointerworks.generator.clazz.Constructor;
+import com.nullpointerworks.generator.clazz.Field;
 import com.nullpointerworks.generator.clazz.Method;
 import com.nullpointerworks.generator.func.Parameter;
 import com.nullpointerworks.util.Log;
@@ -18,9 +19,9 @@ import exp.nullpointerworks.xml.XMLParseException;
 
 public class MainScanner 
 {
-	private static final String JAVA_GIT 	= "D:/Development/Java/workspaces/git";
-	//private static final String JAVA_GIT 	= "F:/Development/Java/workspace/git";
-	private static final String CORE 		= JAVA_GIT+"/libcore/src/com/nullpointerworks/core";
+	static final String JAVA_GIT 	= "D:/Development/Java/workspaces/git";
+	//static final String JAVA_GIT 	= "F:/Development/Java/workspace/git";
+	static final String CORE 		= JAVA_GIT+"/libcore/src/com/nullpointerworks/core";
 	
 	public static void main(String[] args) 
 	{
@@ -35,6 +36,8 @@ public class MainScanner
 		
 		ms.parseSourceFile("src/com/nullpointerworks/examples/ExampleInterface.java");
 		ms.parseSourceFile("src/com/nullpointerworks/examples/ExampleClass.java");
+		ms.parseSourceFile("src/com/nullpointerworks/examples/ExampleEnum.java");
+		//ms.parseSourceFile("src/com/nullpointerworks/examples/ExampleEnum2.java");
 		
 	}
 	
@@ -154,6 +157,8 @@ public class MainScanner
 					jtype = Java.INTERFACE;
 				if (type.equalsIgnoreCase("enum")) 
 					jtype = Java.ENUM;
+				if (type.equalsIgnoreCase("@interface")) 
+					jtype = Java.ANNOTATION;
 				fm.setFileType(jtype);
 				continue;
 			}
@@ -183,7 +188,8 @@ public class MainScanner
 			 */
 			if (child_name.equalsIgnoreCase("field"))
 			{
-				// TODO
+				Field m = parseField(child);
+				fm.addField(m);
 			}
 			
 		}
@@ -413,6 +419,56 @@ public class MainScanner
 			}
 		}
 		return p;
+	}
+	
+	/*
+	 * 
+	 */
+	private Field parseField(Element child) 
+	{
+		Field f = new Field();
+		List<Element> field_children = child.getChildren();
+		for (Element field_child : field_children)
+		{
+			String child_name = field_child.getName();
+
+			/*
+			 * set name
+			 */
+			if (child_name.equalsIgnoreCase("name"))
+			{
+				f.setName( field_child.getText() );
+				continue;
+			}
+			
+			/*
+			 * set type
+			 */
+			if (child_name.equalsIgnoreCase("type"))
+			{
+				f.setType( field_child.getText() );
+				continue;
+			}
+			
+			/*
+			 * set data
+			 */
+			if (child_name.equalsIgnoreCase("data"))
+			{
+				f.setValue( field_child.getText() );
+				continue;
+			}
+			
+			/*
+			 * set modifiers
+			 */
+			if (child_name.equalsIgnoreCase("modifiers"))
+			{
+				f.setModifier( field_child.getText() );
+				continue;
+			}
+		}
+		return f;
 	}
 	
 	/*

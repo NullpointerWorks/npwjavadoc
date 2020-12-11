@@ -9,6 +9,12 @@
 	<code>
 		<type>interface</type>
 		<name>ExampleInterface</name>
+		<field>
+			<name>myVariable</name>
+			<type>int</type>
+			<modifiers>public static final</modifiers>
+			<data>0</data>
+		</field>
 		<method>
 			<commentary>public method</commentary>
 			<name>myPublicMethod</name>

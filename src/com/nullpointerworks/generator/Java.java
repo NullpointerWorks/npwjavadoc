@@ -4,7 +4,8 @@ public enum Java
 {
 	INTERFACE("Interface"),
 	CLASS("Class"),
-	ENUM("Enumeration");
+	ENUM("Enumeration"),
+	ANNOTATION("Annotation");
 	
 	private final String s;
 	private Java(String s) {this.s=s;}
