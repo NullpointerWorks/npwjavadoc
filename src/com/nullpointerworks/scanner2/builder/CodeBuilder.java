@@ -1,4 +1,4 @@
-package com.nullpointerworks.scanner2;
+package com.nullpointerworks.scanner2.builder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -56,9 +56,4 @@ public class CodeBuilder
 		implmentations = new ArrayList<String>();
 		throwing = new ArrayList<String>();
 	}
-	
-	
-	
-	
-	
 }

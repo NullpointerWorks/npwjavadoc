@@ -36,6 +36,13 @@ public class SourceParser
 	
 	public void nextCharacter(String character)
 	{
+		/*
+		 * store the passing characters into a string until a special marker is detected.
+		 * A special marker could be:
+		 * - space
+		 * - braces of any type, (), {}, []
+		 * - end of code line ;
+		 */
 		if (!character.equalsIgnoreCase(" "))
 		{
 			tokenBuilder.append(character);

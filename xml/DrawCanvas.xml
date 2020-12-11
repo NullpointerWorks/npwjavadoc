@@ -37,7 +37,7 @@
 			<param>
 				<type>int[]</type>
 				<name>pixels</name>
-				<comment> - an integer array for the same size as the rendering surface</comment>
+				<comment> an integer array for the same size as the rendering surface</comment>
 			</param>
 			<since>1.0.0</since>
 		</method>

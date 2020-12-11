@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<source>
+	<module>libnpw.core</module>
+	<package>com.nullpointerworks.core</package>
+	<commentary>
+		Provides access the host PC's graphics environment to gain access to its connected monitors.
+		<author>Michiel Drost - Nullpointer Works</author>
+		<since>1.0.0</since>
+	</commentary>
+	<code>
+		<type>class</type>
+		<name>Monitor</name>
+		<modifiers>class</modifiers>
+		<method>
+			<commentary>Returns a Monitor object with the details of the selected display device.</commentary>
+			<name>getDisplay</name>
+			<returns>
+				<type>Monitor</type>
+				<comment>a Monitor object with the details of the selected display device</comment>
+			</returns>
+			<modifiers>static</modifiers>
+			<param>
+				<type>int</type>
+				<name>id</name>
+				<comment> is the monitor identity on the host OS. Provide the identity - 1.</comment>
+			</param>
+			<since>1.0.0</since>
+		</method>
+		<method>
+			<commentary>Returns an array of Monitor objects for each connected monitor.</commentary>
+			<name>getDisplay</name>
+			<returns>
+				<type>Monitor[]</type>
+				<comment>an array of Monitor objects for each connected monitor</comment>
+			</returns>
+			<modifiers>static</modifiers>
+			<since>1.0.0</since>
+		</method>
+		<method>
+			<commentary>Returns the host's graphics environment associated with the monitor.</commentary>
+			<name>getGraphicsEnvironment</name>
+			<returns>
+				<type>GraphicsEnvironment</type>
+				<comment>the host's graphics environment associated with the monitor</comment>
+			</returns>
+			<since>1.0.0</since>
+		</method>
+		<method>
+			<commentary>Returns the host's graphics device associated with the monitor.</commentary>
+			<name>getGraphicsDevice</name>
+			<returns>
+				<type>GraphicsDevice</type>
+				<comment>the host's graphics device associated with the monitor</comment>
+			</returns>
+			<since>1.0.0</since>
+		</method>
+		<method>
+			<commentary>Returns the display mode for this monitor. This contains bit depth, width, height, etc.</commentary>
+			<name>getDisplayMode</name>
+			<returns>
+				<type>DisplayMode</type>
+				<comment>the display mode for this monitor</comment>
+			</returns>
+			<since>1.0.0</since>
+		</method>
+		<method>
+			<commentary>Returns the width in pixels of the display.</commentary>
+			<name>getWidth</name>
+			<returns>
+				<type>int</type>
+				<comment>the width in pixels</comment>
+			</returns>
+			<since>1.0.0</since>
+		</method>
+		<method>
+			<commentary>Returns the height in pixels of the display.</commentary>
+			<name>getHeight</name>
+			<returns>
+				<type>int</type>
+				<comment>the height in pixels</comment>
+			</returns>
+			<since>1.0.0</since>
+		</method>
+		<method>
+			<commentary>Returns the device ID on the host OS.</commentary>
+			<name>getDeviceID</name>
+			<returns>
+				<type>int</type>
+				<comment>the device ID on the host OS</comment>
+			</returns>
+			<since>1.0.0</since>
+		</method>
+	</code>
+</source>

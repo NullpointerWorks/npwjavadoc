@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<source>
+	<module>libnpw.core</module>
+	<package>com.nullpointerworks.core</package>
+	<commentary>
+		Contains a {@code BufferedImage} as a basic rendering surface. This implementation of {@code DrawCanvas} extends a {@code JPanel} and is also returned from the {@code component()} method.
+		<author>Michiel Drost - Nullpointer Works</author>
+		<since>1.0.0</since>
+	</commentary>
+	<code>
+		<type>class</type>
+		<implements>DrawCanvas</implements>
+		<extends>JPanel</extends>
+		<name>PanelCanvas</name>
+		<modifiers>class</modifiers>
+		<constructor>
+			<commentary>Creates a drawing surface of the given dimensions. It will accepts colors as integers in ARGB format at 8 bit depth.</commentary>
+			<name>PanelCanvas</name>
+			<modifiers>public</modifiers>
+			<param>
+				<type>int</type>
+				<name>width</name>
+				<comment> the width of the drawing surface</comment>
+			</param>
+			<param>
+				<type>int</type>
+				<name>height</name>
+				<comment> the height of the drawing surface</comment>
+			</param>
+			<since>1.0.0</since>
+		</constructor>
+		<method>
+			<name>width</name>
+			<returns>
+				<type>int</type>
+			</returns>
+			<override>com.nullpointerworks.core.DrawCanvas</override>
+		</method>
+		<method>
+			<name>height</name>
+			<returns>
+				<type>int</type>
+			</returns>
+			<override>com.nullpointerworks.core.DrawCanvas</override>
+		</method>
+		<method>
+			<name>component</name>
+			<returns>
+				<type>Component</type>
+			</returns>
+			<override>com.nullpointerworks.core.DrawCanvas</override>
+		</method>
+		<method>
+			<name>swap</name>
+			<returns>
+				<type>void</type>
+			</returns>
+			<param>
+				<type>int[]</type>
+				<name>pix</name>
+			</param>
+			<override>com.nullpointerworks.core.DrawCanvas</override>
+		</method>
+		<method>
+			<name>paint</name>
+			<returns>
+				<type>void</type>
+			</returns>
+			<param>
+				<type>Graphics</type>
+				<name>g</name>
+			</param>
+			<override>javax.swing.JComponent</override>
+		</method>
+	</code>
+</source>

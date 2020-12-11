@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Window - API Reference - Nullpointer Works</title>
+        <meta charset="utf-8"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    	<link rel="stylesheet" type="text/css" href="../css/style.css"/>
+    	<link rel="stylesheet" type="text/css" href="../css/layout.css"/>
+    </head>
+    <body>
+        <div class="container">
+            <div class="header small vdark petrol-font">
+                Module <a href="module-core.html">libnpw.core</a>
+            </div>
+            <div class="header small vdark petrol-font">
+                Package <a href="pack-core.html">com.nullpointerworks.core</a>
+            </div>
+            <div class="header vdark petrol-font">
+                Class Window
+            </div>
+            <!-- desc -->
+            <div class="content midlight">
+                <div class="desc">
+A container for a {@code javax.swing.JFrame} which serves as the primary window handler. The Window does not extend any other subclass. To gain access to the underlying frame use; {@code window.getFrame();}
+                </div>
+                <div class="desc mark">Since:<div class="marktext">1.0.0</div></div>
+                <div class="desc mark">Author:<div class="marktext">Michiel Drost - Nullpointer Works</div></div>
+            </div>
+            <!-- method summary section -->
+            <div class="section dark">
+                <div class="sectiontitle">Method Summary</div>
+                <div class="header small yellow">Summary</div>
+                <!-- summary -->
+                <div class="rTable">
+                    <div class="rTableRow">
+                        <div class="rTableHead" style="width:15%;"><strong>Type</strong></div>
+                        <div class="rTableHead" style="width:15%;"><strong>Method</strong></div>
+                        <div class="rTableHead"><strong>Returns</strong></div>
+                    </div>
+                    <div class="rTableRow">
+                        <div class="rTableCell">void</div>
+                        <div class="rTableCell">swap(int[])</div>
+                        <div class="rTableCell"></div>
+                    </div>
+                    <div class="rTableRow">
+                        <div class="rTableCell">void</div>
+                        <div class="rTableCell">setVisible(boolean)</div>
+                        <div class="rTableCell"></div>
+                    </div>
+                    <div class="rTableRow">
+                        <div class="rTableCell">void</div>
+                        <div class="rTableCell">setWindowMode(WindowMode)</div>
+                        <div class="rTableCell"></div>
+                    </div>
+                    <div class="rTableRow">
+                        <div class="rTableCell">void</div>
+                        <div class="rTableCell">setDrawCanvas(DrawCanvas)</div>
+                        <div class="rTableCell"></div>
+                    </div>
+                    <div class="rTableRow">
+                        <div class="rTableCell">void</div>
+                        <div class="rTableCell">setIcon(IntBuffer)</div>
+                        <div class="rTableCell"></div>
+                    </div>
+                    <div class="rTableRow">
+                        <div class="rTableCell">void</div>
+                        <div class="rTableCell">setIcon(InputStream)</div>
+                        <div class="rTableCell"></div>
+                    </div>
+                    <div class="rTableRow">
+                        <div class="rTableCell">void</div>
+                        <div class="rTableCell">addInputDevice(MouseInput)</div>
+                        <div class="rTableCell"></div>
+                    </div>
+                    <div class="rTableRow">
+                        <div class="rTableCell">void</div>
+                        <div class="rTableCell">addInputDevice(KeyboardInput)</div>
+                        <div class="rTableCell"></div>
+                    </div>
+                    <div class="rTableRow">
+                        <div class="rTableCell">void</div>
+                        <div class="rTableCell">addWindowListener(WindowListener)</div>
+                        <div class="rTableCell"></div>
+                    </div>
+                    <div class="rTableRow">
+                        <div class="rTableCell">DrawCanvas</div>
+                        <div class="rTableCell">getDrawCanvas()</div>
+                        <div class="rTableCell">the {@code DrawCanvas} rendering surface</div>
+                    </div>
+                    <div class="rTableRow">
+                        <div class="rTableCell">JFrame</div>
+                        <div class="rTableCell">getFrame()</div>
+                        <div class="rTableCell">the {@code JFrame} which is the primary windowing container</div>
+                    </div>
+                    <div class="rTableRow">
+                        <div class="rTableCell">MouseInput</div>
+                        <div class="rTableCell">getMouse()</div>
+                        <div class="rTableCell">the {@code MouseInput} object attached to the window</div>
+                    </div>
+                    <div class="rTableRow">
+                        <div class="rTableCell">KeyboardInput</div>
+                        <div class="rTableCell">getKeyboard()</div>
+                        <div class="rTableCell">the {@code KeyboardInput} object attached to the window</div>
+                    </div>
+                    <div class="rTableRow">
+                        <div class="rTableCell">int</div>
+                        <div class="rTableCell">getWidth()</div>
+                        <div class="rTableCell">the internal rendering width of the window</div>
+                    </div>
+                    <div class="rTableRow">
+                        <div class="rTableCell">int</div>
+                        <div class="rTableCell">getHeight()</div>
+                        <div class="rTableCell">the internal rendering height of the window</div>
+                    </div>
+                    <div class="rTableRow">
+                        <div class="rTableCell">String</div>
+                        <div class="rTableCell">getTitle()</div>
+                        <div class="rTableCell">the title of the window</div>
+                    </div>
+                </div>
+            </div>
+            <!-- method details section -->
+            <div class="section dark">
+                <div class="sectiontitle">Method Detail</div>
+                <div class="header small blue ">void swap(int[] pixels)</div>
+                <div class="content midlight">
+                    <div class="desc">
+                        Swap the integer content of the given array to the display buffer. It's up to the user to make sure that the length of the array matches the area of the display. Each integer is assumed to follow ARGB order at a bit depth of 8 bits.
+                    </div>
+                    <div class="desc">
+                        <div class="desc mark">Parameters:<div class="marktext">pixels -  - the array of integers that represent colors</div></div>
+                        <div class="desc mark">Since:<div class="marktext">1.0.0</div></div>
+                    </div>
+                </div>
+                <div class="header small blue spacer">void setVisible(boolean show)</div>
+                <div class="content midlight">
+                    <div class="desc">
+                        Delegate to display the internal {@code JFrame} object. Set true to make the window appear, false to hide it.
+                    </div>
+                    <div class="desc">
+                        <div class="desc mark">Parameters:<div class="marktext">show -  - to show, or not to show</div></div>
+                        <div class="desc mark">Since:<div class="marktext">1.0.0</div></div>
+                    </div>
+                </div>
+                <div class="header small blue spacer">void setWindowMode(WindowMode mode)</div>
+                <div class="content midlight">
+                    <div class="desc">
+                        Set the windowing mode for this window. what dimensions it might take
+                    </div>
+                    <div class="desc">
+                        <div class="desc mark">Parameters:<div class="marktext">mode -  - determines if a window will be framed and</div></div>
+                        <div class="desc mark">Since:<div class="marktext">1.0.0</div></div>
+                    </div>
+                </div>
+                <div class="header small blue spacer">void setDrawCanvas(DrawCanvas canvas)</div>
+                <div class="content midlight">
+                    <div class="desc">
+                        This method sets a {@code DrawCanvas} object as the primary recipient to render to. When creating a new window, this class creates a {@code PanelCanvas} instance as the primary rendering recipient. Use this method only if you want the window to utilize non-standard rendering code.
+                    </div>
+                    <div class="desc">
+                        <div class="desc mark">Parameters:<div class="marktext">canvas -  - the drawing canvas to be used in this window.</div></div>
+                        <div class="desc mark">Since:<div class="marktext">1.0.0</div></div>
+                    </div>
+                </div>
+                <div class="header small blue spacer">void setIcon(IntBuffer image)</div>
+                <div class="content midlight">
+                    <div class="desc">
+                        Provide an {@code IntBuffer} object that contains the ARGB image data to be set as the icon for the window. No icon will be set if the input image is null.
+                    </div>
+                    <div class="desc">
+                        <div class="desc mark">Parameters:<div class="marktext">image -  - the integer buffer to be used</div></div>
+                        <div class="desc mark">Since:<div class="marktext">1.0.0</div></div>
+                    </div>
+                </div>
+                <div class="header small blue spacer">void setIcon(InputStream stream)</div>
+                <div class="content midlight">
+                    <div class="desc">
+                        Provide an input stream linking to image data to be used as the icon for the window.
+                    </div>
+                    <div class="desc">
+                        <div class="desc mark">Parameters:<div class="marktext">stream -  - input stream linking to the image data</div></div>
+                        <div class="desc mark">Since:<div class="marktext">1.0.0</div></div>
+                    </div>
+                </div>
+                <div class="header small blue spacer">void addInputDevice(MouseInput mouseinput)</div>
+                <div class="content midlight">
+                    <div class="desc">
+                        Add a mouse input to the window to read user input. The {@code MouseInput} will be attached as a listener to the DrawCanvas. This input device will be moved to another canvas when swapping to another canvas.
+                    </div>
+                    <div class="desc">
+                        <div class="desc mark">Parameters:<div class="marktext">mouseinput -  - the mouse input object</div></div>
+                        <div class="desc mark">Since:<div class="marktext">1.0.0</div></div>
+                    </div>
+                </div>
+                <div class="header small blue spacer">void addInputDevice(KeyboardInput keyboardinput)</div>
+                <div class="content midlight">
+                    <div class="desc">
+                        Add a keyboard input to the window to read user input. The {@code KeyboardInput} will be added as a listener to the internal frame. This input device will be moved to another frame when creating a new window.
+                    </div>
+                    <div class="desc">
+                        <div class="desc mark">Parameters:<div class="marktext">keyboardinput -  - the keyboard input object</div></div>
+                        <div class="desc mark">Since:<div class="marktext">1.0.0</div></div>
+                    </div>
+                </div>
+                <div class="header small blue spacer">void addWindowListener(WindowListener windowlistener)</div>
+                <div class="content midlight">
+                    <div class="desc">
+                        Add a {@code java.awt.event.WindowListener} to the internal frame. When creating a new window, all window listeners will be added to the new window. This method is intended to be used by the libnpw.game library which has a {@code LoopAdapter} that track the state of the application and inform the window.
+                    </div>
+                    <div class="desc">
+                        <div class="desc mark">Parameters:<div class="marktext">windowlistener -  - the window listener to be added</div></div>
+                        <div class="desc mark">Since:<div class="marktext">1.0.0</div></div>
+                    </div>
+                </div>
+                <div class="header small blue spacer">DrawCanvas getDrawCanvas()</div>
+                <div class="content midlight">
+                    <div class="desc">
+                        Returns the {@code DrawCanvas} rendering surface.
+                    </div>
+                    <div class="desc">
+                        <div class="desc mark">Returns:<div class="marktext">the {@code DrawCanvas} rendering surface</div></div>
+                        <div class="desc mark">Since:<div class="marktext">1.0.0</div></div>
+                    </div>
+                </div>
+                <div class="header small blue spacer">JFrame getFrame()</div>
+                <div class="content midlight">
+                    <div class="desc">
+                        Returns the {@code JFrame} which is the primary windowing container.
+                    </div>
+                    <div class="desc">
+                        <div class="desc mark">Returns:<div class="marktext">the {@code JFrame} which is the primary windowing container</div></div>
+                        <div class="desc mark">Since:<div class="marktext">1.0.0</div></div>
+                    </div>
+                </div>
+                <div class="header small blue spacer">MouseInput getMouse()</div>
+                <div class="content midlight">
+                    <div class="desc">
+                        Returns the {@code MouseInput} object attached to the window.
+                    </div>
+                    <div class="desc">
+                        <div class="desc mark">Returns:<div class="marktext">the {@code MouseInput} object attached to the window</div></div>
+                        <div class="desc mark">Since:<div class="marktext">1.0.0</div></div>
+                    </div>
+                </div>
+                <div class="header small blue spacer">KeyboardInput getKeyboard()</div>
+                <div class="content midlight">
+                    <div class="desc">
+                        Returns the {@code KeyboardInput} object attached to the window.
+                    </div>
+                    <div class="desc">
+                        <div class="desc mark">Returns:<div class="marktext">the {@code KeyboardInput} object attached to the window</div></div>
+                        <div class="desc mark">Since:<div class="marktext">1.0.0</div></div>
+                    </div>
+                </div>
+                <div class="header small blue spacer">int getWidth()</div>
+                <div class="content midlight">
+                    <div class="desc">
+                        Returns the internal rendering width of the window.
+                    </div>
+                    <div class="desc">
+                        <div class="desc mark">Returns:<div class="marktext">the internal rendering width of the window</div></div>
+                        <div class="desc mark">Since:<div class="marktext">1.0.0</div></div>
+                    </div>
+                </div>
+                <div class="header small blue spacer">int getHeight()</div>
+                <div class="content midlight">
+                    <div class="desc">
+                        Returns the internal rendering height of the window.
+                    </div>
+                    <div class="desc">
+                        <div class="desc mark">Returns:<div class="marktext">the internal rendering height of the window</div></div>
+                        <div class="desc mark">Since:<div class="marktext">1.0.0</div></div>
+                    </div>
+                </div>
+                <div class="header small blue spacer">String getTitle()</div>
+                <div class="content midlight">
+                    <div class="desc">
+                        Returns the title of the window.
+                    </div>
+                    <div class="desc">
+                        <div class="desc mark">Returns:<div class="marktext">the title of the window</div></div>
+                        <div class="desc mark">Since:<div class="marktext">1.0.0</div></div>
+                    </div>
+                </div>
+            </div>
+            <!-- end -->
+        </div>
+    </body>
+</html>

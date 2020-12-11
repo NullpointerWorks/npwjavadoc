@@ -48,12 +48,24 @@ public class Method
 		setAdditional("Returns",r);
 	}
 	
+	public void setVersion(String r) 
+	{
+		setAdditional("Version",r);
+	}
+	
+	public void setAuthor(String r) 
+	{
+		setAdditional("Author",r);
+	}
+	
 	public void setAdditional(String t, String s) 
 	{
 		adds.add( new Additional(t,s) );
 	}
 	
 	public void setDetails(String t, String n) {type=t;name=n;}
+	public void setType(String t) {type=t;}
+	public void setName(String n) {name=n;}
 	public void setModifier(String m) {mods=m;}
 	public void setDescription(String d) {desc=d;}
 	public String getModifier() {return mods;}
