@@ -20,8 +20,9 @@ public interface ExampleInterface
 	
 	/**
 	 * no modifiers are also public by default
+	 * @param i testing parameter
 	 */
-	void myPublicMethod3();
+	void myPublicMethod3(int i);
 	
 	/**
 	 * my default method
@@ -32,9 +33,9 @@ public interface ExampleInterface
 	}
 	
 	/*
-	 * my default method with bad commentary marker
+	 * my default method with bad commentary marker, but with a parameter
 	 */
-	default void myDefaultMethod2() 
+	default void myDefaultMethod2(int i, int j) 
 	{
 		
 	}

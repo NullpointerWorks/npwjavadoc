@@ -1,11 +1,11 @@
-package com.nullpointerworks.generate;
+package com.nullpointerworks.generator;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.nullpointerworks.generate.mod.Exported;
-import com.nullpointerworks.generate.mod.Required;
+import com.nullpointerworks.generator.mod.Exported;
+import com.nullpointerworks.generator.mod.Required;
 import com.nullpointerworks.util.file.textfile.TextFile;
 import com.nullpointerworks.util.file.textfile.TextFileParser;
 

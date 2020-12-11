@@ -1,4 +1,4 @@
-package com.nullpointerworks.generate.func;
+package com.nullpointerworks.generator.func;
 
 public class Parameter
 {

@@ -108,6 +108,9 @@ public class SourceScanner
 				root.addChild(construct);
 			}
 			
+			/*
+			 * public section of source code, like a class, interface or enum
+			 */
 			if (line.startsWith("public "))
 			{
 				String pub = line.substring(7);
@@ -423,7 +426,8 @@ public class SourceScanner
 				if (pname!=null)
 				if (pname.getText().equalsIgnoreCase(name))
 				{
-					el.addChild( new Element("comment").setText(param.getChild("text").getText()) );
+					String param_text = param.getChild("text").getText();
+					el.addChild( new Element("comment").setText(param_text.trim()) );
 					break;
 				}
 			}
@@ -679,23 +683,32 @@ public class SourceScanner
 	 */
 	private void scanFieldLine(String line, Element root, Element construct, Element commentary) 
 	{
+		construct = new Element("field");
+		
 		line = line.substring(0,line.length()-1);
 		String[] fielddata = line.split("=");
 		String fieldtype = fielddata[0].trim();
 		
 		int lastindex = fieldtype.lastIndexOf(" ");
 		String varName = fieldtype.substring(lastindex+1);
+		construct.addChild( new Element("name").setText(varName) );
+		
 		fieldtype = fieldtype.substring(0,lastindex);
 		lastindex = fieldtype.lastIndexOf(" ");
 		String varType = fieldtype.substring(lastindex+1);
-		String varMod = fieldtype.substring(0,lastindex);
-		
-		if (varMod.contains("private")) return;
-		
-		construct = new Element("field");
-		construct.addChild( new Element("name").setText(varName) );
 		construct.addChild( new Element("type").setText(varType) );
-		construct.addChild( new Element("modifiers").setText(varMod) );
+		
+		// package private doesn't have a modifier, should not be parsed
+		if (lastindex>0)
+		{
+			String varMod = fieldtype.substring(0,lastindex);
+			if (varMod.contains("private")) return;
+			construct.addChild( new Element("modifiers").setText(varMod) );
+		}
+		else
+		{
+			return;
+		}
 		
 		// parse data
 		if (fielddata.length > 1)

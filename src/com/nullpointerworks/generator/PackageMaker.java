@@ -1,10 +1,10 @@
-package com.nullpointerworks.generate;
+package com.nullpointerworks.generator;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.nullpointerworks.generate.pack.PackageItem;
+import com.nullpointerworks.generator.pack.PackageItem;
 import com.nullpointerworks.util.file.textfile.TextFile;
 import com.nullpointerworks.util.file.textfile.TextFileParser;
 

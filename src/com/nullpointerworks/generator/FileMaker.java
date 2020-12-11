@@ -1,14 +1,14 @@
-package com.nullpointerworks.generate;
+package com.nullpointerworks.generator;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.nullpointerworks.generate.clazz.Constructor;
-import com.nullpointerworks.generate.clazz.Field;
-import com.nullpointerworks.generate.clazz.Method;
-import com.nullpointerworks.generate.enums.EnumField;
-import com.nullpointerworks.generate.func.Parameter;
+import com.nullpointerworks.generator.clazz.Constructor;
+import com.nullpointerworks.generator.clazz.Field;
+import com.nullpointerworks.generator.clazz.Method;
+import com.nullpointerworks.generator.enums.EnumField;
+import com.nullpointerworks.generator.func.Parameter;
 import com.nullpointerworks.util.file.textfile.TextFile;
 import com.nullpointerworks.util.file.textfile.TextFileParser;
 

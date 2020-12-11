@@ -1,10 +1,10 @@
-package com.nullpointerworks.generate.clazz;
+package com.nullpointerworks.generator.clazz;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import com.nullpointerworks.generate.Additional;
-import com.nullpointerworks.generate.func.Parameter;
+import com.nullpointerworks.generator.Additional;
+import com.nullpointerworks.generator.func.Parameter;
 
 public class Constructor 
 {

@@ -1,4 +1,4 @@
-package com.nullpointerworks.generate;
+package com.nullpointerworks.generator;
 
 public class Additional
 {

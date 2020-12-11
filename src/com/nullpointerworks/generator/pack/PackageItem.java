@@ -1,4 +1,4 @@
-package com.nullpointerworks.generate.pack;
+package com.nullpointerworks.generator.pack;
 
 public class PackageItem
 {

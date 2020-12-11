@@ -30,6 +30,11 @@
 			<returns>
 				<type>void</type>
 			</returns>
+			<param>
+				<type>int</type>
+				<name>i</name>
+				<comment>testing parameter</comment>
+			</param>
 		</method>
 		<method>
 			<commentary>my default method</commentary>
@@ -45,6 +50,14 @@
 				<type>void</type>
 			</returns>
 			<modifiers>default</modifiers>
+			<param>
+				<type>int</type>
+				<name>i</name>
+			</param>
+			<param>
+				<type>int</type>
+				<name>j</name>
+			</param>
 		</method>
 		<method>
 			<commentary>my default method with a return type</commentary>

@@ -1,4 +1,4 @@
-package com.nullpointerworks.generate.mod;
+package com.nullpointerworks.generator.mod;
 
 public class Required
 {

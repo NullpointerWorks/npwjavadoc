@@ -4,8 +4,34 @@
 	<package>com.nullpointerworks.examples</package>
 	<code>
 		<type>class</type>
+		<implements>ExampleInterface</implements>
+		<extends>Object</extends>
 		<name>ExampleClass</name>
 		<modifiers>class</modifiers>
+		<field>
+			<name>PI</name>
+			<type>Float</type>
+			<modifiers>public</modifiers>
+			<data>3.1415F</data>
+		</field>
+		<field>
+			<name>TAU</name>
+			<type>Float</type>
+			<modifiers>public static</modifiers>
+			<data>6.283F</data>
+		</field>
+		<field>
+			<name>PHI</name>
+			<type>Float</type>
+			<modifiers>protected</modifiers>
+			<data>1.618F</data>
+		</field>
+		<field>
+			<name>myArray</name>
+			<type>String[]</type>
+			<modifiers>public</modifiers>
+			<data>{"hi","hey"}</data>
+		</field>
 		<constructor>
 			<commentary>public constructor</commentary>
 			<name>ExampleClass</name>
@@ -18,15 +44,40 @@
 			<param>
 				<type>int</type>
 				<name>i</name>
+				<comment>integer param</comment>
 			</param>
 			<param>
 				<type>int</type>
 				<name>j</name>
+				<comment>integer param</comment>
 			</param>
 			<param>
 				<type>int</type>
 				<name>k</name>
+				<comment>integer param</comment>
 			</param>
 		</constructor>
+		<method>
+			<name>myPublicMethod</name>
+			<returns>
+				<type>void</type>
+			</returns>
+		</method>
+		<method>
+			<name>myPublicMethod2</name>
+			<returns>
+				<type>void</type>
+			</returns>
+		</method>
+		<method>
+			<name>myPublicMethod3</name>
+			<returns>
+				<type>void</type>
+			</returns>
+			<param>
+				<type>int</type>
+				<name>i</name>
+			</param>
+		</method>
 	</code>
 </source>

@@ -4,11 +4,11 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.List;
 
-import com.nullpointerworks.generate.FileMaker;
-import com.nullpointerworks.generate.Java;
-import com.nullpointerworks.generate.clazz.Constructor;
-import com.nullpointerworks.generate.clazz.Method;
-import com.nullpointerworks.generate.func.Parameter;
+import com.nullpointerworks.generator.FileMaker;
+import com.nullpointerworks.generator.Java;
+import com.nullpointerworks.generator.clazz.Constructor;
+import com.nullpointerworks.generator.clazz.Method;
+import com.nullpointerworks.generator.func.Parameter;
 import com.nullpointerworks.util.Log;
 
 import exp.nullpointerworks.xml.Document;
@@ -18,8 +18,8 @@ import exp.nullpointerworks.xml.XMLParseException;
 
 public class MainScanner 
 {
-	//private static final String JAVA_GIT 	= "D:/Development/Java/workspaces/git";
-	private static final String JAVA_GIT 	= "F:/Development/Java/workspace/git";
+	private static final String JAVA_GIT 	= "D:/Development/Java/workspaces/git";
+	//private static final String JAVA_GIT 	= "F:/Development/Java/workspace/git";
 	private static final String CORE 		= JAVA_GIT+"/libcore/src/com/nullpointerworks/core";
 	
 	public static void main(String[] args) 
@@ -28,12 +28,12 @@ public class MainScanner
 		MainScanner ms = new MainScanner();
 		//ms.parseSourceFile(CORE+"/DrawCanvas.java");
 		//ms.parseSourceFile(CORE+"/Monitor.java");
-		ms.parseSourceFile(CORE+"/PanelCanvas.java");
+		//ms.parseSourceFile(CORE+"/PanelCanvas.java");
 		//ms.parseSourceFile(CORE+"/Window.java");
 		//ms.parseSourceFile(CORE+"/WindowMode.java");
 		
 		
-		//ms.parseSourceFile("src/com/nullpointerworks/examples/ExampleInterface.java");
+		ms.parseSourceFile("src/com/nullpointerworks/examples/ExampleInterface.java");
 		ms.parseSourceFile("src/com/nullpointerworks/examples/ExampleClass.java");
 		
 	}

@@ -1,13 +1,19 @@
 package com.nullpointerworks.examples;
 
-public class ExampleClass 
+public class ExampleClass extends Object implements ExampleInterface
 {
 
 	// =====================================================
 	// FIELDS
 	// =====================================================
 	
+	public Float PI = 3.1415F;
+	public static Float TAU = 6.283F;
+	private Float E = 2.17F;
+	Float SQ2 = 1.414F;
+	protected Float PHI = 1.618F;
 	
+	public String[] myArray = {"hi","hey"};
 	
 	// =====================================================
 	// CONSTRUCTORS
@@ -22,7 +28,7 @@ public class ExampleClass
 	}
 	
 	/**
-	 * package private constructor
+	 * package private constructor. will not be parsed
 	 */
 	ExampleClass(int i)
 	{
@@ -39,6 +45,9 @@ public class ExampleClass
 	
 	/**
 	 * protected constructor
+	 * @param i integer param
+	 * @param j integer param
+	 * @param k integer param
 	 */
 	protected ExampleClass(int i, int j, int k)
 	{
@@ -49,11 +58,22 @@ public class ExampleClass
 	// METHODS
 	// =====================================================
 	
-	
-	
-	
-	
-	
-	
+	@Override
+	public void myPublicMethod() 
+	{
+		
+	}
+
+	@Override
+	public void myPublicMethod2() 
+	{
+		
+	}
+
+	@Override
+	public void myPublicMethod3(int i) 
+	{
+		
+	}
 	
 }

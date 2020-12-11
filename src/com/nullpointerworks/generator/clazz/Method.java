@@ -1,6 +1,6 @@
-package com.nullpointerworks.generate.clazz;
+package com.nullpointerworks.generator.clazz;
 
-import com.nullpointerworks.generate.Additional;
+import com.nullpointerworks.generator.Additional;
 
 public class Method extends Constructor
 {
