@@ -465,7 +465,7 @@ public class SourceScanner
 			{
 				isCommentary = true;
 				construct = new Element("commentary");
-				root.addChild(construct);
+				//root.addChild(construct);
 			}
 			if (isCommentary)
 			{
@@ -479,6 +479,9 @@ public class SourceScanner
 				continue;
 			}
 			
+			/*
+			 * if code was detected
+			 */
 			if (line.length()>0)
 			{
 				String[] enums = line.split(",");
@@ -486,8 +489,9 @@ public class SourceScanner
 				{
 					e = e.replace(";", "");
 					e = e.trim();
-					
 					if (!validLettering(e)) continue;
+					
+					
 					Element en = new Element("value");
 					en.setText(e);
 					root.addChild(en);
