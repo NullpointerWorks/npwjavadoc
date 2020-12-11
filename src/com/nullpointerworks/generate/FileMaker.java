@@ -48,10 +48,14 @@ public class FileMaker
 		sourcePackage=n;
 	}
 	
-	public void setFileName(Java type, String fn) 
+	public void setFileName(String fn) 
 	{
-		this.type=type;
 		fileName = fn;
+	}
+	
+	public void setFileType(Java typ) 
+	{
+		type=typ;
 	}
 	
 	public void setSince(String s) 

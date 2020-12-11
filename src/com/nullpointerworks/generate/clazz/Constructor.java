@@ -31,10 +31,25 @@ public class Constructor
 	{
 		params.add(e);
 	}
-	
-	public void setSince(String s)
+
+	public void setSince(String s) 
 	{
 		setAdditional("Since",s);
+	}
+	
+	public void setReturns(String r) 
+	{
+		setAdditional("Returns",r);
+	}
+	
+	public void setVersion(String r) 
+	{
+		setAdditional("Version",r);
+	}
+	
+	public void setAuthor(String r) 
+	{
+		setAdditional("Author",r);
 	}
 	
 	public void setAdditional(String t, String s)

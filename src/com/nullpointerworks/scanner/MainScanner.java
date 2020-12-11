@@ -24,52 +24,54 @@ public class MainScanner
 	
 	public static void main(String[] args) 
 	{
-		//args = new String[] {JAVA_GIT+"libcore/src/module-info.java"};
-		//args = new String[] {JAVA_GIT+"libcore/src/com/nullpointerworks/core/Monitor.java"};
-		
-		/*
-		args = new String[] {"src/com/nullpointerworks/scanner/ScanTestInterface.java", 
-							 "src/com/nullpointerworks/scanner/ScanTestClass.java", 
-							 "src/com/nullpointerworks/scanner/ScanTestEnum.java"};
-		//*/
-		
 		//args = new String[] {CORE+"/DrawCanvas.java"};
-		//args = new String[] {CORE+"/Monitor.java"};
-		args = new String[] {CORE+"/PanelCanvas.java"};
-		//args = new String[] {CORE+"/Window.java"};
-		//args = new String[] {CORE+"/WindowMode.java"};
-		new MainScanner(args);
+		MainScanner ms = new MainScanner();
+		//ms.parseSourceFile(CORE+"/DrawCanvas.java");
+		//ms.parseSourceFile(CORE+"/Monitor.java");
+		ms.parseSourceFile(CORE+"/PanelCanvas.java");
+		//ms.parseSourceFile(CORE+"/Window.java");
+		//ms.parseSourceFile(CORE+"/WindowMode.java");
+		
+		
+		//ms.parseSourceFile("src/com/nullpointerworks/examples/ExampleInterface.java");
+		ms.parseSourceFile("src/com/nullpointerworks/examples/ExampleClass.java");
+		
 	}
+	
+	/* ====================================================
+	 * individual file scan
+	 * ==================================================== */
 	
 	/*
 	 * package preset
 	 */
 	private final String[][] PACK = 
 	{
-		{"com.nullpointerworks.color", "pack-color.html", "libnpw.color", "module-color.html"},
-		{"com.nullpointerworks.core", "pack-core.html", "libnpw.core", "module-core.html"},
-		{"com.nullpointerworks.game", "pack-game.html", "libnpw.game", "module-game.html"},
-		{"com.nullpointerworks.graphics", "pack-graphics.html", "libnpw.graphics", "module-graphics.html"},
-		{"exp.nullpointerworks.http", "pack-http.html", "libnpw.http", "module-http.html"},
-		{"com.nullpointerworks.j2d", "pack-j2d.html", "libnpw.j2d", "module-j2d.html"},
-		{"com.nullpointerworks.math", "pack-math.html", "libnpw.math", "module-math.html"},
-		{"com.nullpointerworks.util", "pack-util.html", "libnpw.util", "module-util.html"},
-		{"exp.nullpointerworks.xml", "pack-xml.html", "libnpw.xml", "module-xml.html"},
+		{"com.nullpointerworks.color", 		"pack-color.html", "libnpw.color", "module-color.html"},
+		{"com.nullpointerworks.core", 		"pack-core.html", "libnpw.core", "module-core.html"},
+		{"com.nullpointerworks.game", 		"pack-game.html", "libnpw.game", "module-game.html"},
+		{"com.nullpointerworks.graphics", 	"pack-graphics.html", "libnpw.graphics", "module-graphics.html"},
+		{"exp.nullpointerworks.http", 		"pack-http.html", "libnpw.http", "module-http.html"},
+		{"com.nullpointerworks.j2d", 		"pack-j2d.html", "libnpw.j2d", "module-j2d.html"},
+		{"com.nullpointerworks.math", 		"pack-math.html", "libnpw.math", "module-math.html"},
+		{"com.nullpointerworks.util", 		"pack-util.html", "libnpw.util", "module-util.html"},
+		{"exp.nullpointerworks.xml", 		"pack-xml.html", "libnpw.xml", "module-xml.html"},
 	};
 	
-	/* ====================================================
-	 * individual file scan
-	 * ==================================================== */
-	
+	public MainScanner() {}
 	public MainScanner(String[] args)
 	{
-		SourceScanner sc = new SourceScanner(PACK);
-		
 		for (String f : args)
 		{
-			String xml = sc.scanFile(f);
-			makeWebFile(xml);
+			parseSourceFile(f);
 		}
+	}
+	
+	public void parseSourceFile(String file)
+	{
+		SourceScanner sc = new SourceScanner(PACK);
+		String xml = sc.scanFile(file);
+		//makeWebFile(xml);
 	}
 	
 	public void makeWebFile(String file) 
@@ -93,31 +95,34 @@ public class MainScanner
 			return; // throw error
 		}
 		
+		/*
+		 * TODO clean up the code below
+		 */
 		Element root = doc.getRootElement();
 		String module = root.getChild("module").getText();
 		String pack = root.getChild("package").getText();
+		
 		Element comment = root.getChild("commentary");
 		Element version = comment.getChild("version");
 		Element author = comment.getChild("author");
 		Element since = comment.getChild("since");
 		
 		Element code = root.getChild("code");
-		String type = code.getChild("type").getText();
-		String name = code.getChild("name").getText();
 		String[] info = getPackageInfo(pack);
-		
-		Java jtype = Java.CLASS;
-		if (type.equalsIgnoreCase("interface")) jtype = Java.INTERFACE;
-		if (type.equalsIgnoreCase("enum")) jtype = Java.ENUM;
 		
 		FileMaker fm = new FileMaker();
 		fm.setSourceModule(info[3], module);
 		fm.setSourcePackage(info[1], pack);
-		fm.setFileName(jtype, name);
 		fm.setDescription(comment.getText());
 		if (version!=null)	fm.setVersion( version.getText() );
 		if (since!=null)	fm.setSince( since.getText() );
 		if (author!=null)	fm.setAuthor( author.getText() );
+		
+		/*
+		 * used later when writing the web file
+		 */
+		String name = "";
+		String type = "";
 		
 		/*
 		 * loop through comments, field and methods
@@ -126,17 +131,37 @@ public class MainScanner
 		for (int i=0,l=elements.size(); i<l; i++)
 		{
 			Element child = elements.get(i);
+			String child_name = child.getName();
 			
 			/*
-			 * skip type and name. this was done before the element loop
+			 * get file name
 			 */
-			if (child.getName().equalsIgnoreCase("type")) continue;
-			if (child.getName().equalsIgnoreCase("name")) continue;
+			if (child_name.equalsIgnoreCase("name")) 
+			{
+				name = child.getText();
+				fm.setFileName(name);
+				continue;
+			}
+			
+			/*
+			 * get source type
+			 */
+			if (child_name.equalsIgnoreCase("type")) 
+			{
+				type = child.getText();
+				Java jtype = Java.CLASS;
+				if (type.equalsIgnoreCase("interface")) 
+					jtype = Java.INTERFACE;
+				if (type.equalsIgnoreCase("enum")) 
+					jtype = Java.ENUM;
+				fm.setFileType(jtype);
+				continue;
+			}
 			
 			/*
 			 * if constructor
 			 */
-			if (child.getName().equalsIgnoreCase("constructor"))
+			if (child_name.equalsIgnoreCase("constructor"))
 			{
 				Constructor c = parseConstructor(child);
 				fm.addConstructor(c);
@@ -146,12 +171,21 @@ public class MainScanner
 			/*
 			 * if method
 			 */
-			if (child.getName().equalsIgnoreCase("method"))
+			if (child_name.equalsIgnoreCase("method"))
 			{
 				Method m = parseMethod(child);
 				fm.addMethod(m);
 				continue;
 			}
+			
+			/*
+			 * if field
+			 */
+			if (child_name.equalsIgnoreCase("field"))
+			{
+				// TODO
+			}
+			
 		}
 		
 		try
@@ -312,10 +346,29 @@ public class MainScanner
 				continue;
 			}
 			
+			/*
+			 * @since
+			 */
+			if (child_name.equalsIgnoreCase("since"))
+			{
+				constructor.setSince(constructor_child.getText());
+			}
 			
+			/*
+			 * @author
+			 */
+			if (child_name.equalsIgnoreCase("author"))
+			{
+				constructor.setAuthor(constructor_child.getText());
+			}
 			
-			
-			
+			/*
+			 * @version
+			 */
+			if (child_name.equalsIgnoreCase("version"))
+			{
+				constructor.setVersion(constructor_child.getText());
+			}
 			
 		}
 		return constructor;
@@ -361,7 +414,10 @@ public class MainScanner
 		}
 		return p;
 	}
-
+	
+	/*
+	 * 
+	 */
 	private String[] getPackageInfo(String packName)
 	{
 		for (String[] info : PACK)

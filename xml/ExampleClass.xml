@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<source>
+	<module></module>
+	<package>com.nullpointerworks.examples</package>
+	<code>
+		<type>class</type>
+		<name>ExampleClass</name>
+		<modifiers>class</modifiers>
+		<constructor>
+			<commentary>public constructor</commentary>
+			<name>ExampleClass</name>
+			<modifiers>public</modifiers>
+		</constructor>
+		<constructor>
+			<commentary>protected constructor</commentary>
+			<name>ExampleClass</name>
+			<modifiers>protected</modifiers>
+			<param>
+				<type>int</type>
+				<name>i</name>
+			</param>
+			<param>
+				<type>int</type>
+				<name>j</name>
+			</param>
+			<param>
+				<type>int</type>
+				<name>k</name>
+			</param>
+		</constructor>
+	</code>
+</source>

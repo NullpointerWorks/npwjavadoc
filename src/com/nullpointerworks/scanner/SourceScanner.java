@@ -301,6 +301,7 @@ public class SourceScanner
 	{
 		if (token.equals("public")) return true;
 		if (token.equals("protected")) return true;
+		if (token.equals("private")) return true;
 		return false;
 	}
 	
@@ -539,7 +540,7 @@ public class SourceScanner
 	}
 	
 	/**
-	 * This method takes a line of code that indicates the start of a method. 
+	 * This method takes a line of code that indicates the start of a method or constructor
 	 */
 	private void scanMethodLine(String line, Element root, Element construct, Element commentary)
 	{
@@ -569,9 +570,13 @@ public class SourceScanner
 		construct.addChild(new Element("name").setText(name));
 		
 		// find method return type
-		modifiers = modifiers.substring(0,lastindex).trim();
-		lastindex = modifiers.lastIndexOf(" ");
-		String ret = modifiers.substring(lastindex+1);
+		String ret="private";
+		if (lastindex>0) // if there's no return type, it's package private
+		{
+			modifiers = modifiers.substring(0,lastindex).trim();
+			lastindex = modifiers.lastIndexOf(" ");
+			ret = modifiers.substring(lastindex+1);
+		}
 		
 		/*
 		 * is the return type
@@ -599,8 +604,16 @@ public class SourceScanner
 		 */
 		else
 		{
-			construct.setName("constructor");
-			construct.addChild(new Element("modifiers").setText(ret));
+			if (!ret.equalsIgnoreCase("private"))
+			{
+				construct.setName("constructor");
+				construct.addChild(new Element("modifiers").setText(ret));
+			}
+			else
+			{
+				// if private constructor, skip
+				return;
+			}
 		}
 		
 		/*
