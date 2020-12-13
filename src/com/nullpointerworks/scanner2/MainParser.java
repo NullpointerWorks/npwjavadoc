@@ -6,18 +6,17 @@ import com.nullpointerworks.util.Log;
 import com.nullpointerworks.util.file.textfile.TextFile;
 import com.nullpointerworks.util.file.textfile.TextFileParser;
 
-public class MainScanner2 
+public class MainParser 
 {
-
 	public static void main(String[] args) 
 	{
-		args = new String[] {"src/com/nullpointerworks/scanner/ScanTestInterface.java"};
-		new MainScanner2(args);
+		args = new String[] {"src/com/nullpointerworks/examples/ExampleInterface.java"};
+		new MainParser(args);
 	}
 	
-	private SourceParser parser;
+	private ISourceParser parser;
 	
-	public MainScanner2(String[] args) 
+	public MainParser(String[] args) 
 	{
 		for (String f : args)
 		{
@@ -48,8 +47,8 @@ public class MainScanner2
 			 */
 			for (int i=0,l=lines.length; i<l; i++)
 			{
-				String line = lines[i].trim();
-				parser.characterStream(line);
+				String line = lines[i];
+				parser.nextLine(line);
 			}
 		}
 	}

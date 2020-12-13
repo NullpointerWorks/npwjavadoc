@@ -34,10 +34,10 @@ public class MainScanner
 		//ms.parseSourceFile(CORE+"/WindowMode.java");
 		
 		
-		ms.parseSourceFile("src/com/nullpointerworks/examples/ExampleInterface.java");
-		ms.parseSourceFile("src/com/nullpointerworks/examples/ExampleClass.java");
+		//ms.parseSourceFile("src/com/nullpointerworks/examples/ExampleInterface.java");
+		//ms.parseSourceFile("src/com/nullpointerworks/examples/ExampleClass.java");
 		ms.parseSourceFile("src/com/nullpointerworks/examples/ExampleEnum.java");
-		//ms.parseSourceFile("src/com/nullpointerworks/examples/ExampleEnum2.java");
+		ms.parseSourceFile("src/com/nullpointerworks/examples/ExampleEnum2.java");
 		
 	}
 	

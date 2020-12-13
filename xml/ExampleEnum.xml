@@ -8,9 +8,14 @@
 	<code>
 		<type>enum</type>
 		<name>ExampleEnum</name>
-		<commentary/>
-		<value>VALUE1</value>
-		<commentary/>
-		<value>VALUE2</value>
+		<value>
+			<data>VALUE1</data>
+			<comment>some value commentary</comment>
+		</value>
+		<value>
+			<data>VALUE2</data>
+			<comment>more commentary</comment>
+			<since>1.0.0</since>
+		</value>
 	</code>
 </source>

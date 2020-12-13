@@ -2,6 +2,7 @@ package com.nullpointerworks.scanner;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.List;
 
 import com.nullpointerworks.util.FileUtil;
 import com.nullpointerworks.util.file.textfile.TextFile;
@@ -453,6 +454,7 @@ public class SourceScanner
 	private int scanEnum(Element root, int i, String[] lines) 
 	{
 		Element construct = null;
+		Element commentary = null;
 		for (int l=lines.length; i<l; i++)
 		{
 			String line = lines[i].trim();
@@ -464,18 +466,16 @@ public class SourceScanner
 			if (line.startsWith("/**"))
 			{
 				isCommentary = true;
-				construct = new Element("commentary");
-				//root.addChild(construct);
+				commentary = new Element("commentary");
 			}
 			if (isCommentary)
 			{
 				if (line.endsWith("*/"))
 				{
-					construct = null;
 					isCommentary = false;
 					continue;
 				}
-				checkCommentLine(construct, line);
+				checkCommentLine(commentary, line);
 				continue;
 			}
 			
@@ -490,10 +490,35 @@ public class SourceScanner
 					e = e.replace(";", "");
 					e = e.trim();
 					if (!validLettering(e)) continue;
-					
-					
 					Element en = new Element("value");
-					en.setText(e);
+					en.addChild( new Element("data").setText(e) );
+					
+					
+					
+					/*
+					 * add commentary for this enum value
+					 */
+					if (commentary!=null)
+					{
+						en.addChild( new Element("comment").setText(commentary.getText()) );
+						
+						List<Element> list = commentary.getChildren();
+						for (Element el : list)
+						{
+							String el_name = el.getName();
+							
+							if (el_name.equalsIgnoreCase("since"))
+								en.addChild( new Element("since").setText(el.getText()) );
+							
+							if (el_name.equalsIgnoreCase("version"))
+								en.addChild( new Element("version").setText(el.getText()) );
+							
+							if (el_name.equalsIgnoreCase("author"))
+								en.addChild( new Element("author").setText(el.getText()) );
+						}
+					}
+					
+					commentary = null;
 					root.addChild(en);
 				}
 			}
