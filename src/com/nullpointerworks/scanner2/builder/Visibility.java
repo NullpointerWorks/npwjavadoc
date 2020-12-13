@@ -5,5 +5,6 @@ public enum Visibility
 	PUBLIC,
 	PROTECTED,
 	PRIVATE,
-	NOTHING // a.k.a. package private
+	NOTHING, // a.k.a. package private
+	NULL
 }

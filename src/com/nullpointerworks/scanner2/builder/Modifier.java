@@ -5,5 +5,7 @@ public enum Modifier
 	STATIC,
 	ABSTRACT,
 	FINAL,
-	NOTHING
+	STRICTFP,
+	DEFAULT,
+	NULL
 }

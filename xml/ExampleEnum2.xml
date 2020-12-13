@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<source>
-	<module></module>
-	<package>com.nullpointerworks.examples</package>
-	<code>
-		<type>enum</type>
-		<name>ExampleEnum2</name>
-	</code>
-</source>

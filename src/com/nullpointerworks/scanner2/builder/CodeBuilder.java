@@ -11,24 +11,40 @@ public class CodeBuilder
 	Visibility visibility;
 	
 	/*
-	 * static, abstract, final or nothing
-	 */
-	Modifier modifiers;
-
-	/*
-	 * field, method, interface, class or enum
+	 * interface, class, annotation or enum
 	 */
 	SourceType sourceType;
 	
 	/*
-	 * might return something
+	 * static, abstract, final or nothing
 	 */
-	String returnType;
+	List<Modifier> modifiers;
 	
+	/*
+	 * field, constructor, method
+	 * the type is inferred after information has been gathered
+	 */
+	ItemType itemType;
+	
+	/*
+	 * field type or method return type
+	 */
+	DataType dataType;
+
 	/*
 	 * name of the field, method, interface, class or enum
 	 */
 	String codeName;
+	
+	/*
+	 * field or enum value, if any
+	 */
+	String value;
+	
+	/*
+	 * parameters
+	 */
+	List<CodeBuilder> params;
 	
 	/*
 	 * extends
@@ -38,7 +54,7 @@ public class CodeBuilder
 	/*
 	 * implements
 	 */
-	List<String> implmentations;
+	List<String> implementations;
 	
 	/*
 	 * throws
@@ -47,13 +63,38 @@ public class CodeBuilder
 	
 	public CodeBuilder()
 	{
-		visibility = Visibility.NOTHING;
-		modifiers = Modifier.NOTHING;
-		sourceType = SourceType.NULL;
-		returnType = "";
-		codeName = "";
-		extensions = new ArrayList<String>();
-		implmentations = new ArrayList<String>();
-		throwing = new ArrayList<String>();
+		visibility 	= Visibility.NULL;
+		sourceType 	= SourceType.NULL;
+		modifiers 	= new ArrayList<Modifier>();
+		itemType 	= ItemType.NULL;
+		dataType 	= DataType.NULL;
+		codeName 	= "";
+		value 		= "";
+		params 			= new ArrayList<CodeBuilder>();
+		extensions 		= new ArrayList<String>();
+		implementations	= new ArrayList<String>();
+		throwing 		= new ArrayList<String>();
 	}
+	
+	public void setVisibility(Visibility visibility) 
+	{
+		this.visibility=visibility;
+	}
+
+	public void setSourceType(SourceType sourceType) 
+	{
+		this.sourceType=sourceType;
+	}
+
+	public void setModifier(Modifier modifier) 
+	{
+		modifiers.add(modifier);
+	}
+	
+	
+	
+	
+	
+	
+	
 }
