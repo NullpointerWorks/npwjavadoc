@@ -2,7 +2,6 @@ package com.nullpointerworks.scanner2;
 
 import java.io.FileNotFoundException;
 
-import com.nullpointerworks.util.Log;
 import com.nullpointerworks.util.file.textfile.TextFile;
 import com.nullpointerworks.util.file.textfile.TextFileParser;
 
@@ -10,7 +9,10 @@ public class MainParser
 {
 	public static void main(String[] args) 
 	{
-		args = new String[] {"src/com/nullpointerworks/examples/ExampleInterface.java"};
+		args = new String[] 
+		{
+			"src/com/nullpointerworks/examples/ExampleInterface.java"
+		};
 		new MainParser(args);
 	}
 	
@@ -20,12 +22,10 @@ public class MainParser
 	{
 		for (String f : args)
 		{
-			Log.out("file: "+f);
-			
 			/*
 			 * prepare
 			 */
-			parser = new SourceParser();
+			parser = new SourceParser("ExampleInterface");
 			
 			/*
 			 * read text file

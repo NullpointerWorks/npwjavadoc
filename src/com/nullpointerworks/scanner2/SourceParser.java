@@ -1,13 +1,19 @@
 package com.nullpointerworks.scanner2;
 
+import java.io.IOException;
+
 import com.nullpointerworks.scanner2.builder.CodeBuilder;
+import com.nullpointerworks.scanner2.builder.ItemName;
 import com.nullpointerworks.scanner2.builder.Modifier;
 import com.nullpointerworks.scanner2.builder.SourceType;
 import com.nullpointerworks.scanner2.builder.Visibility;
+import com.nullpointerworks.util.FileUtil;
 import com.nullpointerworks.util.Log;
 
 import exp.nullpointerworks.xml.Document;
 import exp.nullpointerworks.xml.Element;
+import exp.nullpointerworks.xml.format.FormatBuilder;
+import exp.nullpointerworks.xml.io.DocumentIO;
 
 public class SourceParser implements ISourceParser
 {
@@ -17,13 +23,88 @@ public class SourceParser implements ISourceParser
 	private StringBuilder tokenBuilder;
 	private Document doc;
 	private Element root;
+	private final String outFile;
 	
-	public SourceParser()
+	public SourceParser(String outFile)
 	{
+		this.outFile=outFile;
 		doc = new Document();
 		root = new Element("source");
 		doc.setRootElement(root);
 		tokenBuilder = new StringBuilder();
+	}
+	
+	private void parseBuilder(CodeBuilder builder) 
+	{
+		/*
+		 * detect if its a source file 
+		 */
+		if (builder.getSourceType() != SourceType.NULL)
+		{
+			isSourceInfo(builder, root);
+			return;
+		}
+		
+		
+		
+		
+		
+		
+		
+		
+		
+	}
+	
+	private void isSourceInfo(CodeBuilder builder, Element root) 
+	{
+		Element elementType = new Element("type");
+		
+		/*
+		 * source type
+		 */
+		String st = builder.getSourceType().toString();
+		elementType.addChild( new Element("sourcetype").setText(st) );
+		
+		/*
+		 * visibility
+		 */
+		if (builder.getVisibility() != Visibility.NULL)
+		{
+			String v = builder.getVisibility().toString();
+			elementType.addChild( new Element("visibility").setText(v) );
+		}
+		
+		/*
+		 * name
+		 */
+		if (builder.getItemName() != ItemName.NULL)
+		{
+			String v = builder.getItemName().toString();
+			elementType.addChild( new Element("name").setText(v) );
+		}
+		
+		
+		
+		
+		
+		root.addChild(elementType);
+	}
+	
+	private void writeToFile() 
+	{
+		/*
+		 * write to XML file
+		 */
+		String name = FileUtil.getFileNameFromPath(outFile);
+		String path = "xml/" + name + ".xml";
+		try 
+		{
+			DocumentIO.write(doc, path, FormatBuilder.getPrettyFormat());
+		} 
+		catch (IOException e) 
+		{
+			e.printStackTrace();
+		}
 	}
 	
 	// ============================================================================================
@@ -149,15 +230,15 @@ public class SourceParser implements ISourceParser
 	/*
 	 * code building
 	 */
-	private CodeBuilder codeBuilder;
-	
+	private CodeBuilder codeBuilder = new CodeBuilder();
+	private int curlyBraceCount = 0;
 	
 	/*
 	 * takes a token and decides what to do with it
 	 */
 	private void doProcessToken(String token) 
 	{
-		Log.out(token);
+		//Log.out(token);
 		
 		/*
 		 * started a new file
@@ -176,11 +257,29 @@ public class SourceParser implements ISourceParser
 		}
 		
 		/*
+		 * detect when parsing code inside a code block. skip code inside code blocks
+		 */
+		if (token.equalsIgnoreCase("{")) curlyBraceCount++;
+		if (token.equalsIgnoreCase("}")) curlyBraceCount--;
+		if (curlyBraceCount>1) return;
+		
+		/*
+		 * 
+		 */
+		if (isEndOfSource(token))
+		{
+			writeToFile();
+			return;
+		}
+		
+		/*
 		 * if the end of a piece of code has been detected, parse the CodeBuilder
 		 */
 		if (isEndOfCode(token))
 		{
-			
+			parseBuilder(codeBuilder);
+			codeBuilder = new CodeBuilder();
+			return;
 		}
 		
 		boolean isVisibility = isVisibility(token);
@@ -222,15 +321,26 @@ public class SourceParser implements ISourceParser
 			return;
 		}
 		
+		
+		
+		
+		Log.out(token);
+		
+		
 	}
-	
+
 	/*
 	 * code end. } are also present at internal block code
 	 */
 	private boolean isEndOfCode(String token) 
 	{
 		if (token.equalsIgnoreCase(";")) return true;
-		if (token.equalsIgnoreCase("}")) return true;
+		if (token.equalsIgnoreCase("{") && curlyBraceCount<2) return true;
+		return false;
+	}
+	private boolean isEndOfSource(String token) 
+	{
+		if (token.equalsIgnoreCase("}") && curlyBraceCount==0) return true;
 		return false;
 	}
 

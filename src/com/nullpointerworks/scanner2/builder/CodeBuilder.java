@@ -34,12 +34,12 @@ public class CodeBuilder
 	/*
 	 * name of the field, method, interface, class or enum
 	 */
-	String codeName;
+	ItemName codeName;
 	
 	/*
 	 * field or enum value, if any
 	 */
-	String value;
+	ItemValue value;
 	
 	/*
 	 * parameters
@@ -68,28 +68,32 @@ public class CodeBuilder
 		modifiers 	= new ArrayList<Modifier>();
 		itemType 	= ItemType.NULL;
 		dataType 	= DataType.NULL;
-		codeName 	= "";
-		value 		= "";
+		codeName 	= ItemName.NULL;
+		value 		= ItemValue.NULL;
 		params 			= new ArrayList<CodeBuilder>();
 		extensions 		= new ArrayList<String>();
 		implementations	= new ArrayList<String>();
 		throwing 		= new ArrayList<String>();
 	}
 	
-	public void setVisibility(Visibility visibility) 
-	{
-		this.visibility=visibility;
-	}
+	public Visibility getVisibility() {return visibility;}
+	public void setVisibility(Visibility v) {this.visibility=v;}
 
-	public void setSourceType(SourceType sourceType) 
-	{
-		this.sourceType=sourceType;
-	}
-
+	public SourceType getSourceType() {return sourceType;}
+	public void setSourceType(SourceType st) {this.sourceType=st;}
+	
+	public List<Modifier> getModifier() {return modifiers;}
 	public void setModifier(Modifier modifier) 
 	{
-		modifiers.add(modifier);
+		if (!modifiers.contains(modifier))
+		{
+			modifiers.add(modifier);
+		}
 	}
+	
+	public ItemName getItemName() {return codeName;}
+	public void setItemName(ItemName cn) {this.codeName=cn;}
+	
 	
 	
 	
