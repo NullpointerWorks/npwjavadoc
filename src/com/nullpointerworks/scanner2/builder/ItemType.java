@@ -5,5 +5,6 @@ public enum ItemType
 	FIELD,
 	CONSTRUCTOR,
 	METHOD,
+	METHOD_CONSTRUCTOR,
 	NULL
 }

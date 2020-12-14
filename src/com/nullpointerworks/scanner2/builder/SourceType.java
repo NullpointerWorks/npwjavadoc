@@ -6,5 +6,6 @@ public enum SourceType
 	INTERFACE,
 	ENUM,
 	ANNOTATION,
+	MODULE,
 	NULL
 }

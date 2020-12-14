@@ -1,12 +1,10 @@
 package com.nullpointerworks.examples;
 
-/**
- * 
- * This interface serves as a scan test to see if all aspects of an interface are observed.
- * 
- * @author Michiel
- */
-public interface ExampleInterface 
+/** 
+This interface serves as a scan test to see if all aspects of an interface are observed.
+@author Michiel
+*/
+public interface ExampleInterface extends Runnable
 {
 	/**
 	 * interface variables are automatically public, static and final.

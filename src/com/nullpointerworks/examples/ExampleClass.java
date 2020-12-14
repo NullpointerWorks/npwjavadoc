@@ -1,11 +1,12 @@
 package com.nullpointerworks.examples;
 
 /**
- * Testing class for file parsing
+ * Testing class for file parsing.
  * @version 1.0.0
  * @author Michiel
  */
-public class ExampleClass extends Object implements ExampleInterface
+@SuppressWarnings("unused")
+public abstract class ExampleClass extends Object implements ExampleInterface, Runnable
 {
 
 	// =====================================================
@@ -13,12 +14,18 @@ public class ExampleClass extends Object implements ExampleInterface
 	// =====================================================
 	
 	/**
-	 * 
+	 * some variation among variable declaration
 	 */
 	public final Float PI = 3.1415F;
+	
+	public Float PI2;
+	
 	public static Float TAU = 6.283F;
+	
 	private Float E = 2.17F;
+	
 	Float SQ2 = 1.414F;
+	
 	protected Float PHI = 1.618F;
 	
 	public String[] myArray = {"hi","hey"};
@@ -84,5 +91,4 @@ public class ExampleClass extends Object implements ExampleInterface
 	{
 		
 	}
-	
 }

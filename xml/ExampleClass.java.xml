@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<source>
+	<package>
+		<name>com.nullpointerworks.examples</name>
+	</package>
+	<type>
+		<sourcetype>CLASS</sourcetype>
+		<visibility>PUBLIC</visibility>
+		<modifier>ABSTRACT</modifier>
+		<name>ExampleClass</name>
+		<extends>Object</extends>
+		<implements>ExampleInterface</implements>
+		<implements>Runnable</implements>
+	</type>
+</source>

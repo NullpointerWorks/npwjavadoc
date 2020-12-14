@@ -1,7 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <source>
+	<package>
+		<name>com.nullpointerworks.examples</name>
+	</package>
 	<type>
 		<sourcetype>INTERFACE</sourcetype>
 		<visibility>PUBLIC</visibility>
+		<name>ExampleInterface</name>
+		<extends>Runnable</extends>
 	</type>
 </source>

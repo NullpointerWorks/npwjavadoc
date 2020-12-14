@@ -15,5 +15,5 @@ public enum ExampleEnum
 	 * more commentary
 	 * @since 1.0.0
 	 */
-	VALUE2;
+	VALUE2
 }

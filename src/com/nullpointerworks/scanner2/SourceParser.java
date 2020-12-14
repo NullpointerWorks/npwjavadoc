@@ -1,15 +1,18 @@
 package com.nullpointerworks.scanner2;
 
 import java.io.IOException;
+import java.util.List;
 
 import com.nullpointerworks.scanner2.builder.CodeBuilder;
-import com.nullpointerworks.scanner2.builder.ItemName;
+import com.nullpointerworks.scanner2.builder.CommentBuilder;
+import com.nullpointerworks.scanner2.builder.ItemType;
 import com.nullpointerworks.scanner2.builder.Modifier;
 import com.nullpointerworks.scanner2.builder.SourceType;
 import com.nullpointerworks.scanner2.builder.Visibility;
+import com.nullpointerworks.scanner2.builder.Package;
+
 import com.nullpointerworks.util.FileUtil;
 import com.nullpointerworks.util.Log;
-
 import exp.nullpointerworks.xml.Document;
 import exp.nullpointerworks.xml.Element;
 import exp.nullpointerworks.xml.format.FormatBuilder;
@@ -37,6 +40,20 @@ public class SourceParser implements ISourceParser
 	private void parseBuilder(CodeBuilder builder) 
 	{
 		/*
+		 * 
+		 */
+		builder.inferTypeInfo();
+		
+		/*
+		 * if parsing package info
+		 */
+		if (builder.getPackage() == Package.PACKAGE)
+		{
+			isPackage(builder, root);			
+			return;
+		}
+		
+		/*
 		 * detect if its a source file 
 		 */
 		if (builder.getSourceType() != SourceType.NULL)
@@ -48,13 +65,32 @@ public class SourceParser implements ISourceParser
 		
 		
 		
-		
-		
-		
-		
-		
 	}
 	
+	private void isPackage(CodeBuilder builder, Element root) 
+	{
+		Element elPack = new Element("package");
+		
+		/*
+		 * name
+		 */
+		List<String> uid = builder.getUnidentified();
+		if (uid.size()==1)
+		{
+			/*
+			 * for package info, only one token should be present and should be the name
+			 */
+			String n = uid.get(0);
+			elPack.addChild( new Element("name").setText(n) );
+		}
+		else
+		{
+			Log.err("Error: Package information incomplete");
+		}
+		
+		root.addChild(elPack);
+	}
+
 	private void isSourceInfo(CodeBuilder builder, Element root) 
 	{
 		Element elementType = new Element("type");
@@ -75,17 +111,55 @@ public class SourceParser implements ISourceParser
 		}
 		
 		/*
-		 * name
+		 * modifiers
 		 */
-		if (builder.getItemName() != ItemName.NULL)
+		List<Modifier> mods = builder.getModifier();
+		if (mods.size()>0)
 		{
-			String v = builder.getItemName().toString();
-			elementType.addChild( new Element("name").setText(v) );
+			String m = mods.get(0).toString();
+			elementType.addChild( new Element("modifier").setText(m) );
 		}
 		
+		/*
+		 * name
+		 */
+		List<String> uid = builder.getUnidentified();
+		if (uid.size()>0)
+		{
+			/*
+			 * when source info is found, the first token should be the name
+			 */
+			String n = uid.get(0);
+			elementType.addChild( new Element("name").setText(n) );
+		}
+		else
+		{
+			Log.err("Error: Source information incomplete");
+		}
 		
+		/*
+		 * extending
+		 */
+		List<String> ext = builder.getExtended();
+		if (ext.size()>0)
+		{
+			for (String e : ext)
+			{
+				elementType.addChild( new Element("extends").setText(e) );
+			}
+		}
 		
-		
+		/*
+		 * implementing
+		 */
+		List<String> imp = builder.getImplemented();
+		if (imp.size()>0)
+		{
+			for (String e : imp)
+			{
+				elementType.addChild( new Element("implements").setText(e) );
+			}
+		}
 		
 		root.addChild(elementType);
 	}
@@ -210,7 +284,7 @@ public class SourceParser implements ISourceParser
 		if (newLine || whiteSpace)
 		{
 			String token = tokenBuilder.toString();
-			doProcessToken(token);
+			nextToken(token);
 			tokenBuilder.setLength(0);// reset builder
 			return;
 		}
@@ -220,7 +294,9 @@ public class SourceParser implements ISourceParser
 		 */
 		tokenBuilder.append(character);
 	}
-
+	
+	// ============================================================================================
+	
 	/*
 	 * comment block signifier
 	 */
@@ -231,113 +307,229 @@ public class SourceParser implements ISourceParser
 	 * code building
 	 */
 	private CodeBuilder codeBuilder = new CodeBuilder();
-	private int curlyBraceCount = 0;
+	private CommentBuilder commentBuilder = new CommentBuilder();
+	private boolean hasCommentBranch = false;
+	private boolean hasPackageBranch = false;
+	private boolean hasSourceBranch = false;
+	private boolean hasFieldBranch = false;
+	private boolean isImplementing = false;
+	private boolean isExtending = false;
+	
+	private void resetBuilder(CodeBuilder builder)
+	{
+		builder.reset();
+		hasCommentBranch = false;
+		hasPackageBranch = false;
+		hasSourceBranch = false;
+		hasFieldBranch = false;
+		isImplementing = false;
+		isExtending = false;
+	}
+	
+	@Override
+	public void nextToken(String token)
+	{
+		doProcessToken(codeBuilder, token);
+	}
 	
 	/*
 	 * takes a token and decides what to do with it
 	 */
-	private void doProcessToken(String token) 
+	private int curlyBraceCount = 0;
+	private void doProcessToken(CodeBuilder builder, String token) 
 	{
-		//Log.out(token);
+		/*
+		 * detect when parsing code inside a code block. skip code inside code blocks
+		 */
+		if (equals(token,"{")) curlyBraceCount++;
+		if (equals(token,"}")) curlyBraceCount--;
+		if (curlyBraceCount>1) return;
+		
+		/*
+		 * if the end of a piece of code has been detected, parse the CodeBuilder.
+		 * if the end of the file has been detected, write the XML file
+		 */
+		if (isEndOfSource(token))
+		{
+			writeToFile();
+			resetBuilder(builder);
+			return;
+		}
+		if (isEndOfCode(token))
+		{
+			parseBuilder(builder);
+			resetBuilder(builder);
+			return;
+		}
+		
+		/*
+		 * detect commentary blocks. check this before checking other code. 
+		 * commentary can contain code examples. we don't want to falsely 
+		 * trigger the CodeBuilder.
+		 */
+		if (token.equalsIgnoreCase(C_BLOCK_START))
+		{
+			hasCommentBranch = true;
+			return;
+		}
+		if (hasCommentBranch)
+		{
+			hasCommentBranch = !token.equalsIgnoreCase(C_BLOCK_END);
+			doCommentaryBranch(commentBuilder, token);
+			return;
+		}
 		
 		/*
 		 * started a new file
 		 */
-		if (token.equalsIgnoreCase("package"))
+		if (equals(token,"package"))
 		{
+			builder.setPackage(Package.PACKAGE);
+			hasPackageBranch = true;
 			return;
 		}
 		
 		/*
 		 * the file imports classes
 		 */
-		if (token.equalsIgnoreCase("import"))
+		if (equals(token,"import"))
 		{
 			return;
-		}
-		
-		/*
-		 * detect when parsing code inside a code block. skip code inside code blocks
-		 */
-		if (token.equalsIgnoreCase("{")) curlyBraceCount++;
-		if (token.equalsIgnoreCase("}")) curlyBraceCount--;
-		if (curlyBraceCount>1) return;
-		
-		/*
-		 * 
-		 */
-		if (isEndOfSource(token))
-		{
-			writeToFile();
-			return;
-		}
-		
-		/*
-		 * if the end of a piece of code has been detected, parse the CodeBuilder
-		 */
-		if (isEndOfCode(token))
-		{
-			parseBuilder(codeBuilder);
-			codeBuilder = new CodeBuilder();
-			return;
-		}
-		
-		boolean isVisibility = isVisibility(token);
-		boolean isSourceType = isSourceType(token);
-		boolean isModifier = isModifier(token);
-		
-		/*
-		 * if a modifier or visibility has been detected, start recording code
-		 */
-		if (isVisibility || isModifier)
-		{
-			codeBuilder = new CodeBuilder();
 		}
 		
 		/*
 		 * something visible has been detected
 		 */
+		boolean isVisibility = isVisibility(token);
 		if (isVisibility)
 		{
-			codeBuilder.setVisibility( getVisibility(token) );
+			builder.setVisibility( getVisibility(token) );
+			return;
+		}
+		
+		/*
+		 * if token is a modifier
+		 */
+		boolean isModifier = isModifier(token);
+		if (isModifier)
+		{
+			builder.setModifier( getModifier(token) );
 			return;
 		}
 		
 		/*
 		 * detect java source file type
 		 */
+		boolean isSourceType = isSourceType(token);
 		if (isSourceType)
 		{
-			codeBuilder.setSourceType( getSourceType(token) );
+			hasSourceBranch = true;
+			builder.setSourceType( getSourceType(token) );
 			return;
 		}
 		
 		/*
-		 * 
+		 * check for data assignment. when found, set type and name
 		 */
-		if (isModifier)
+		if (equals(token,"="))
 		{
-			codeBuilder.setModifier( getModifier(token) );
+			hasFieldBranch = true;
+			builder.setItemType(ItemType.FIELD);
 			return;
 		}
 		
+		/*
+		 * detect method/constructor signifier
+		 */
+		if (equals(token,"("))
+		{
+			builder.setItemType(ItemType.METHOD_CONSTRUCTOR);
+			return;
+		}
 		
+		/*
+		 * branch off when item identification has been determined
+		 */
+		if (hasPackageBranch)
+		{
+			builder.setUnidentified(token);
+			return;
+		}
+		if (hasSourceBranch)
+		{
+			doSourceBranch(builder, token);
+			return;
+		}
+		if (hasFieldBranch)
+		{
+			
+			return;
+		}
+		//*/
 		
+		builder.setUnidentified(token);
+	}
+	
+	/*
+	 * 
+	 */
+	private void doCommentaryBranch(CommentBuilder builder, String token) 
+	{
 		
-		Log.out(token);
+	}
+	
+	/*
+	 * 
+	 */
+	private void doSourceBranch(CodeBuilder builder, String token) 
+	{
+		/*
+		 * if a separator, skip
+		 */
+		if (equals(token,",")) return;
 		
+		/*
+		 * check implementations first
+		 */
+		if (equals(token,"implements"))
+		{
+			isImplementing = true;
+			return;
+		}
+		if (isImplementing)
+		{
+			builder.setImplemented(token);
+			return;
+		}
 		
+		/*
+		 * check extensions
+		 */
+		if (equals(token,"extends"))
+		{
+			isExtending = true;
+			return;
+		}
+		if (isExtending)
+		{
+			builder.setExtended(token);
+			return;
+		}
+		
+		builder.setUnidentified(token);
 	}
 
 	/*
-	 * code end. } are also present at internal block code
+	 * code end. { and } are also used by internal block code
 	 */
 	private boolean isEndOfCode(String token) 
 	{
+		if (token.equalsIgnoreCase(")")) return true;
 		if (token.equalsIgnoreCase(";")) return true;
 		if (token.equalsIgnoreCase("{") && curlyBraceCount<2) return true;
 		return false;
 	}
+	
 	private boolean isEndOfSource(String token) 
 	{
 		if (token.equalsIgnoreCase("}") && curlyBraceCount==0) return true;
@@ -362,6 +554,7 @@ public class SourceParser implements ISourceParser
 		return Visibility.NULL;
 	}
 	
+	
 	/*
 	 * 
 	 */
@@ -371,6 +564,7 @@ public class SourceParser implements ISourceParser
 		if (token.equalsIgnoreCase("class")) return true;
 		if (token.equalsIgnoreCase("enum")) return true;
 		if (token.equalsIgnoreCase("@interface")) return true;
+		if (token.equalsIgnoreCase("module")) return true;
 		return false;
 	}
 	private SourceType getSourceType(String token) 
@@ -379,8 +573,10 @@ public class SourceParser implements ISourceParser
 		if (token.equalsIgnoreCase("class")) return SourceType.CLASS;
 		if (token.equalsIgnoreCase("enum")) return SourceType.ENUM;
 		if (token.equalsIgnoreCase("@interface")) return SourceType.ANNOTATION;
+		if (token.equalsIgnoreCase("module")) return SourceType.MODULE;
 		return SourceType.NULL;
 	}
+	
 	
 	/*
 	 * 
@@ -402,5 +598,10 @@ public class SourceParser implements ISourceParser
 		if (token.equalsIgnoreCase("strictfp")) return Modifier.STRICTFP;
 		if (token.equalsIgnoreCase("default")) return Modifier.DEFAULT;
 		return Modifier.NULL;
+	}
+	
+	private boolean equals(String s, String c)
+	{
+		return s.equalsIgnoreCase(c);
 	}
 }
