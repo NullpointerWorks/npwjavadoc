@@ -71,7 +71,22 @@ public class SourceParser implements ISourceParser
 			return;
 		}
 		
+		/*
+		 * 
+		 */
+		if (builder.getItemType() == ItemType.METHOD)
+		{
+
+			
+		}
 		
+		/*
+		 * 
+		 */
+		if (builder.getItemType() == ItemType.CONSTRUCTOR)
+		{
+			
+		}
 		
 		
 		
@@ -434,35 +449,39 @@ public class SourceParser implements ISourceParser
 	private void doProcessToken(CodeBuilder builder, CommentBuilder cbuilder, String token) 
 	{
 		/*
-		 * detect when parsing code inside a code block. skip code inside code blocks
+		 * keep track of embedded code blocks
 		 */
 		if (equals(token,"{")) curlyBraceCount++;
 		if (equals(token,"}")) curlyBraceCount--;
-		if (curlyBraceCount>1) return;
 		
 		/*
 		 * if the end of a piece of code has been detected, parse the CodeBuilder.
 		 * if the end of the file has been detected, write the XML file
 		 */
+		if (isEndOfDeclaration(token))
+		{
+			parseBuilder(builder);
+			resetBuilder(builder);
+			return;
+		}
 		if (isEndOfSource(token))
 		{
 			writeToFile();
 			resetBuilder(builder);
 			return;
 		}
-		if (isEndOfCode(token))
-		{
-			parseBuilder(builder);
-			resetBuilder(builder);
-			return;
-		}
+		
+		/*
+		 * detect when parsing code inside a code block. skip code inside code blocks
+		 */
+		if (curlyBraceCount>1) return;
 		
 		/*
 		 * detect commentary blocks. check this before checking other code. 
 		 * commentary can contain code examples. we don't want to falsely 
 		 * trigger the CodeBuilder.
 		 */
-		if (token.equalsIgnoreCase(C_BLOCK_START))
+		if (equals(token,C_BLOCK_START))
 		{
 			hasCommentBranch = true;
 			return;
@@ -476,7 +495,7 @@ public class SourceParser implements ISourceParser
 		else
 		{
 			/*
-			 * end of comment markers outside of the commentary block get a reset. Skip parsing those
+			 * end of comment markers outside of the commentary block get a reset. Skip parsing
 			 */
 			if (equals(token,C_END))
 			{
@@ -486,11 +505,12 @@ public class SourceParser implements ISourceParser
 		}
 		
 		/*
-		 * treat parameters like variables. ) marker ends the branch
+		 * detect end of an instruction ;
 		 */
-		if (hasParameterBranch)
+		if (isEndOfInstruction(token))
 		{
-			doParameterBranch(builder, token);
+			parseBuilder(builder);
+			resetBuilder(builder);
 			return;
 		}
 		
@@ -502,35 +522,6 @@ public class SourceParser implements ISourceParser
 		if (equals(token,"="))
 		{
 			builder.setItemType(ItemType.FIELD);
-			return;
-		}
-		
-		/*
-		 * detect method/constructor/annotation/enum signifier
-		 * variables don't have ()
-		 * 
-		 * TODO
-		 */
-		if (equals(token,"("))
-		{
-			builder.setParameterCapable(true);
-			
-			
-			
-			/*
-			if (builder.getUnidentified().size()<=1)
-				builder.setItemType(ItemType.CONSTRUCTOR);
-			else
-			if (builder.getUnidentified().size()>1)
-				builder.setItemType(ItemType.METHOD);
-			//*/
-			
-			var list = builder.getUnidentified();
-			Log.out("type: "+list.size());
-			for (String s : list) {Log.out(s);}
-			Log.out("");
-			
-			hasParameterBranch = true;
 			return;
 		}
 		
@@ -584,6 +575,22 @@ public class SourceParser implements ISourceParser
 		}
 		
 		/*
+		 * detect method/constructor/annotation/enum signifier
+		 * variables don't have ()
+		 * TODO
+		 */
+		if (equals(token,"("))
+		{
+			builder.setParameterCapable(true);
+			hasParameterBranch = true;
+			return;
+		}
+		if (equals(token,")")) 
+		{
+			hasParameterBranch = false;
+		}
+		
+		/*
 		 * branch off when item identification has been determined
 		 */
 		if (hasPackageBranch)
@@ -594,6 +601,11 @@ public class SourceParser implements ISourceParser
 		if (hasSourceBranch)
 		{
 			doSourceBranch(builder, token);
+			return;
+		}
+		if (hasParameterBranch)
+		{
+			doParameterBranch(builder, token);
 			return;
 		}
 		
@@ -612,6 +624,7 @@ public class SourceParser implements ISourceParser
 		/*
 		 * add unidentified marker
 		 */
+		Log.out(token);
 		builder.setUnidentified(token);
 	}
 	
@@ -620,11 +633,9 @@ public class SourceParser implements ISourceParser
 	 */
 	private void doParameterBranch(CodeBuilder builder, String token) 
 	{
-		if (equals(token,")")) 
-		{
-			hasParameterBranch = false;
-			return;
-		}
+		//Log.out("param: "+token);
+		
+		
 		
 		
 		
@@ -682,10 +693,15 @@ public class SourceParser implements ISourceParser
 	/*
 	 * code end. { and } are also used by internal block code
 	 */
-	private boolean isEndOfCode(String token) 
+	private boolean isEndOfInstruction(String token) 
 	{
 		if (token.equalsIgnoreCase(";")) return true;
-		if (token.equalsIgnoreCase("{") && curlyBraceCount<2) return true;
+		return false;
+	}
+	
+	private boolean isEndOfDeclaration(String token) 
+	{
+		if (token.equalsIgnoreCase("{") && curlyBraceCount<3) return true;
 		return false;
 	}
 	

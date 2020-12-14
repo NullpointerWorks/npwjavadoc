@@ -31,12 +31,12 @@ public interface ExampleInterface extends Runnable
 	/**
 	 * my default method
 	 */
-	default void myDefaultMethod() 
+	default void myDefaultMethod()
 	{
 		
 	}
 	
-	/*
+	/**
 	 * my default method with bad commentary marker, but with a parameter
 	 */
 	default void myDefaultMethod2(int i, int j)
@@ -47,7 +47,7 @@ public interface ExampleInterface extends Runnable
 	/**
 	 * my default method with a return type
 	 */
-	default String myDefaultMethod3() 
+	default String myDefaultMethod3() throws Exception
 	{
 		return "";
 	}
@@ -59,5 +59,5 @@ public interface ExampleInterface extends Runnable
 	{
 		return "";
 	}
-	
+	//*/
 }

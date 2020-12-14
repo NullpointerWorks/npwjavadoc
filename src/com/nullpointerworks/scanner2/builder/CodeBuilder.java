@@ -177,12 +177,20 @@ public class CodeBuilder
 			{
 				itemType = ItemType.FIELD;
 			}
-			
-			
-			
+			else
+			{
+				// try to find data type, if not found, probably a constructor
+				if (unidentified.size() == 1)
+				{
+					itemType = ItemType.CONSTRUCTOR;
+				}
+				else
+				if (unidentified.size() == 2)
+				{
+					itemType = ItemType.METHOD;
+				}
+			}
 		}
-		
-		
 		
 		/*
 		 * if already set to FIELD, then = sign was detected
@@ -198,13 +206,13 @@ public class CodeBuilder
 		else
 		if (itemType == ItemType.METHOD)
 		{
-			// try to find data type, if not found, probably a constructor
-			
+			dataType = unidentified.get(0);
+			codeName = unidentified.get(1);
 		}
 		else
 		if (itemType == ItemType.CONSTRUCTOR)
 		{
-			
+			codeName = unidentified.get(0);
 		}
 		
 		
