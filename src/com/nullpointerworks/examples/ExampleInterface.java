@@ -39,7 +39,7 @@ public interface ExampleInterface extends Runnable
 	/*
 	 * my default method with bad commentary marker, but with a parameter
 	 */
-	default void myDefaultMethod2(int i, int j) 
+	default void myDefaultMethod2(int i, int j)
 	{
 		
 	}

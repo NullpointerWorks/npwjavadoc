@@ -56,9 +56,6 @@ public class CodeBuilder
 	private boolean isArray;
 	public boolean isArray() {return isArray;}
 	public void setArray(boolean b) {isArray=b;}
-	
-	
-	
 	private String dataType;
 
 	/*

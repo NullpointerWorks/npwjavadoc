@@ -394,7 +394,8 @@ public class SourceParser implements ISourceParser
 	 * comment block signifier
 	 */
 	final String C_BLOCK_START = "/**";
-	final String C_BLOCK_END = "*/";
+	final String C_START = "/*";
+	final String C_END = "*/";
 	
 	/*
 	 * code building
@@ -423,14 +424,14 @@ public class SourceParser implements ISourceParser
 	@Override
 	public void nextToken(String token)
 	{
-		doProcessToken(codeBuilder, token);
+		doProcessToken(codeBuilder, commentBuilder, token);
 	}
 	
 	/*
 	 * takes a token and decides what to do with it
 	 */
 	private int curlyBraceCount = 0;
-	private void doProcessToken(CodeBuilder builder, String token) 
+	private void doProcessToken(CodeBuilder builder, CommentBuilder cbuilder, String token) 
 	{
 		/*
 		 * detect when parsing code inside a code block. skip code inside code blocks
@@ -468,8 +469,28 @@ public class SourceParser implements ISourceParser
 		}
 		if (hasCommentBranch)
 		{
-			hasCommentBranch = !token.equalsIgnoreCase(C_BLOCK_END);
-			doCommentaryBranch(commentBuilder, token);
+			hasCommentBranch = !equals(token,C_END);
+			doCommentaryBranch(cbuilder, token);
+			return;
+		}
+		else
+		{
+			/*
+			 * end of comment markers outside of the commentary block get a reset. Skip parsing those
+			 */
+			if (equals(token,C_END))
+			{
+				resetBuilder(builder);
+				return;
+			}
+		}
+		
+		/*
+		 * treat parameters like variables. ) marker ends the branch
+		 */
+		if (hasParameterBranch)
+		{
+			doParameterBranch(builder, token);
 			return;
 		}
 		
@@ -487,13 +508,29 @@ public class SourceParser implements ISourceParser
 		/*
 		 * detect method/constructor/annotation/enum signifier
 		 * variables don't have ()
+		 * 
+		 * TODO
 		 */
 		if (equals(token,"("))
 		{
 			builder.setParameterCapable(true);
+			
+			
+			
+			/*
+			if (builder.getUnidentified().size()<=1)
+				builder.setItemType(ItemType.CONSTRUCTOR);
+			else
+			if (builder.getUnidentified().size()>1)
+				builder.setItemType(ItemType.METHOD);
+			//*/
+			
+			var list = builder.getUnidentified();
+			Log.out("type: "+list.size());
+			for (String s : list) {Log.out(s);}
+			Log.out("");
+			
 			hasParameterBranch = true;
-			
-			
 			return;
 		}
 		
@@ -570,11 +607,27 @@ public class SourceParser implements ISourceParser
 		}
 		if (equals(token,"]")) return;
 		if (equals(token,"}")) return;
+		if (equals(token,")")) return;
 		
 		/*
 		 * add unidentified marker
 		 */
 		builder.setUnidentified(token);
+	}
+	
+	/*
+	 * 
+	 */
+	private void doParameterBranch(CodeBuilder builder, String token) 
+	{
+		if (equals(token,")")) 
+		{
+			hasParameterBranch = false;
+			return;
+		}
+		
+		
+		
 	}
 	
 	/*
@@ -631,7 +684,6 @@ public class SourceParser implements ISourceParser
 	 */
 	private boolean isEndOfCode(String token) 
 	{
-		//if (token.equalsIgnoreCase(")")) return true;
 		if (token.equalsIgnoreCase(";")) return true;
 		if (token.equalsIgnoreCase("{") && curlyBraceCount<2) return true;
 		return false;
@@ -653,6 +705,7 @@ public class SourceParser implements ISourceParser
 		if (token.equalsIgnoreCase("private")) return true;
 		return false;
 	}
+	
 	private Visibility getVisibility(String token) 
 	{
 		if (token.equalsIgnoreCase("public")) return Visibility.PUBLIC;
@@ -674,6 +727,7 @@ public class SourceParser implements ISourceParser
 		if (token.equalsIgnoreCase("module")) return true;
 		return false;
 	}
+	
 	private SourceType getSourceType(String token) 
 	{
 		if (token.equalsIgnoreCase("interface")) return SourceType.INTERFACE;
@@ -697,6 +751,7 @@ public class SourceParser implements ISourceParser
 		if (token.equalsIgnoreCase("default")) return true;
 		return false;
 	}
+	
 	private Modifier getModifier(String token) 
 	{
 		if (token.equalsIgnoreCase("static")) return Modifier.STATIC;

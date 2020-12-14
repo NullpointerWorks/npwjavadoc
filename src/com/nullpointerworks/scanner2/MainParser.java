@@ -13,7 +13,7 @@ public class MainParser
 		args = new String[] 
 		{
 			"src/com/nullpointerworks/examples/ExampleInterface.java"
-			,"src/com/nullpointerworks/examples/ExampleClass.java"
+			//,"src/com/nullpointerworks/examples/ExampleClass.java"
 		};
 		new MainParser(args);
 	}
