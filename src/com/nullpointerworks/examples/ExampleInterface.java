@@ -1,5 +1,7 @@
 package com.nullpointerworks.examples;
 
+import java.io.IOException;
+
 /** 
 This interface serves as a scan test to see if all aspects of an interface are observed.
 @author Michiel
@@ -47,7 +49,7 @@ public interface ExampleInterface extends Runnable
 	/**
 	 * my default method with a return type
 	 */
-	default String myDefaultMethod3() throws Exception
+	default String myDefaultMethod3() throws Exception, IOException
 	{
 		return "";
 	}

@@ -76,8 +76,8 @@ public class SourceParser implements ISourceParser
 		 */
 		if (builder.getItemType() == ItemType.METHOD)
 		{
-
-			
+			isMethodInfo(builder, root);
+			return;
 		}
 		
 		/*
@@ -86,10 +86,13 @@ public class SourceParser implements ISourceParser
 		if (builder.getItemType() == ItemType.CONSTRUCTOR)
 		{
 			
+			return;
 		}
 		
-		
-		
+	}
+	
+	private void isMethodInfo(CodeBuilder builder, Element root) 
+	{
 		
 		
 		
@@ -422,8 +425,10 @@ public class SourceParser implements ISourceParser
 	private boolean hasCommentBranch = false;
 	private boolean hasPackageBranch = false;
 	private boolean hasSourceBranch = false;
+	private boolean hasMethodBranch = false;
 	private boolean isImplementing = false;
 	private boolean isExtending = false;
+	private boolean isThrowing = false;
 	
 	private void resetBuilder(CodeBuilder builder)
 	{
@@ -432,8 +437,10 @@ public class SourceParser implements ISourceParser
 		hasCommentBranch = false;
 		hasPackageBranch = false;
 		hasSourceBranch = false;
+		hasMethodBranch = false;
 		isImplementing = false;
 		isExtending = false;
+		isThrowing = false;
 	}
 	
 	@Override
@@ -588,6 +595,7 @@ public class SourceParser implements ISourceParser
 		if (equals(token,")")) 
 		{
 			hasParameterBranch = false;
+			hasMethodBranch = true;
 		}
 		
 		/*
@@ -606,6 +614,11 @@ public class SourceParser implements ISourceParser
 		if (hasParameterBranch)
 		{
 			doParameterBranch(builder, token);
+			return;
+		}
+		if (hasMethodBranch)
+		{
+			doMethodBranch(builder, token);
 			return;
 		}
 		
@@ -628,6 +641,33 @@ public class SourceParser implements ISourceParser
 		builder.setUnidentified(token);
 	}
 	
+	/*
+	 * 
+	 */
+	private void doMethodBranch(CodeBuilder builder, String token) 
+	{
+		/*
+		 * if a separator, skip
+		 */
+		if (equals(token,",")) return;
+		
+		/*
+		 * check exception throws
+		 */
+		if (equals(token,"throws"))
+		{
+			isThrowing = true;
+			return;
+		}
+		if (isThrowing)
+		{
+			builder.setThrowing(token);
+			return;
+		}
+		
+		builder.setUnidentified(token);
+	}
+
 	/*
 	 * 
 	 */
