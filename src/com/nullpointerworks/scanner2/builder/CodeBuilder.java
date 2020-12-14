@@ -53,12 +53,18 @@ public class CodeBuilder
 	/*
 	 * field type or method return type
 	 */
-	private DataType dataType;
+	private boolean isArray;
+	public boolean isArray() {return isArray;}
+	public void setArray(boolean b) {isArray=b;}
+	
+	
+	
+	private String dataType;
 
 	/*
 	 * name of the field, method, interface, class or enum
 	 */
-	private ItemName codeName;
+	private String codeName;
 	
 	/*
 	 * field or enum value, if any
@@ -71,7 +77,17 @@ public class CodeBuilder
 	/*
 	 * parameters
 	 */
+	private boolean parameterCapable = false;
+	public boolean isParameterCapable() {return parameterCapable;}
+	public void setParameterCapable(boolean p) {parameterCapable=p;}
 	private List<CodeBuilder> params;
+	public boolean hasParameters() {return params.size()>0;}
+	public void setParameter(CodeBuilder param)
+	{
+		
+		
+		parameterCapable = true;
+	}
 	
 	/*
 	 * extends
@@ -133,9 +149,11 @@ public class CodeBuilder
 		modifiers.clear();
 		unidentified.clear();
 		
-		dataType = DataType.NULL;
-		codeName = ItemName.NULL;
+		dataType = "";
+		isArray = false;
+		codeName = "";
 		value = ItemValue.NULL;
+		parameterCapable = false;
 		params.clear();
 		
 		extensions.clear();
@@ -154,20 +172,31 @@ public class CodeBuilder
 	public void inferTypeInfo() 
 	{
 		/*
+		 * 
+		 */
+		if (itemType == ItemType.NULL)
+		{
+			if (!parameterCapable)
+			{
+				itemType = ItemType.FIELD;
+			}
+			
+			
+			
+		}
+		
+		
+		
+		/*
 		 * if already set to FIELD, then = sign was detected
 		 */
 		if (itemType == ItemType.FIELD)
 		{
-			if (unidentified.size()==2)
+			if (unidentified.size()>1)
 			{
-				
+				dataType = unidentified.get(0);
+				codeName = unidentified.get(1);
 			}
-			else
-			if (unidentified.size()==3)
-			{
-				
-			}
-			
 		}
 		else
 		if (itemType == ItemType.METHOD)
@@ -180,10 +209,8 @@ public class CodeBuilder
 		{
 			
 		}
-		else
-		{
-			
-		}
+		
+		
 		
 	}
 	

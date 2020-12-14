@@ -22,11 +22,10 @@ public class MainParser
 	{
 		for (String f : args)
 		{
-			String name = FileUtil.getFileNameFromPath(f);
-			
 			/*
 			 * prepare
 			 */
+			String name = FileUtil.getFileNameFromPath(f);
 			ISourceParser parser = new SourceParser(name);
 			
 			/*

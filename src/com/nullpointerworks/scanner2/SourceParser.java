@@ -62,11 +62,99 @@ public class SourceParser implements ISourceParser
 			return;
 		}
 		
+		/*
+		 * when the parser confirmed it's a field
+		 */
+		if (builder.getItemType() == ItemType.FIELD)
+		{
+			isFieldInfo(builder, root);
+			return;
+		}
+		
+		
+		
+		
+		
 		
 		
 		
 	}
 	
+	private void isFieldInfo(CodeBuilder builder, Element root) 
+	{
+		/*
+		 * variable syntax for interfaces are always "public static final" and value 
+		 * assigned. Skip privacy check if it's an interface.
+		 */
+		if (sourceType == SourceType.INTERFACE)
+		{
+			builder.setVisibility( Visibility.PUBLIC );
+			builder.setModifier( Modifier.STATIC );
+			builder.setModifier( Modifier.FINAL );
+		}
+		
+		/*
+		 * if the variable is not public or protected, thus invisible for users, skip
+		 */
+		var vis = builder.getVisibility();
+		if (vis != Visibility.PUBLIC && vis != Visibility.PROTECTED)
+		{
+			return;
+		}
+		
+		/*
+		 * make xml element
+		 */
+		Element elField = new Element("field");
+		
+		/*
+		 * visibility
+		 */
+		if (builder.getVisibility() != Visibility.NULL)
+		{
+			String v = builder.getVisibility().toString();
+			elField.addChild( new Element("visibility").setText(v) );
+		}
+		
+		/*
+		 * modifiers
+		 */
+		List<Modifier> mods = builder.getModifier();
+		if (mods.size()>0)
+		{
+			for (Modifier mod : mods)
+			{
+				String m = mod.toString();
+				elField.addChild( new Element("modifier").setText(m) );
+			}
+		}
+		
+		/*
+		 * name
+		 */
+		List<String> uid = builder.getUnidentified();
+		if (uid.size()>1)
+		{
+			String arr = builder.isArray()?"[]":"";
+			String n = uid.get(0);
+			elField.addChild( new Element("type").setText(n+arr) );
+
+			n = uid.get(1);
+			elField.addChild( new Element("name").setText(n) );
+			
+			/*
+			 * if a value is present, why not add it to the XML
+			 */
+			if (uid.size()>2)
+			{
+				n = uid.get(2);
+				elField.addChild( new Element("value").setText(n) );
+			}
+		}
+		
+		root.addChild(elField);
+	}
+
 	private void isPackage(CodeBuilder builder, Element root) 
 	{
 		Element elPack = new Element("package");
@@ -97,8 +185,10 @@ public class SourceParser implements ISourceParser
 		
 		/*
 		 * source type
+		 * keep track of the file source type.
 		 */
-		String st = builder.getSourceType().toString();
+		sourceType = builder.getSourceType();
+		String st = sourceType.toString();
 		elementType.addChild( new Element("sourcetype").setText(st) );
 		
 		/*
@@ -116,8 +206,11 @@ public class SourceParser implements ISourceParser
 		List<Modifier> mods = builder.getModifier();
 		if (mods.size()>0)
 		{
-			String m = mods.get(0).toString();
-			elementType.addChild( new Element("modifier").setText(m) );
+			for (Modifier mod : mods)
+			{
+				String m = mod.toString();
+				elementType.addChild( new Element("modifier").setText(m) );
+			}
 		}
 		
 		/*
@@ -306,22 +399,23 @@ public class SourceParser implements ISourceParser
 	/*
 	 * code building
 	 */
+	private SourceType sourceType = SourceType.NULL;
 	private CodeBuilder codeBuilder = new CodeBuilder();
 	private CommentBuilder commentBuilder = new CommentBuilder();
+	private boolean hasParameterBranch = false;
 	private boolean hasCommentBranch = false;
 	private boolean hasPackageBranch = false;
 	private boolean hasSourceBranch = false;
-	private boolean hasFieldBranch = false;
 	private boolean isImplementing = false;
 	private boolean isExtending = false;
 	
 	private void resetBuilder(CodeBuilder builder)
 	{
 		builder.reset();
+		hasParameterBranch = false;
 		hasCommentBranch = false;
 		hasPackageBranch = false;
 		hasSourceBranch = false;
-		hasFieldBranch = false;
 		isImplementing = false;
 		isExtending = false;
 	}
@@ -380,6 +474,30 @@ public class SourceParser implements ISourceParser
 		}
 		
 		/*
+		 * check for data assignment. when found, set type and name.
+		 * variable values should be mentioned in commentary. Otherwise 
+		 * auto-complete will notify it's value
+		 */
+		if (equals(token,"="))
+		{
+			builder.setItemType(ItemType.FIELD);
+			return;
+		}
+		
+		/*
+		 * detect method/constructor/annotation/enum signifier
+		 * variables don't have ()
+		 */
+		if (equals(token,"("))
+		{
+			builder.setParameterCapable(true);
+			hasParameterBranch = true;
+			
+			
+			return;
+		}
+		
+		/*
 		 * started a new file
 		 */
 		if (equals(token,"package"))
@@ -394,6 +512,17 @@ public class SourceParser implements ISourceParser
 		 */
 		if (equals(token,"import"))
 		{
+			return;
+		}
+		
+		/*
+		 * detect java source file type
+		 */
+		boolean isSourceType = isSourceType(token);
+		if (isSourceType)
+		{
+			hasSourceBranch = true;
+			builder.setSourceType( getSourceType(token) );
 			return;
 		}
 		
@@ -418,36 +547,6 @@ public class SourceParser implements ISourceParser
 		}
 		
 		/*
-		 * detect java source file type
-		 */
-		boolean isSourceType = isSourceType(token);
-		if (isSourceType)
-		{
-			hasSourceBranch = true;
-			builder.setSourceType( getSourceType(token) );
-			return;
-		}
-		
-		/*
-		 * check for data assignment. when found, set type and name
-		 */
-		if (equals(token,"="))
-		{
-			hasFieldBranch = true;
-			builder.setItemType(ItemType.FIELD);
-			return;
-		}
-		
-		/*
-		 * detect method/constructor signifier
-		 */
-		if (equals(token,"("))
-		{
-			builder.setItemType(ItemType.METHOD_CONSTRUCTOR);
-			return;
-		}
-		
-		/*
 		 * branch off when item identification has been determined
 		 */
 		if (hasPackageBranch)
@@ -460,22 +559,22 @@ public class SourceParser implements ISourceParser
 			doSourceBranch(builder, token);
 			return;
 		}
-		if (hasFieldBranch)
+		
+		/*
+		 * check for array markers, or misc markers
+		 */
+		if (equals(token,"["))
 		{
-			
+			builder.setArray(true);
 			return;
 		}
-		//*/
+		if (equals(token,"]")) return;
+		if (equals(token,"}")) return;
 		
+		/*
+		 * add unidentified marker
+		 */
 		builder.setUnidentified(token);
-	}
-	
-	/*
-	 * 
-	 */
-	private void doCommentaryBranch(CommentBuilder builder, String token) 
-	{
-		
 	}
 	
 	/*
@@ -518,13 +617,21 @@ public class SourceParser implements ISourceParser
 		
 		builder.setUnidentified(token);
 	}
+	
+	/*
+	 * 
+	 */
+	private void doCommentaryBranch(CommentBuilder builder, String token) 
+	{
+		
+	}
 
 	/*
 	 * code end. { and } are also used by internal block code
 	 */
 	private boolean isEndOfCode(String token) 
 	{
-		if (token.equalsIgnoreCase(")")) return true;
+		//if (token.equalsIgnoreCase(")")) return true;
 		if (token.equalsIgnoreCase(";")) return true;
 		if (token.equalsIgnoreCase("{") && curlyBraceCount<2) return true;
 		return false;

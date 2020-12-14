@@ -9,4 +9,12 @@
 		<name>ExampleInterface</name>
 		<extends>Runnable</extends>
 	</type>
+	<field>
+		<visibility>PUBLIC</visibility>
+		<modifier>STATIC</modifier>
+		<modifier>FINAL</modifier>
+		<type>int</type>
+		<name>myVariable</name>
+		<value>0</value>
+	</field>
 </source>
