@@ -72,30 +72,183 @@ public class SourceParser implements ISourceParser
 		}
 		
 		/*
-		 * 
+		 * parse methods and constructors
 		 */
 		if (builder.getItemType() == ItemType.METHOD)
 		{
 			isMethodInfo(builder, root);
 			return;
 		}
-		
-		/*
-		 * 
-		 */
 		if (builder.getItemType() == ItemType.CONSTRUCTOR)
 		{
-			
+			isConstructorInfo(builder, root);
 			return;
 		}
 		
+		
+		
+		
+		
+	}
+	
+	private void isConstructorInfo(CodeBuilder builder, Element root) 
+	{
+		/*
+		 * make xml element
+		 */
+		Element elMethod = new Element("constructor");
+		
+		/*
+		 * visibility
+		 * only ad the user available constructors
+		 */
+		var vis = builder.getVisibility();
+		if (vis == Visibility.PUBLIC || vis == Visibility.PROTECTED)
+		{
+			String v = builder.getVisibility().toString();
+			elMethod.addChild( new Element("visibility").setText(v) );
+		}
+		else
+		{
+			return;
+		}
+		
+		/*
+		 * name
+		 */
+		List<String> uid = builder.getUnidentified();
+		if (uid.size()>0)
+		{
+			String n = uid.get(0);
+			elMethod.addChild( new Element("name").setText(n) );
+		}
+		
+		/*
+		 * parameters
+		 */
+		List<CodeBuilder> params = builder.getParameters();
+		for (CodeBuilder param : params)
+		{
+			List<String> puid = param.getUnidentified();
+			
+			/*
+			 * make parameter xml element
+			 */
+			Element elParam = new Element("param");
+			
+			String n = puid.get(0);
+			elParam.addChild( new Element("type").setText(n) );
+			
+			n = puid.get(1);
+			elParam.addChild( new Element("name").setText(n) );
+			
+			elMethod.addChild(elParam);
+		}
+		
+		/*
+		 * throws
+		 */
+		List<String> thrw = builder.getThrowing();
+		for (String t : thrw)
+		{
+			elMethod.addChild( new Element("throws").setText(t) );
+		}
+		
+		root.addChild(elMethod);
 	}
 	
 	private void isMethodInfo(CodeBuilder builder, Element root) 
 	{
+		/*
+		 * interface methods are always public when visibility is undefined
+		 */
+		if (sourceType == SourceType.INTERFACE)
+		{
+			builder.setVisibility( Visibility.PUBLIC );
+		}
 		
+		/*
+		 * make xml element
+		 */
+		Element elMethod = new Element("method");
 		
+		/*
+		 * visibility
+		 */
+		if (builder.getVisibility() != Visibility.NULL)
+		{
+			String v = builder.getVisibility().toString();
+			elMethod.addChild( new Element("visibility").setText(v) );
+		}
 		
+		/*
+		 * modifiers
+		 */
+		List<Modifier> mods = builder.getModifier();
+		if (mods.size()>0)
+		{
+			for (Modifier mod : mods)
+			{
+				String m = mod.toString();
+				elMethod.addChild( new Element("modifier").setText(m) );
+			}
+		}
+		
+		/*
+		 * name
+		 */
+		List<String> uid = builder.getUnidentified();
+		if (uid.size()>1)
+		{
+			String arr = builder.isArray()?"[]":"";
+			String n = uid.get(0);
+			elMethod.addChild( new Element("type").setText(n+arr) );
+
+			n = uid.get(1);
+			elMethod.addChild( new Element("name").setText(n) );
+			
+			/*
+			 * if a value is present, why not add it to the XML
+			 */
+			if (uid.size()>2)
+			{
+				n = uid.get(2);
+				elMethod.addChild( new Element("value").setText(n) );
+			}
+		}
+		
+		/*
+		 * parameters
+		 */
+		List<CodeBuilder> params = builder.getParameters();
+		for (CodeBuilder param : params)
+		{
+			List<String> puid = param.getUnidentified();
+			
+			/*
+			 * make parameter xml element
+			 */
+			Element elParam = new Element("param");
+			
+			String n = puid.get(0);
+			elParam.addChild( new Element("type").setText(n) );
+			
+			n = puid.get(1);
+			elParam.addChild( new Element("name").setText(n) );
+			
+			elMethod.addChild(elParam);
+		}
+		
+		/*
+		 * throws
+		 */
+		List<String> thrw = builder.getThrowing();
+		for (String t : thrw)
+		{
+			elMethod.addChild( new Element("throws").setText(t) );
+		}
+		
+		root.addChild(elMethod);
 	}
 	
 	private void isFieldInfo(CodeBuilder builder, Element root) 
@@ -420,12 +573,13 @@ public class SourceParser implements ISourceParser
 	 */
 	private SourceType sourceType = SourceType.NULL;
 	private CodeBuilder codeBuilder = new CodeBuilder();
+	private CodeBuilder parambuilder = new CodeBuilder();
 	private CommentBuilder commentBuilder = new CommentBuilder();
 	private boolean hasParameterBranch = false;
 	private boolean hasCommentBranch = false;
 	private boolean hasPackageBranch = false;
 	private boolean hasSourceBranch = false;
-	private boolean hasMethodBranch = false;
+	private boolean hasThrowingBranch = false;
 	private boolean isImplementing = false;
 	private boolean isExtending = false;
 	private boolean isThrowing = false;
@@ -433,11 +587,12 @@ public class SourceParser implements ISourceParser
 	private void resetBuilder(CodeBuilder builder)
 	{
 		builder.reset();
+		commentBuilder.reset();
 		hasParameterBranch = false;
 		hasCommentBranch = false;
 		hasPackageBranch = false;
 		hasSourceBranch = false;
-		hasMethodBranch = false;
+		hasThrowingBranch = false;
 		isImplementing = false;
 		isExtending = false;
 		isThrowing = false;
@@ -512,6 +667,15 @@ public class SourceParser implements ISourceParser
 		}
 		
 		/*
+		 * detect annotations
+		 */
+		if (token.startsWith("@"))
+		{
+			//Log.out("annotation: "+token);
+			return;
+		}
+		
+		/*
 		 * detect end of an instruction ;
 		 */
 		if (isEndOfInstruction(token))
@@ -547,6 +711,7 @@ public class SourceParser implements ISourceParser
 		 */
 		if (equals(token,"import"))
 		{
+			builder.setPackage(Package.IMPORT);
 			return;
 		}
 		
@@ -592,11 +757,6 @@ public class SourceParser implements ISourceParser
 			hasParameterBranch = true;
 			return;
 		}
-		if (equals(token,")")) 
-		{
-			hasParameterBranch = false;
-			hasMethodBranch = true;
-		}
 		
 		/*
 		 * branch off when item identification has been determined
@@ -616,9 +776,9 @@ public class SourceParser implements ISourceParser
 			doParameterBranch(builder, token);
 			return;
 		}
-		if (hasMethodBranch)
+		if (hasThrowingBranch)
 		{
-			doMethodBranch(builder, token);
+			doThrowingBranch(builder, token);
 			return;
 		}
 		
@@ -632,23 +792,23 @@ public class SourceParser implements ISourceParser
 		}
 		if (equals(token,"]")) return;
 		if (equals(token,"}")) return;
-		if (equals(token,")")) return;
+		//if (equals(token,")")) return;
 		
 		/*
 		 * add unidentified marker
 		 */
-		Log.out(token);
 		builder.setUnidentified(token);
 	}
 	
 	/*
 	 * 
 	 */
-	private void doMethodBranch(CodeBuilder builder, String token) 
+	private void doThrowingBranch(CodeBuilder builder, String token) 
 	{
 		/*
-		 * if a separator, skip
+		 * if a marker, skip
 		 */
+		//if (equals(token,")")) return;
 		if (equals(token,",")) return;
 		
 		/*
@@ -673,12 +833,34 @@ public class SourceParser implements ISourceParser
 	 */
 	private void doParameterBranch(CodeBuilder builder, String token) 
 	{
+		/*
+		 * marks the end of parameters
+		 */
+		if (equals(token,")")) 
+		{
+			if (parambuilder.getUnidentified().size()>0) 
+			{
+				builder.setParameter(parambuilder);
+				parambuilder = new CodeBuilder();
+			}
+			hasParameterBranch = false;
+			hasThrowingBranch = true;
+			return;
+		}
+		
+		/*
+		 * marks parameter separation
+		 */
+		if (equals(token,",")) 
+		{
+			builder.setParameter(parambuilder);
+			parambuilder = new CodeBuilder();
+			return;
+		}
+		
 		//Log.out("param: "+token);
-		
-		
-		
-		
-		
+		parambuilder.setItemType(ItemType.PARAMETER);
+		parambuilder.setUnidentified(token);
 	}
 	
 	/*
@@ -750,6 +932,11 @@ public class SourceParser implements ISourceParser
 		if (token.equalsIgnoreCase("}") && curlyBraceCount==0) return true;
 		return false;
 	}
+	
+	private boolean equals(String s, String c)
+	{
+		return s.equalsIgnoreCase(c);
+	}
 
 	/*
 	 * package-private has no keyword
@@ -816,10 +1003,5 @@ public class SourceParser implements ISourceParser
 		if (token.equalsIgnoreCase("strictfp")) return Modifier.STRICTFP;
 		if (token.equalsIgnoreCase("default")) return Modifier.DEFAULT;
 		return Modifier.NULL;
-	}
-	
-	private boolean equals(String s, String c)
-	{
-		return s.equalsIgnoreCase(c);
 	}
 }

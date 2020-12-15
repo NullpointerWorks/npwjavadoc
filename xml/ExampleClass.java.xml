@@ -42,4 +42,43 @@
 		<type>String[]</type>
 		<name>myArray</name>
 	</field>
+	<constructor>
+		<visibility>PUBLIC</visibility>
+		<name>ExampleClass</name>
+	</constructor>
+	<constructor>
+		<visibility>PROTECTED</visibility>
+		<name>ExampleClass</name>
+		<param>
+			<type>int</type>
+			<name>i</name>
+		</param>
+		<param>
+			<type>int</type>
+			<name>j</name>
+		</param>
+		<param>
+			<type>int</type>
+			<name>k</name>
+		</param>
+	</constructor>
+	<method>
+		<visibility>PUBLIC</visibility>
+		<type>void</type>
+		<name>myPublicMethod</name>
+	</method>
+	<method>
+		<visibility>PUBLIC</visibility>
+		<type>void</type>
+		<name>myPublicMethod2</name>
+	</method>
+	<method>
+		<visibility>PUBLIC</visibility>
+		<type>void</type>
+		<name>myPublicMethod3</name>
+		<param>
+			<type>int</type>
+			<name>i</name>
+		</param>
+	</method>
 </source>

@@ -56,20 +56,6 @@ public class CodeBuilder
 	private boolean isArray;
 	public boolean isArray() {return isArray;}
 	public void setArray(boolean b) {isArray=b;}
-	private String dataType;
-
-	/*
-	 * name of the field, method, interface, class or enum
-	 */
-	private String codeName;
-	
-	/*
-	 * field or enum value, if any
-	 */
-	private ItemValue value;
-	public boolean hasItemValue() {return value != ItemValue.NULL;}
-	public ItemValue getItemValue() {return value;}
-	public void setItemValue(ItemValue v) {value = v;}
 	
 	/*
 	 * parameters
@@ -79,10 +65,11 @@ public class CodeBuilder
 	public void setParameterCapable(boolean p) {parameterCapable=p;}
 	private List<CodeBuilder> params;
 	public boolean hasParameters() {return params.size()>0;}
+	public List<CodeBuilder> getParameters() {return params;}
 	public void setParameter(CodeBuilder param)
 	{
-		
-		
+		param.inferTypeInfo();
+		params.add(param);
 		parameterCapable = true;
 	}
 	
@@ -146,10 +133,7 @@ public class CodeBuilder
 		modifiers.clear();
 		unidentified.clear();
 		
-		dataType = "";
 		isArray = false;
-		codeName = "";
-		value = ItemValue.NULL;
 		parameterCapable = false;
 		params.clear();
 		
@@ -175,7 +159,13 @@ public class CodeBuilder
 		{
 			if (!parameterCapable)
 			{
-				itemType = ItemType.FIELD;
+				if (isPackage != Package.NULL) { }
+				else
+				if (sourceType != SourceType.NULL) { }
+				else
+				{
+					itemType = ItemType.FIELD;
+				}
 			}
 			else
 			{
@@ -191,34 +181,6 @@ public class CodeBuilder
 				}
 			}
 		}
-		
-		/*
-		 * if already set to FIELD, then = sign was detected
-		 */
-		if (itemType == ItemType.FIELD)
-		{
-			if (unidentified.size()>1)
-			{
-				dataType = unidentified.get(0);
-				codeName = unidentified.get(1);
-			}
-		}
-		else
-		if (itemType == ItemType.METHOD)
-		{
-			dataType = unidentified.get(0);
-			codeName = unidentified.get(1);
-		}
-		else
-		if (itemType == ItemType.CONSTRUCTOR)
-		{
-			codeName = unidentified.get(0);
-		}
-		
-		
-		
 	}
-	
-	
 	
 }
