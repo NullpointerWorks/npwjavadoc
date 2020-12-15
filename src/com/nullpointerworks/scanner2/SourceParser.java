@@ -648,9 +648,9 @@ public class SourceParser implements ISourceParser
 			hasCommentBranch = true;
 			return;
 		}
+		if (hasCommentBranch) hasCommentBranch = !equals(token,C_END);
 		if (hasCommentBranch)
 		{
-			hasCommentBranch = !equals(token,C_END);
 			doCommentaryBranch(cbuilder, token);
 			return;
 		}
@@ -668,6 +668,9 @@ public class SourceParser implements ISourceParser
 		
 		/*
 		 * detect annotations
+		 * 
+		 * TODO
+		 * 
 		 */
 		if (token.startsWith("@"))
 		{
@@ -708,6 +711,8 @@ public class SourceParser implements ISourceParser
 		
 		/*
 		 * the file imports classes
+		 * 
+		 * TODO
 		 */
 		if (equals(token,"import"))
 		{
@@ -749,7 +754,6 @@ public class SourceParser implements ISourceParser
 		/*
 		 * detect method/constructor/annotation/enum signifier
 		 * variables don't have ()
-		 * TODO
 		 */
 		if (equals(token,"("))
 		{
@@ -801,7 +805,7 @@ public class SourceParser implements ISourceParser
 	}
 	
 	/*
-	 * 
+	 * parse exception throwing tokens
 	 */
 	private void doThrowingBranch(CodeBuilder builder, String token) 
 	{
@@ -829,7 +833,7 @@ public class SourceParser implements ISourceParser
 	}
 
 	/*
-	 * 
+	 * build parameters for methods and constructors
 	 */
 	private void doParameterBranch(CodeBuilder builder, String token) 
 	{
@@ -864,7 +868,7 @@ public class SourceParser implements ISourceParser
 	}
 	
 	/*
-	 * 
+	 * detect source type and extensions/implementations
 	 */
 	private void doSourceBranch(CodeBuilder builder, String token) 
 	{
@@ -905,10 +909,22 @@ public class SourceParser implements ISourceParser
 	}
 	
 	/*
+	 * TODO
+	 * 
+	 * 
+	 * 
 	 * 
 	 */
-	private void doCommentaryBranch(CommentBuilder builder, String token) 
+	private void doCommentaryBranch(CommentBuilder cbuilder, String token) 
 	{
+		
+		
+		
+		
+		
+		
+		
+		Log.out(token);
 		
 	}
 
@@ -957,7 +973,6 @@ public class SourceParser implements ISourceParser
 		return Visibility.NULL;
 	}
 	
-	
 	/*
 	 * 
 	 */
@@ -980,7 +995,6 @@ public class SourceParser implements ISourceParser
 		if (token.equalsIgnoreCase("module")) return SourceType.MODULE;
 		return SourceType.NULL;
 	}
-	
 	
 	/*
 	 * 
