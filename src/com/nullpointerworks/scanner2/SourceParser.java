@@ -402,6 +402,18 @@ public class SourceParser implements ISourceParser
 		}
 		
 		/*
+		 * templates
+		 */
+		List<String> tmp = builder.getTemplate();
+		if (tmp.size()>0)
+		{
+			for (String e : tmp)
+			{
+				elementType.addChild( new Element("template").setText(e) );
+			}
+		}
+		
+		/*
 		 * extending
 		 */
 		List<String> ext = builder.getExtended();
@@ -506,6 +518,12 @@ public class SourceParser implements ISourceParser
 		line = line.replace("]", " ] ");
 		
 		/*
+		 * template
+		 */
+		line = line.replace("<", " < ");
+		line = line.replace(">", " > ");
+		
+		/*
 		 * other
 		 */
 		line = line.replace("//", " // ");
@@ -576,10 +594,11 @@ public class SourceParser implements ISourceParser
 	private CodeBuilder parambuilder = new CodeBuilder();
 	private CommentBuilder commentBuilder = new CommentBuilder();
 	private boolean hasParameterBranch = false;
+	private boolean hasThrowingBranch = false;
+	private boolean hasTemplateBranch = false;
 	private boolean hasCommentBranch = false;
 	private boolean hasPackageBranch = false;
 	private boolean hasSourceBranch = false;
-	private boolean hasThrowingBranch = false;
 	private boolean isImplementing = false;
 	private boolean isExtending = false;
 	private boolean isThrowing = false;
@@ -589,10 +608,11 @@ public class SourceParser implements ISourceParser
 		builder.reset();
 		commentBuilder.reset();
 		hasParameterBranch = false;
+		hasThrowingBranch = false;
+		hasTemplateBranch = false;
 		hasCommentBranch = false;
 		hasPackageBranch = false;
 		hasSourceBranch = false;
-		hasThrowingBranch = false;
 		isImplementing = false;
 		isExtending = false;
 		isThrowing = false;
@@ -803,7 +823,7 @@ public class SourceParser implements ISourceParser
 		 */
 		builder.setUnidentified(token);
 	}
-	
+
 	/*
 	 * parse exception throwing tokens
 	 */
@@ -905,6 +925,17 @@ public class SourceParser implements ISourceParser
 			return;
 		}
 		
+		/*
+		 * check template
+		 */
+		if (equals(token,"<"))
+		{
+			hasTemplateBranch = false;
+			return;
+		}
+		builder.setTemplate(token);
+		
+		
 		builder.setUnidentified(token);
 	}
 	
@@ -924,7 +955,7 @@ public class SourceParser implements ISourceParser
 		
 		
 		
-		Log.out(token);
+		//Log.out(token);
 		
 	}
 

@@ -6,7 +6,7 @@ package com.nullpointerworks.examples;
  * @author Michiel
  */
 @SuppressWarnings("unused")
-public abstract class ExampleClass extends Object implements ExampleInterface, Runnable
+public abstract class ExampleClass extends Object implements ExampleInterface<String>, Runnable
 {
 
 	// =====================================================
@@ -76,12 +76,6 @@ public abstract class ExampleClass extends Object implements ExampleInterface, R
 	
 	@Override
 	public void myPublicMethod() 
-	{
-		
-	}
-	
-	@Override
-	public void myPublicMethod2() 
 	{
 		
 	}

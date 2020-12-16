@@ -7,6 +7,7 @@
 		<sourcetype>INTERFACE</sourcetype>
 		<visibility>PUBLIC</visibility>
 		<name>ExampleInterface</name>
+		<template>T</template>
 		<extends>Runnable</extends>
 	</type>
 	<field>
@@ -25,7 +26,7 @@
 	<method>
 		<visibility>PUBLIC</visibility>
 		<modifier>ABSTRACT</modifier>
-		<type>void</type>
+		<type>T</type>
 		<name>myPublicMethod2</name>
 	</method>
 	<method>
@@ -49,7 +50,7 @@
 		<type>void</type>
 		<name>myDefaultMethod2</name>
 		<param>
-			<type>int</type>
+			<type>ExampleInterface</type>
 			<name>i</name>
 		</param>
 		<param>

@@ -74,6 +74,13 @@ public class CodeBuilder
 	}
 	
 	/*
+	 * template
+	 */
+	private List<String> templates;
+	public List<String> getTemplate() {return templates;}
+	public void setTemplate(String ex) {templates.add(ex);}
+	
+	/*
 	 * extends
 	 */
 	private List<String> extensions;
@@ -119,6 +126,8 @@ public class CodeBuilder
 		modifiers 		= new ArrayList<Modifier>();
 		unidentified	= new ArrayList<String>();
 		params 			= new ArrayList<CodeBuilder>();
+		
+		templates 		= new ArrayList<String>();
 		extensions 		= new ArrayList<String>();
 		implementations	= new ArrayList<String>();
 		throwing 		= new ArrayList<String>();
@@ -137,6 +146,7 @@ public class CodeBuilder
 		parameterCapable = false;
 		params.clear();
 		
+		templates.clear();
 		extensions.clear();
 		isExtending = false;
 		implementations.clear();

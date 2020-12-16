@@ -6,7 +6,7 @@ import java.io.IOException;
 This interface serves as a scan test to see if all aspects of an interface are observed.
 @author Michiel
 */
-public interface ExampleInterface extends Runnable
+public interface ExampleInterface<T> extends Runnable
 {
 	/**
 	 * interface variables are automatically public, static and final.
@@ -20,9 +20,9 @@ public interface ExampleInterface extends Runnable
 	public void myPublicMethod();
 	
 	/**
-	 * abstract method
+	 * abstract method with template return
 	 */
-	abstract void myPublicMethod2();
+	abstract T myPublicMethod2();
 	
 	/**
 	 * no modifiers are also public by default
@@ -41,7 +41,7 @@ public interface ExampleInterface extends Runnable
 	/**
 	 * my default method with bad commentary marker, but with a parameter
 	 */
-	default void myDefaultMethod2(int i, int j)
+	default void myDefaultMethod2(ExampleInterface<T> i, int j)
 	{
 		
 	}

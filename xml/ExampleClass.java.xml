@@ -8,6 +8,7 @@
 		<visibility>PUBLIC</visibility>
 		<modifier>ABSTRACT</modifier>
 		<name>ExampleClass</name>
+		<template>String</template>
 		<extends>Object</extends>
 		<implements>ExampleInterface</implements>
 		<implements>Runnable</implements>
@@ -66,11 +67,6 @@
 		<visibility>PUBLIC</visibility>
 		<type>void</type>
 		<name>myPublicMethod</name>
-	</method>
-	<method>
-		<visibility>PUBLIC</visibility>
-		<type>void</type>
-		<name>myPublicMethod2</name>
 	</method>
 	<method>
 		<visibility>PUBLIC</visibility>
