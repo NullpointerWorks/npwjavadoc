@@ -1,4 +1,4 @@
-package com.nullpointerworks.scanner;
+package com.nullpointerworks.linescanner;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;

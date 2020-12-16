@@ -1,4 +1,4 @@
-package com.nullpointerworks.scanner2.builder;
+package com.nullpointerworks.tokenscanner.builder;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,4 +1,4 @@
-package com.nullpointerworks.scanner2;
+package com.nullpointerworks.tokenscanner;
 
 public interface ISourceParser 
 {

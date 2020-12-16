@@ -1,16 +1,15 @@
-package com.nullpointerworks.scanner2;
+package com.nullpointerworks.tokenscanner;
 
 import java.io.IOException;
 import java.util.List;
 
-import com.nullpointerworks.scanner2.builder.CodeBuilder;
-import com.nullpointerworks.scanner2.builder.CommentBuilder;
-import com.nullpointerworks.scanner2.builder.ItemType;
-import com.nullpointerworks.scanner2.builder.Modifier;
-import com.nullpointerworks.scanner2.builder.SourceType;
-import com.nullpointerworks.scanner2.builder.Visibility;
-import com.nullpointerworks.scanner2.builder.Package;
-
+import com.nullpointerworks.tokenscanner.builder.CodeBuilder;
+import com.nullpointerworks.tokenscanner.builder.CommentBuilder;
+import com.nullpointerworks.tokenscanner.builder.ItemType;
+import com.nullpointerworks.tokenscanner.builder.Modifier;
+import com.nullpointerworks.tokenscanner.builder.Package;
+import com.nullpointerworks.tokenscanner.builder.SourceType;
+import com.nullpointerworks.tokenscanner.builder.Visibility;
 import com.nullpointerworks.util.FileUtil;
 import com.nullpointerworks.util.Log;
 import exp.nullpointerworks.xml.Document;
