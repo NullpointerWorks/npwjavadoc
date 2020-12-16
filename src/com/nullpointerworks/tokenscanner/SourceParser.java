@@ -17,23 +17,22 @@ import exp.nullpointerworks.xml.Element;
 import exp.nullpointerworks.xml.format.FormatBuilder;
 import exp.nullpointerworks.xml.io.DocumentIO;
 
-public class SourceParser implements ISourceParser
+public class SourceParser extends AbstractSourceParser
 {
 	/*
 	 * document building
 	 */
-	private StringBuilder tokenBuilder;
 	private Document doc;
 	private Element root;
 	private final String outFile;
 	
 	public SourceParser(String outFile)
 	{
+		super();
 		this.outFile=outFile;
 		doc = new Document();
 		root = new Element("source");
 		doc.setRootElement(root);
-		tokenBuilder = new StringBuilder();
 	}
 	
 	private void parseBuilder(CodeBuilder builder) 
@@ -494,126 +493,6 @@ public class SourceParser implements ISourceParser
 	
 	// ============================================================================================
 	
-	@Override
-	public void nextLine(String line)
-	{
-		/*
-		 * trim whitespace
-		 */
-		line = line.trim();
-		
-		/*
-		 * if the line is a comment line, skip
-		 */
-		if (line.startsWith("//")) return;
-		
-		/*
-		 * if the line has no text, skip
-		 */
-		int leng = line.length();
-		if (leng < 1) return;
-		
-		/*
-		 * preprocessor: tokenize all code markers
-		 */
-		String preproc = doPreprocessor( line );
-		leng = preproc.length();
-		
-		/*
-		 * feed all characters in the line
-		 */
-		for (int i=0; i<leng; i++)
-		{
-			String character = preproc.substring(i, i+1);
-			nextCharacter(character);
-		}
-	}
-	
-	/*
-	 * tokenize important code markers before parsing
-	 */
-	private String doPreprocessor(String line) 
-	{
-		/*
-		 * method parameters
-		 */
-		line = line.replace("(", " ( ");
-		line = line.replace(")", " ) ");
-		
-		/*
-		 * code blocks
-		 */
-		line = line.replace("{", " { ");
-		line = line.replace("}", " } ");
-		
-		/*
-		 * arrays
-		 */
-		line = line.replace("[", " [ ");
-		line = line.replace("]", " ] ");
-		
-		/*
-		 * template
-		 */
-		line = line.replace("<", " < ");
-		line = line.replace(">", " > ");
-		
-		/*
-		 * other
-		 */
-		line = line.replace("//", " // ");
-		//line = line.replace("*", " * ");
-		line = line.replace("=", " = ");
-		line = line.replace(",", " , ");
-		line = line.replace(";", " ; ");
-		
-		/*
-		 * convert duplicate spaces into as single space, add a line-end space at the end
-		 */
-		line = line.trim();
-		return line.replaceAll("\\s+", " ")+"\n";
-	}
-	
-	// ============================================================================================
-	
-	@Override
-	public void nextCharacter(String character)
-	{
-		boolean newLine = character.equalsIgnoreCase("\n");
-		boolean whiteSpace = character.equalsIgnoreCase(" ");
-		
-		/*
-		 * do something when a new line is detected
-		 * some code is newline sensitive, like comments
-		 */
-		if (newLine)
-		{
-			
-		}
-		
-		/*
-		 * store the passing characters into a string until a special marker is detected.
-		 * A special marker could be:
-		 * - space
-		 * - braces of any type, (), {}, []
-		 * - end of code line ;
-		 */
-		if (newLine || whiteSpace)
-		{
-			String token = tokenBuilder.toString();
-			nextToken(token);
-			tokenBuilder.setLength(0);// reset builder
-			return;
-		}
-		
-		/*
-		 * add character to token
-		 */
-		tokenBuilder.append(character);
-	}
-	
-	// ============================================================================================
-	
 	/*
 	 * comment block signifier
 	 */
@@ -876,10 +755,12 @@ public class SourceParser implements ISourceParser
 		if (equals(token,"]")) return;
 		if (equals(token,"}")) return;
 		//if (equals(token,")")) return;
+		//if (equals(token,",")) return;
 		
 		/*
 		 * add unidentified marker
 		 */
+		Log.out("uid: "+token);
 		builder.setUnidentified(token);
 	}
 
@@ -1034,10 +915,6 @@ public class SourceParser implements ISourceParser
 	
 	/*
 	 * TODO
-	 * 
-	 * 
-	 * 
-	 * 
 	 */
 	private void doCommentaryBranch(CommentBuilder cbuilder, String token) 
 	{
