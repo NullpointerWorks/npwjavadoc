@@ -131,5 +131,6 @@ public abstract class AbstractSourceParser implements ISourceParser
 		tokenBuilder.append(character);
 	}
 	
+	@Override
 	public abstract void nextToken(String token);
 }

@@ -26,8 +26,8 @@ public class MainParser
 			/*
 			 * prepare
 			 */
-			String name = FileUtil.getFileNameFromPath(f);
-			ISourceParser parser = new SourceParser(name);
+			String n = FileUtil.getFileNameFromPath(f);
+			ISourceParser parser = new SourceParser(n);
 			
 			/*
 			 * read text file

@@ -745,7 +745,7 @@ public class SourceParser extends AbstractSourceParser
 		}
 		
 		/*
-		 * check for array markers, or misc markers
+		 * check for array or miscellaneous markers
 		 */
 		if (equals(token,"["))
 		{
@@ -954,7 +954,7 @@ public class SourceParser extends AbstractSourceParser
 	{
 		return s.equalsIgnoreCase(c);
 	}
-
+	
 	/*
 	 * package-private has no keyword
 	 */
