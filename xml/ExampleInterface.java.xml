@@ -7,7 +7,8 @@
 		<sourcetype>INTERFACE</sourcetype>
 		<visibility>PUBLIC</visibility>
 		<name>ExampleInterface</name>
-		<template>T</template>
+		<template>I</template>
+		<template>J</template>
 		<extends>Runnable</extends>
 	</type>
 	<field>
@@ -18,6 +19,14 @@
 		<name>myVariable</name>
 		<value>0</value>
 	</field>
+	<field>
+		<visibility>PUBLIC</visibility>
+		<modifier>STATIC</modifier>
+		<modifier>FINAL</modifier>
+		<type>List</type>
+		<name>myTemplate</name>
+		<template>String</template>
+	</field>
 	<method>
 		<visibility>PUBLIC</visibility>
 		<type>void</type>
@@ -26,7 +35,7 @@
 	<method>
 		<visibility>PUBLIC</visibility>
 		<modifier>ABSTRACT</modifier>
-		<type>T</type>
+		<type>I</type>
 		<name>myPublicMethod2</name>
 	</method>
 	<method>
@@ -52,6 +61,8 @@
 		<param>
 			<type>ExampleInterface</type>
 			<name>i</name>
+			<template>I</template>
+			<template>J</template>
 		</param>
 		<param>
 			<type>int</type>

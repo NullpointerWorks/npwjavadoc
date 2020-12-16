@@ -9,6 +9,7 @@
 		<modifier>ABSTRACT</modifier>
 		<name>ExampleClass</name>
 		<template>String</template>
+		<template>String</template>
 		<extends>Object</extends>
 		<implements>ExampleInterface</implements>
 		<implements>Runnable</implements>

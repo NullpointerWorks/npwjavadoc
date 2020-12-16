@@ -142,6 +142,18 @@ public class SourceParser implements ISourceParser
 			n = puid.get(1);
 			elParam.addChild( new Element("name").setText(n) );
 			
+			/*
+			 * templates
+			 */
+			List<String> tmp = param.getTemplate();
+			if (tmp.size()>0)
+			{
+				for (String e : tmp)
+				{
+					elParam.addChild( new Element("template").setText(e) );
+				}
+			}
+			
 			elMethod.addChild(elParam);
 		}
 		
@@ -236,6 +248,18 @@ public class SourceParser implements ISourceParser
 			n = puid.get(1);
 			elParam.addChild( new Element("name").setText(n) );
 			
+			/*
+			 * templates
+			 */
+			List<String> tmp = param.getTemplate();
+			if (tmp.size()>0)
+			{
+				for (String e : tmp)
+				{
+					elParam.addChild( new Element("template").setText(e) );
+				}
+			}
+			
 			elMethod.addChild(elParam);
 		}
 		
@@ -316,10 +340,22 @@ public class SourceParser implements ISourceParser
 			/*
 			 * if a value is present, why not add it to the XML
 			 */
-			if (uid.size()>2)
+			if (uid.size()==3)
 			{
 				n = uid.get(2);
 				elField.addChild( new Element("value").setText(n) );
+			}
+		}
+		
+		/*
+		 * templates
+		 */
+		List<String> tmp = builder.getTemplate();
+		if (tmp.size()>0)
+		{
+			for (String e : tmp)
+			{
+				elField.addChild( new Element("template").setText(e) );
 			}
 		}
 		
@@ -807,6 +843,30 @@ public class SourceParser implements ISourceParser
 		}
 		
 		/*
+		 * check template.
+		 * after the item has been identified as a field, don't scan for templates again.
+		 */
+		if (builder.getItemType() != ItemType.FIELD) 
+		{
+			if (equals(token,">"))
+			{
+				hasTemplateBranch = false;
+				return;
+			}
+			if (equals(token,"<"))
+			{
+				hasTemplateBranch = true;
+				return;
+			}
+			if (hasTemplateBranch)
+			{
+				if (equals(token,",")) return;
+				builder.setTemplate(token);
+				return;
+			}
+		}
+		
+		/*
 		 * check for array markers, or misc markers
 		 */
 		if (equals(token,"["))
@@ -858,6 +918,26 @@ public class SourceParser implements ISourceParser
 	private void doParameterBranch(CodeBuilder builder, String token) 
 	{
 		/*
+		 * check template
+		 */
+		if (equals(token,">"))
+		{
+			hasTemplateBranch = false;
+			return;
+		}
+		if (equals(token,"<"))
+		{
+			hasTemplateBranch = true;
+			return;
+		}
+		if (hasTemplateBranch)
+		{
+			if (equals(token,",")) return;
+			parambuilder.setTemplate(token);
+			return;
+		}
+		
+		/*
 		 * marks the end of parameters
 		 */
 		if (equals(token,")")) 
@@ -898,6 +978,20 @@ public class SourceParser implements ISourceParser
 		if (equals(token,",")) return;
 		
 		/*
+		 * check template
+		 */
+		if (equals(token,">"))
+		{
+			hasTemplateBranch = false;
+			return;
+		}
+		if (equals(token,"<"))
+		{
+			hasTemplateBranch = true;
+			return;
+		}
+		
+		/*
 		 * check implementations first
 		 */
 		if (equals(token,"implements"))
@@ -905,6 +999,7 @@ public class SourceParser implements ISourceParser
 			isImplementing = true;
 			return;
 		}
+		if (!hasTemplateBranch)
 		if (isImplementing)
 		{
 			builder.setImplemented(token);
@@ -919,6 +1014,7 @@ public class SourceParser implements ISourceParser
 			isExtending = true;
 			return;
 		}
+		if (!hasTemplateBranch)
 		if (isExtending)
 		{
 			builder.setExtended(token);
@@ -926,15 +1022,13 @@ public class SourceParser implements ISourceParser
 		}
 		
 		/*
-		 * check template
+		 * add source templates
 		 */
-		if (equals(token,"<"))
+		if (hasTemplateBranch)
 		{
-			hasTemplateBranch = false;
+			builder.setTemplate(token);
 			return;
 		}
-		builder.setTemplate(token);
-		
 		
 		builder.setUnidentified(token);
 	}

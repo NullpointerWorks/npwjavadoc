@@ -1,18 +1,25 @@
 package com.nullpointerworks.examples;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 /** 
 This interface serves as a scan test to see if all aspects of an interface are observed.
 @author Michiel
 */
-public interface ExampleInterface<T> extends Runnable
+public interface ExampleInterface<I,J> extends Runnable
 {
 	/**
 	 * interface variables are automatically public, static and final.
 	 * no other modifiers are permitted
 	 */
 	int myVariable = 0;
+	
+	/**
+	 * scan template fields
+	 */
+	List<String> myTemplate = new ArrayList<String>();
 	
 	/**
 	 * public method
@@ -22,7 +29,7 @@ public interface ExampleInterface<T> extends Runnable
 	/**
 	 * abstract method with template return
 	 */
-	abstract T myPublicMethod2();
+	abstract I myPublicMethod2();
 	
 	/**
 	 * no modifiers are also public by default
@@ -41,7 +48,7 @@ public interface ExampleInterface<T> extends Runnable
 	/**
 	 * my default method with bad commentary marker, but with a parameter
 	 */
-	default void myDefaultMethod2(ExampleInterface<T> i, int j)
+	default void myDefaultMethod2(ExampleInterface<I,J> i, int j)
 	{
 		
 	}

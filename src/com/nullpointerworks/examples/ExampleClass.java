@@ -6,7 +6,7 @@ package com.nullpointerworks.examples;
  * @author Michiel
  */
 @SuppressWarnings("unused")
-public abstract class ExampleClass extends Object implements ExampleInterface<String>, Runnable
+public abstract class ExampleClass extends Object implements ExampleInterface<String,String>, Runnable
 {
 
 	// =====================================================
