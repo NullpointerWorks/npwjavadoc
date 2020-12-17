@@ -53,10 +53,8 @@ public class CodeBuilder
 	private List<Modifier> modifiers;
 	public boolean hasModifier() {return modifiers.size()>0;}
 	public List<Modifier> getModifier() {return modifiers;}
-	public void setModifier(Modifier modifier) 
-	{
-		if (!modifiers.contains(modifier)) modifiers.add(modifier);
-	}
+	public void setModifier(Modifier modifier) {if (!modifiers.contains(modifier)) modifiers.add(modifier);}
+	public boolean hasModifier(Modifier m) {return modifiers.contains(m);}
 	public void setModifier(String modifier) 
 	{
 		setModifier(getModifier(modifier));
@@ -107,9 +105,19 @@ public class CodeBuilder
 	/*
 	 * annotation
 	 */
-	private List<String> annotation;
-	public List<String> getAnnotation() {return annotation;}
-	public void setAnnotation(String ann) {annotation.add(ann);}
+	private Annotation lastAnnotation;
+	private List<Annotation> annotation;
+	public List<Annotation> getAnnotation() {return annotation;}
+	public void setAnnotation(String ann) 
+	{
+		lastAnnotation = new Annotation(ann);
+		annotation.add( lastAnnotation );
+	}
+	public void setAnnotation(String ann, String...params) {annotation.add( new Annotation(ann,params) );}
+	public void setAnnotationParameters(List<String> params) 
+	{
+		lastAnnotation.setParameters(params);
+	}
 	
 	/*
 	 * template
@@ -164,7 +172,7 @@ public class CodeBuilder
 		modifiers 		= new ArrayList<Modifier>();
 		unidentified	= new ArrayList<String>();
 		params 			= new ArrayList<CodeBuilder>();
-		annotation 		= new ArrayList<String>();
+		annotation 		= new ArrayList<Annotation>();
 		templates 		= new ArrayList<String>();
 		extensions 		= new ArrayList<String>();
 		implementations	= new ArrayList<String>();

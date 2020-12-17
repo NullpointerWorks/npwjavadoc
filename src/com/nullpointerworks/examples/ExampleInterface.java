@@ -64,6 +64,7 @@ public interface ExampleInterface<I,J> extends Runnable
 	/**
 	 * my default strict floating-point method with a return type
 	 */
+	@SuppressWarnings("unchecked")
 	default strictfp String myDefaultMethod4() 
 	{
 		return "";

@@ -1,5 +1,7 @@
 package com.nullpointerworks.examples;
 
+import java.util.List;
+
 /**
  * Testing class for file parsing.
  * @version 1.0.0
@@ -8,7 +10,6 @@ package com.nullpointerworks.examples;
 //@SuppressWarnings("unused")
 public abstract class ExampleClass extends Object implements ExampleInterface<String,String>, Runnable
 {
-
 	// =====================================================
 	// FIELDS
 	// =====================================================
@@ -65,7 +66,7 @@ public abstract class ExampleClass extends Object implements ExampleInterface<St
 	 * @param j integer param
 	 * @param k integer param
 	 */
-	protected ExampleClass(int i, int j, int k)
+	protected ExampleClass(int i, List<Integer> j, int k)
 	{
 		
 	}
@@ -81,6 +82,7 @@ public abstract class ExampleClass extends Object implements ExampleInterface<St
 	}
 	
 	@Override
+	@SuppressWarnings("unchecked")
 	public void myPublicMethod3(int i) 
 	{
 		

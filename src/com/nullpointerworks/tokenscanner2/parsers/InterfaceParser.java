@@ -6,6 +6,7 @@ import java.util.List;
 import com.nullpointerworks.tokenscanner2.builder.ItemType;
 import com.nullpointerworks.tokenscanner2.builder.Visibility;
 import com.nullpointerworks.tokenscanner2.builder.Modifier;
+import com.nullpointerworks.tokenscanner2.builder.Annotation;
 import com.nullpointerworks.tokenscanner2.builder.CodeBuilder;
 import com.nullpointerworks.tokenscanner2.JavaSyntax;
 
@@ -81,13 +82,31 @@ public class InterfaceParser extends AbstractSourceParser
 	{
 		/*
 		 * interface methods are always public when visibility is undefined
+		 * non-default methods (i.e. without a body) are always abstract
 		 */
 		builder.setVisibility( Visibility.PUBLIC );
+		if (!builder.hasModifier(Modifier.DEFAULT))
+		{
+			builder.setModifier(Modifier.ABSTRACT);
+		}
 		
 		/*
 		 * make xml element
 		 */
 		Element elMethod = new Element("method");
+		
+		/*
+		 * annotations
+		 */
+		List<Annotation> anns = builder.getAnnotation();
+		if (anns.size()>0)
+		{
+			for (Annotation ann: anns)
+			{
+				String m = ann.getString();
+				elMethod.addChild( new Element("annotation").setText(m) );
+			}
+		}
 		
 		/*
 		 * visibility
@@ -262,6 +281,7 @@ public class InterfaceParser extends AbstractSourceParser
 	boolean hasTemplateBranch = false;
 	boolean hasThrowingBranch = false;
 	boolean hasParameterBranch = false;
+	boolean hasAnnotationBranch = false;
 
 	private void resetBuilder(CodeBuilder builder) 
 	{
@@ -271,6 +291,7 @@ public class InterfaceParser extends AbstractSourceParser
 		hasTemplateBranch = false;
 		hasThrowingBranch = false;
 		hasParameterBranch = false;
+		hasAnnotationBranch = false;
 	}
 	
 	@Override
@@ -394,6 +415,16 @@ public class InterfaceParser extends AbstractSourceParser
 			hasThrowingBranch = true;
 			return;
 		}
+
+		/*
+		 * check for annotations
+		 */
+		if (token.startsWith("@"))
+		{
+			builder.setAnnotation(token);
+			hasAnnotationBranch = true;
+			return;
+		}
 		
 		/*
 		 * do branching
@@ -468,6 +499,30 @@ public class InterfaceParser extends AbstractSourceParser
 	 */
 	private void doParameterBranch(CodeBuilder builder, String token) 
 	{
+		/*
+		 * 
+		 */
+		if (hasAnnotationBranch)
+		{
+			if (equals(token,",")) return;
+			
+			if (equals(token,")"))
+			{
+				if (parambuilder.getUnidentified().size()>0) 
+				{
+					builder.setAnnotationParameters(parambuilder.getUnidentified());
+					parambuilder = new CodeBuilder();
+				}
+				
+				hasAnnotationBranch = false;
+				hasParameterBranch = false;
+				return;
+			}
+			
+			parambuilder.setUnidentified(token);
+			return;
+		}
+		
 		/*
 		 * check template
 		 */

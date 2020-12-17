@@ -1,22 +1,18 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <file>
 	<package>com.nullpointerworks.examples</package>
+	<import>java.util.List</import>
 	<source>
 		<visibility>PUBLIC</visibility>
 		<sourcetype>CLASS</sourcetype>
 		<name>abstract</name>
 		<extends>Object</extends>
 		<implements>ExampleInterface</implements>
-		<implements><</implements>
-		<implements>String</implements>
-		<implements>String</implements>
-		<implements>></implements>
 		<implements>Runnable</implements>
 	</source>
 	<field>
 		<visibility>PUBLIC</visibility>
 		<modifier>FINAL</modifier>
-		<modifier>STATIC</modifier>
 		<type>Float</type>
 		<name>PI</name>
 		<value>3.1415F</value>
@@ -29,41 +25,57 @@
 	<field>
 		<visibility>PUBLIC</visibility>
 		<modifier>STATIC</modifier>
-		<modifier>FINAL</modifier>
 		<type>Float</type>
 		<name>TAU</name>
 		<value>6.283F</value>
 	</field>
 	<field>
-		<visibility>PUBLIC</visibility>
-		<modifier>STATIC</modifier>
-		<modifier>FINAL</modifier>
-		<type>Float</type>
-		<name>E</name>
-		<value>2.17F</value>
-	</field>
-	<field>
-		<visibility>PUBLIC</visibility>
-		<modifier>STATIC</modifier>
-		<modifier>FINAL</modifier>
-		<type>Float</type>
-		<name>SQ2</name>
-		<value>1.414F</value>
-	</field>
-	<field>
-		<visibility>PUBLIC</visibility>
-		<modifier>STATIC</modifier>
-		<modifier>FINAL</modifier>
+		<visibility>PROTECTED</visibility>
 		<type>Float</type>
 		<name>PHI</name>
 		<value>1.618F</value>
 	</field>
 	<field>
 		<visibility>PUBLIC</visibility>
-		<modifier>STATIC</modifier>
-		<modifier>FINAL</modifier>
 		<type>String[]</type>
 		<name>myArray</name>
 	</field>
-	<field/>
+	<constructor>
+		<visibility>PUBLIC</visibility>
+		<name>ExampleClass</name>
+	</constructor>
+	<constructor>
+		<visibility>PROTECTED</visibility>
+		<name>ExampleClass</name>
+		<param>
+			<type>int</type>
+			<name>i</name>
+		</param>
+		<param>
+			<type>List</type>
+			<name>j</name>
+			<template>Integer</template>
+		</param>
+		<param>
+			<type>int</type>
+			<name>k</name>
+		</param>
+	</constructor>
+	<method>
+		<annotation>@Override</annotation>
+		<visibility>PUBLIC</visibility>
+		<type>void</type>
+		<name>myPublicMethod</name>
+	</method>
+	<method>
+		<annotation>@Override</annotation>
+		<annotation>@SuppressWarnings("unchecked")</annotation>
+		<visibility>PUBLIC</visibility>
+		<type>void</type>
+		<name>myPublicMethod3</name>
+		<param>
+			<type>int</type>
+			<name>i</name>
+		</param>
+	</method>
 </file>

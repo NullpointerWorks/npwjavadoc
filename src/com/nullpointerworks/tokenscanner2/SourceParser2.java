@@ -1,23 +1,19 @@
 package com.nullpointerworks.tokenscanner2;
 
-
-import java.io.IOException;
 import java.util.List;
 
 import com.nullpointerworks.tokenscanner2.builder.Package;
 import com.nullpointerworks.tokenscanner2.builder.Modifier;
 import com.nullpointerworks.tokenscanner2.builder.SourceType;
 import com.nullpointerworks.tokenscanner2.builder.Visibility;
+import com.nullpointerworks.tokenscanner2.builder.Annotation;
 import com.nullpointerworks.tokenscanner2.builder.CodeBuilder;
 import com.nullpointerworks.tokenscanner2.parsers.AbstractSourceParser;
 import com.nullpointerworks.tokenscanner2.parsers.ISourceParser;
-import com.nullpointerworks.util.FileUtil;
-import com.nullpointerworks.util.Log;
 
+import com.nullpointerworks.util.Log;
 import exp.nullpointerworks.xml.Document;
 import exp.nullpointerworks.xml.Element;
-import exp.nullpointerworks.xml.format.FormatBuilder;
-import exp.nullpointerworks.xml.io.DocumentIO;
 
 public class SourceParser2 extends AbstractSourceParser
 {
@@ -41,23 +37,6 @@ public class SourceParser2 extends AbstractSourceParser
 	private boolean equals(String s, String c)
 	{
 		return s.equalsIgnoreCase(c);
-	}
-	
-	private void writeToFile(Document doc, String outFile) 
-	{
-		/*
-		 * write to XML file
-		 */
-		String name = FileUtil.getFileNameFromPath(outFile);
-		String path = "xml/" + name + ".xml";
-		try 
-		{
-			DocumentIO.write(doc, path, FormatBuilder.getPrettyFormat());
-		} 
-		catch (IOException e) 
-		{
-			e.printStackTrace();
-		}
 	}
 	
 	// ============================================================================================
@@ -156,9 +135,9 @@ public class SourceParser2 extends AbstractSourceParser
 		var anno = builder.getAnnotation();
 		if (anno.size()>0)
 		{
-			for (String ann : anno)
+			for (Annotation ann : anno)
 			{
-				String m = ann.toString();
+				String m = ann.getString();
 				elementType.addChild( new Element("annotation").setText(m) );
 			}
 		}
@@ -412,7 +391,6 @@ public class SourceParser2 extends AbstractSourceParser
 		{
 			parseBuilder(builder);
 			resetBuilder();
-			writeToFile(doc, file);
 			
 			switch(sourceType)
 			{
@@ -455,6 +433,7 @@ public class SourceParser2 extends AbstractSourceParser
 	/*
 	 * 
 	 */
+	boolean skipTemplate = false;
 	private boolean doImplementingBranch(CodeBuilder builder, String token) 
 	{
 		if (equals(token,"{")) 
@@ -463,6 +442,21 @@ public class SourceParser2 extends AbstractSourceParser
 			return false;
 		}
 		if (equals(token,",")) return true;
+		
+		/*
+		 * check template
+		 */
+		if (equals(token,"<"))
+		{
+			skipTemplate = true;
+			return true;
+		}
+		if (equals(token,">"))
+		{
+			skipTemplate = false;
+			return true;
+		}
+		if (skipTemplate) return true;
 		
 		builder.setImplemented(token);
 		return true;

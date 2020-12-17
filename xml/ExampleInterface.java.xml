@@ -30,6 +30,7 @@
 	</field>
 	<method>
 		<visibility>PUBLIC</visibility>
+		<modifier>ABSTRACT</modifier>
 		<type>void</type>
 		<name>myPublicMethod</name>
 	</method>
@@ -41,6 +42,7 @@
 	</method>
 	<method>
 		<visibility>PUBLIC</visibility>
+		<modifier>ABSTRACT</modifier>
 		<type>void</type>
 		<name>myPublicMethod3</name>
 		<param>
@@ -79,6 +81,7 @@
 		<throws>IOException</throws>
 	</method>
 	<method>
+		<annotation>@SuppressWarnings("unchecked")</annotation>
 		<visibility>PUBLIC</visibility>
 		<modifier>DEFAULT</modifier>
 		<modifier>STRICTFP</modifier>
