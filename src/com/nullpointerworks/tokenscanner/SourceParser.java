@@ -615,7 +615,7 @@ public class SourceParser extends AbstractSourceParser
 		/*
 		 * detect end of an instruction ;
 		 */
-		if (isEndOfInstruction(token))
+		if (equals(token,";"))
 		{
 			parseBuilder(builder);
 			resetBuilder(builder);
@@ -743,6 +743,16 @@ public class SourceParser extends AbstractSourceParser
 				return;
 			}
 		}
+		
+		/*
+		 * 
+		 */
+		if (sourceType == SourceType.ENUM)
+		{
+			
+			
+		}
+		
 		
 		/*
 		 * check for array or miscellaneous markers
@@ -928,7 +938,7 @@ public class SourceParser extends AbstractSourceParser
 		//Log.out(token);
 		
 	}
-
+	
 	/*
 	 * code end. { and } are also used by internal block code
 	 */
