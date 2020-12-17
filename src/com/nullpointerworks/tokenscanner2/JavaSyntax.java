@@ -29,6 +29,19 @@ public final class JavaSyntax
 	/*
 	 * 
 	 */
+	public static boolean isModifier(String token) 
+	{
+		if (token.equalsIgnoreCase("static")) return true;
+		if (token.equalsIgnoreCase("final")) return true;
+		if (token.equalsIgnoreCase("abstract")) return true;
+		if (token.equalsIgnoreCase("strictfp")) return true;
+		if (token.equalsIgnoreCase("default")) return true;
+		return false;
+	}
+	
+	/*
+	 * 
+	 */
 	public static boolean isKnownKeyword(String token)
 	{
 		if (isSourceType(token)) return true;

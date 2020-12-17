@@ -57,6 +57,19 @@ public class CodeBuilder
 	{
 		if (!modifiers.contains(modifier)) modifiers.add(modifier);
 	}
+	public void setModifier(String modifier) 
+	{
+		setModifier(getModifier(modifier));
+	}
+	private Modifier getModifier(String token) 
+	{
+		if (token.equalsIgnoreCase("static")) return Modifier.STATIC;
+		if (token.equalsIgnoreCase("final")) return Modifier.FINAL;
+		if (token.equalsIgnoreCase("abstract")) return Modifier.ABSTRACT;
+		if (token.equalsIgnoreCase("strictfp")) return Modifier.STRICTFP;
+		if (token.equalsIgnoreCase("default")) return Modifier.DEFAULT;
+		return Modifier.NULL;
+	}
 	
 	/*
 	 * unidentified pieces of information. for example names and custom data types

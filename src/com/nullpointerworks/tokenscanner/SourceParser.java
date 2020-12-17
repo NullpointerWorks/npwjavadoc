@@ -615,7 +615,7 @@ public class SourceParser extends AbstractSourceParser
 		/*
 		 * detect end of an instruction ;
 		 */
-		if (equals(token,";"))
+		if (isEndOfInstruction(token))
 		{
 			parseBuilder(builder);
 			resetBuilder(builder);
