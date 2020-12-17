@@ -1,15 +1,14 @@
-package com.nullpointerworks.tokenscanner2.parsers;
+package com.nullpointerworks.tokenscanner.parsers;
 
 import java.io.IOException;
 import java.util.List;
 
-import com.nullpointerworks.tokenscanner2.builder.ItemType;
-import com.nullpointerworks.tokenscanner2.builder.Visibility;
-import com.nullpointerworks.tokenscanner2.builder.Modifier;
-import com.nullpointerworks.tokenscanner2.builder.Annotation;
-import com.nullpointerworks.tokenscanner2.builder.CodeBuilder;
-import com.nullpointerworks.tokenscanner2.JavaSyntax;
-
+import com.nullpointerworks.tokenscanner.JavaSyntax;
+import com.nullpointerworks.tokenscanner.builder.Annotation;
+import com.nullpointerworks.tokenscanner.builder.CodeBuilder;
+import com.nullpointerworks.tokenscanner.builder.ItemType;
+import com.nullpointerworks.tokenscanner.builder.Modifier;
+import com.nullpointerworks.tokenscanner.builder.Visibility;
 import com.nullpointerworks.util.FileUtil;
 import com.nullpointerworks.util.Log;
 import exp.nullpointerworks.xml.Document;
@@ -23,7 +22,7 @@ import exp.nullpointerworks.xml.io.DocumentIO;
  * - commentary
  * 
  */
-public class InterfaceParser extends AbstractSourceParser
+public class ClassParser extends AbstractSourceParser
 {
 	/*
 	 * comment block signifier
@@ -43,7 +42,7 @@ public class InterfaceParser extends AbstractSourceParser
 	/**
 	 * 
 	 */
-	public InterfaceParser(Document doc, String file)
+	public ClassParser(Document doc, String file)
 	{
 		super();
 		this.file = file;
@@ -55,7 +54,7 @@ public class InterfaceParser extends AbstractSourceParser
 	{
 		Log.out("");
 		builder.inferTypeInfo();
-		
+
 		/*
 		 * when the parser confirmed it's a field
 		 */
@@ -73,6 +72,93 @@ public class InterfaceParser extends AbstractSourceParser
 			isMethodInfo(builder, root);
 			return;
 		}
+		if (builder.getItemType() == ItemType.CONSTRUCTOR)
+		{
+			isConstructorInfo(builder, root);
+			return;
+		}
+		
+	}
+	
+	/*
+	 * 
+	 */
+	private void isConstructorInfo(CodeBuilder builder, Element root) 
+	{
+		/*
+		 * make xml element
+		 */
+		Element elMethod = new Element("constructor");
+		
+		/*
+		 * visibility
+		 * only ad the user available constructors
+		 */
+		var vis = builder.getVisibility();
+		if (vis == Visibility.PUBLIC || vis == Visibility.PROTECTED)
+		{
+			String v = builder.getVisibility().toString();
+			elMethod.addChild( new Element("visibility").setText(v) );
+		}
+		else
+		{
+			return;
+		}
+		
+		/*
+		 * name
+		 */
+		List<String> uid = builder.getUnidentified();
+		if (uid.size()>0)
+		{
+			String n = uid.get(0);
+			elMethod.addChild( new Element("name").setText(n) );
+		}
+		
+		/*
+		 * parameters
+		 */
+		List<CodeBuilder> params = builder.getParameters();
+		for (CodeBuilder param : params)
+		{
+			List<String> puid = param.getUnidentified();
+			
+			/*
+			 * make parameter xml element
+			 */
+			Element elParam = new Element("param");
+			
+			String n = puid.get(0);
+			elParam.addChild( new Element("type").setText(n) );
+			
+			n = puid.get(1);
+			elParam.addChild( new Element("name").setText(n) );
+			
+			/*
+			 * templates
+			 */
+			List<String> tmp = param.getTemplate();
+			if (tmp.size()>0)
+			{
+				for (String e : tmp)
+				{
+					elParam.addChild( new Element("template").setText(e) );
+				}
+			}
+			
+			elMethod.addChild(elParam);
+		}
+		
+		/*
+		 * throws
+		 */
+		List<String> thrw = builder.getThrowing();
+		for (String t : thrw)
+		{
+			elMethod.addChild( new Element("throws").setText(t) );
+		}
+		
+		root.addChild(elMethod);
 	}
 	
 	/*
@@ -82,13 +168,8 @@ public class InterfaceParser extends AbstractSourceParser
 	{
 		/*
 		 * interface methods are always public when visibility is undefined
-		 * non-default methods (i.e. without a body) are always abstract
 		 */
 		builder.setVisibility( Visibility.PUBLIC );
-		if (!builder.hasModifier(Modifier.DEFAULT))
-		{
-			builder.setModifier(Modifier.ABSTRACT);
-		}
 		
 		/*
 		 * make xml element
@@ -205,6 +286,16 @@ public class InterfaceParser extends AbstractSourceParser
 	private void isFieldInfo(CodeBuilder builder, Element root) 
 	{
 		/*
+		 * if the variable is not public or protected, thus invisible for users, skip
+		 */
+		var vis = builder.getVisibility();
+		if (vis != Visibility.PUBLIC && vis != Visibility.PROTECTED)
+		{
+			return;
+		}
+		
+		
+		/*
 		 * make xml element
 		 */
 		Element elField = new Element("field");
@@ -212,7 +303,7 @@ public class InterfaceParser extends AbstractSourceParser
 		/*
 		 * visibility
 		 */
-		if (builder.getVisibility() != Visibility.NULL)
+		if (vis != Visibility.NULL)
 		{
 			String v = builder.getVisibility().toString();
 			elField.addChild( new Element("visibility").setText(v) );
@@ -367,13 +458,9 @@ public class InterfaceParser extends AbstractSourceParser
 		 * check for data assignment. when found, set type and name.
 		 * variable values should be mentioned in commentary. Otherwise 
 		 * auto-complete will notify it's value. 
-		 * interface variables are always "public static final"
 		 */
 		if (equals(token,"="))
 		{
-			builder.setVisibility(Visibility.PUBLIC);
-			builder.setModifier(Modifier.STATIC);
-			builder.setModifier(Modifier.FINAL);
 			builder.setItemType(ItemType.FIELD);
 			return;
 		}
@@ -405,7 +492,6 @@ public class InterfaceParser extends AbstractSourceParser
 		 */
 		if (equals(token,"("))
 		{
-			//builder.setItemType(ItemType.METHOD);
 			builder.setParameterCapable(true);
 			hasParameterBranch = true;
 			return;
@@ -415,7 +501,7 @@ public class InterfaceParser extends AbstractSourceParser
 			hasThrowingBranch = true;
 			return;
 		}
-
+		
 		/*
 		 * check for annotations
 		 */

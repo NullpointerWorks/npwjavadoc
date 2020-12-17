@@ -1,4 +1,4 @@
-package com.nullpointerworks.tokenscanner2.parsers;
+package com.nullpointerworks.tokenscanner.parsers;
 
 import exp.nullpointerworks.xml.Document;
 import exp.nullpointerworks.xml.Element;

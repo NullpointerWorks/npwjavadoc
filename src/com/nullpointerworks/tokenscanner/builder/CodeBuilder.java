@@ -20,6 +20,14 @@ public class CodeBuilder
 	public boolean hasVisibility() {return visibility != Visibility.NULL;}
 	public Visibility getVisibility() {return visibility;}
 	public void setVisibility(Visibility v) {this.visibility=v;}
+	public void setVisibility(String v) {this.visibility=getVisibility(v);}
+	private Visibility getVisibility(String token) 
+	{
+		if (token.equalsIgnoreCase("public")) return Visibility.PUBLIC;
+		if (token.equalsIgnoreCase("protected")) return Visibility.PROTECTED;
+		if (token.equalsIgnoreCase("private")) return Visibility.PRIVATE;
+		return Visibility.NULL;
+	}
 	
 	/*
 	 * module, interface, class, annotation or enum
@@ -28,6 +36,16 @@ public class CodeBuilder
 	public boolean hasSourceType() {return sourceType != SourceType.NULL;}
 	public SourceType getSourceType() {return sourceType;}
 	public void setSourceType(SourceType st) {this.sourceType=st;}
+	public void setSourceType(String st) {this.sourceType=getSourceType(st);}
+	private SourceType getSourceType(String token) 
+	{
+		if (token.equalsIgnoreCase("interface")) return SourceType.INTERFACE;
+		if (token.equalsIgnoreCase("class")) return SourceType.CLASS;
+		if (token.equalsIgnoreCase("enum")) return SourceType.ENUM;
+		if (token.equalsIgnoreCase("@interface")) return SourceType.ANNOTATION;
+		if (token.equalsIgnoreCase("module")) return SourceType.MODULE;
+		return SourceType.NULL;
+	}
 	
 	/*
 	 * static, abstract, final or nothing
@@ -35,9 +53,20 @@ public class CodeBuilder
 	private List<Modifier> modifiers;
 	public boolean hasModifier() {return modifiers.size()>0;}
 	public List<Modifier> getModifier() {return modifiers;}
-	public void setModifier(Modifier modifier) 
+	public void setModifier(Modifier modifier) {if (!modifiers.contains(modifier)) modifiers.add(modifier);}
+	public boolean hasModifier(Modifier m) {return modifiers.contains(m);}
+	public void setModifier(String modifier) 
 	{
-		if (!modifiers.contains(modifier)) modifiers.add(modifier);
+		setModifier(getModifier(modifier));
+	}
+	private Modifier getModifier(String token) 
+	{
+		if (token.equalsIgnoreCase("static")) return Modifier.STATIC;
+		if (token.equalsIgnoreCase("final")) return Modifier.FINAL;
+		if (token.equalsIgnoreCase("abstract")) return Modifier.ABSTRACT;
+		if (token.equalsIgnoreCase("strictfp")) return Modifier.STRICTFP;
+		if (token.equalsIgnoreCase("default")) return Modifier.DEFAULT;
+		return Modifier.NULL;
 	}
 	
 	/*
@@ -71,6 +100,23 @@ public class CodeBuilder
 		param.inferTypeInfo();
 		params.add(param);
 		parameterCapable = true;
+	}
+	
+	/*
+	 * annotation
+	 */
+	private Annotation lastAnnotation;
+	private List<Annotation> annotation;
+	public List<Annotation> getAnnotation() {return annotation;}
+	public void setAnnotation(String ann) 
+	{
+		lastAnnotation = new Annotation(ann);
+		annotation.add( lastAnnotation );
+	}
+	public void setAnnotation(String ann, String...params) {annotation.add( new Annotation(ann,params) );}
+	public void setAnnotationParameters(List<String> params) 
+	{
+		lastAnnotation.setParameters(params);
 	}
 	
 	/*
@@ -126,7 +172,7 @@ public class CodeBuilder
 		modifiers 		= new ArrayList<Modifier>();
 		unidentified	= new ArrayList<String>();
 		params 			= new ArrayList<CodeBuilder>();
-		
+		annotation 		= new ArrayList<Annotation>();
 		templates 		= new ArrayList<String>();
 		extensions 		= new ArrayList<String>();
 		implementations	= new ArrayList<String>();
@@ -146,6 +192,7 @@ public class CodeBuilder
 		parameterCapable = false;
 		params.clear();
 		
+		annotation.clear();
 		templates.clear();
 		extensions.clear();
 		isExtending = false;

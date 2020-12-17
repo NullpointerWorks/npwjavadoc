@@ -1,12 +1,12 @@
-package com.nullpointerworks.tokenscanner2;
+package com.nullpointerworks.tokenscanner;
 
-import com.nullpointerworks.tokenscanner2.parsers.AnnotationParser;
-import com.nullpointerworks.tokenscanner2.parsers.ClassParser;
-import com.nullpointerworks.tokenscanner2.parsers.EmptyParser;
-import com.nullpointerworks.tokenscanner2.parsers.EnumParser;
-import com.nullpointerworks.tokenscanner2.parsers.ISourceParser;
-import com.nullpointerworks.tokenscanner2.parsers.InterfaceParser;
-import com.nullpointerworks.tokenscanner2.parsers.ModuleParser;
+import com.nullpointerworks.tokenscanner.parsers.AnnotationParser;
+import com.nullpointerworks.tokenscanner.parsers.ClassParser;
+import com.nullpointerworks.tokenscanner.parsers.EmptyParser;
+import com.nullpointerworks.tokenscanner.parsers.EnumParser;
+import com.nullpointerworks.tokenscanner.parsers.ISourceParser;
+import com.nullpointerworks.tokenscanner.parsers.InterfaceParser;
+import com.nullpointerworks.tokenscanner.parsers.ModuleParser;
 
 import exp.nullpointerworks.xml.Document;
 

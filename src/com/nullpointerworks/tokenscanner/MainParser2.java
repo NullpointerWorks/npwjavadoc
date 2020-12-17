@@ -2,11 +2,12 @@ package com.nullpointerworks.tokenscanner;
 
 import java.io.FileNotFoundException;
 
+import com.nullpointerworks.tokenscanner.parsers.ISourceParser;
 import com.nullpointerworks.util.FileUtil;
 import com.nullpointerworks.util.file.textfile.TextFile;
 import com.nullpointerworks.util.file.textfile.TextFileParser;
 
-public class MainParser 
+public class MainParser2 
 {
 	public static void main(String[] args) 
 	{
@@ -14,12 +15,12 @@ public class MainParser
 		{
 			"src/com/nullpointerworks/examples/ExampleInterface.java"
 			,"src/com/nullpointerworks/examples/ExampleClass.java"
-			,"src/com/nullpointerworks/examples/ExampleEnum.java"
+			//,"src/com/nullpointerworks/examples/ExampleEnum.java"
 		};
-		new MainParser(args);
+		new MainParser2(args);
 	}
 	
-	public MainParser(String[] args) 
+	public MainParser2(String[] args) 
 	{
 		for (String f : args)
 		{
@@ -27,7 +28,7 @@ public class MainParser
 			 * prepare
 			 */
 			String n = FileUtil.getFileNameFromPath(f);
-			ISourceParser parser = new SourceParser(n);
+			ISourceParser parser = new SourceParser2(n);
 			
 			/*
 			 * read text file

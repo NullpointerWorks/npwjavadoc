@@ -1,4 +1,4 @@
-package com.nullpointerworks.tokenscanner2.parsers;
+package com.nullpointerworks.tokenscanner.parsers;
 
 import exp.nullpointerworks.xml.Document;
 import exp.nullpointerworks.xml.Element;
@@ -6,7 +6,7 @@ import exp.nullpointerworks.xml.Element;
 /**
  * 
  */
-public class EnumParser extends AbstractSourceParser
+public class AnnotationParser extends AbstractSourceParser
 {
 	/*
 	 * document building
@@ -20,7 +20,7 @@ public class EnumParser extends AbstractSourceParser
 	/**
 	 * 
 	 */
-	public EnumParser(Document doc, String file)
+	public AnnotationParser(Document doc, String file)
 	{
 		super();
 		this.outFile = file;
