@@ -9,8 +9,8 @@ import com.nullpointerworks.tokenscanner.builder.CodeBuilder;
 import com.nullpointerworks.tokenscanner.builder.ItemType;
 import com.nullpointerworks.tokenscanner.builder.Modifier;
 import com.nullpointerworks.tokenscanner.builder.Visibility;
+
 import com.nullpointerworks.util.FileUtil;
-import com.nullpointerworks.util.Log;
 import exp.nullpointerworks.xml.Document;
 import exp.nullpointerworks.xml.Element;
 import exp.nullpointerworks.xml.format.FormatBuilder;
@@ -18,7 +18,6 @@ import exp.nullpointerworks.xml.io.DocumentIO;
 
 /**
  * TODO
- * - annotations
  * - commentary
  * 
  */
@@ -52,7 +51,6 @@ public class InterfaceParser extends AbstractSourceParser
 	
 	private void parseBuilder(CodeBuilder builder) 
 	{
-		Log.out("");
 		builder.inferTypeInfo();
 		
 		/*
@@ -474,7 +472,6 @@ public class InterfaceParser extends AbstractSourceParser
 		if (equals(token,"]")) return;
 		if (equals(token,"}")) return;
 		
-		Log.out(token);
 		builder.setUnidentified(token);
 	}
 	

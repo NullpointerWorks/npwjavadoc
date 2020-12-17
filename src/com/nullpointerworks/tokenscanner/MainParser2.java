@@ -13,9 +13,9 @@ public class MainParser2
 	{
 		args = new String[] 
 		{
-			"src/com/nullpointerworks/examples/ExampleInterface.java"
-			,"src/com/nullpointerworks/examples/ExampleClass.java"
-			//,"src/com/nullpointerworks/examples/ExampleEnum.java"
+			//"src/com/nullpointerworks/examples/ExampleInterface.java"
+			//,"src/com/nullpointerworks/examples/ExampleClass.java"
+			"src/com/nullpointerworks/examples/ExampleEnum.java"
 		};
 		new MainParser2(args);
 	}
