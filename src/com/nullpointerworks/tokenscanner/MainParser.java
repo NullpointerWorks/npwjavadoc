@@ -7,7 +7,7 @@ import com.nullpointerworks.util.FileUtil;
 import com.nullpointerworks.util.file.textfile.TextFile;
 import com.nullpointerworks.util.file.textfile.TextFileParser;
 
-public class MainParser2 
+public class MainParser 
 {
 	public static void main(String[] args) 
 	{
@@ -17,10 +17,10 @@ public class MainParser2
 			//,"src/com/nullpointerworks/examples/ExampleClass.java"
 			"src/com/nullpointerworks/examples/ExampleEnum.java"
 		};
-		new MainParser2(args);
+		new MainParser(args);
 	}
 	
-	public MainParser2(String[] args) 
+	public MainParser(String[] args) 
 	{
 		for (String f : args)
 		{
@@ -28,7 +28,7 @@ public class MainParser2
 			 * prepare
 			 */
 			String n = FileUtil.getFileNameFromPath(f);
-			ISourceParser parser = new SourceParser2(n);
+			ISourceParser parser = new SourceParser(n);
 			
 			/*
 			 * read text file

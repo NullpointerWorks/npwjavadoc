@@ -14,7 +14,7 @@ import com.nullpointerworks.util.Log;
 import exp.nullpointerworks.xml.Document;
 import exp.nullpointerworks.xml.Element;
 
-public class SourceParser2 extends AbstractSourceParser
+public class SourceParser extends AbstractSourceParser
 {
 	/*
 	 * document building
@@ -25,12 +25,12 @@ public class SourceParser2 extends AbstractSourceParser
 	private ISourceParser parser = null;
 	private SourceType sourceType = SourceType.NULL;
 	
-	public SourceParser2(String file) 
+	public SourceParser(String file) 
 	{
 		super();
 		this.file = file;
 		this.doc = new Document();
-		this.root = doc.getRootElement("file");
+		this.root = doc.getRootElement("source");
 	}
 	
 	private boolean equals(String s, String c)
