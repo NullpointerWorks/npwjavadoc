@@ -3,13 +3,12 @@ package com.nullpointerworks.tokenscanner.parsers;
 import java.io.IOException;
 import java.util.List;
 
-import com.nullpointerworks.tokenscanner.JavaSyntax;
 import com.nullpointerworks.tokenscanner.builder.Annotation;
 import com.nullpointerworks.tokenscanner.builder.CodeBuilder;
 import com.nullpointerworks.tokenscanner.builder.ItemType;
 import com.nullpointerworks.tokenscanner.builder.Modifier;
 import com.nullpointerworks.tokenscanner.builder.Visibility;
-
+import com.nullpointerworks.tokenscanner.util.JavaSyntax;
 import com.nullpointerworks.util.FileUtil;
 import exp.nullpointerworks.xml.Document;
 import exp.nullpointerworks.xml.Element;

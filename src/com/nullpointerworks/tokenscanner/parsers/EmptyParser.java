@@ -1,7 +1,5 @@
 package com.nullpointerworks.tokenscanner.parsers;
 
-import com.nullpointerworks.tokenscanner.ISourceParser;
-
 /**
  * 
  */

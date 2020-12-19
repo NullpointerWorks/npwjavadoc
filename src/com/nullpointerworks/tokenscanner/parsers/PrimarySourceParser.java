@@ -1,4 +1,4 @@
-package com.nullpointerworks.tokenscanner;
+package com.nullpointerworks.tokenscanner.parsers;
 
 import java.util.List;
 
@@ -8,8 +8,9 @@ import com.nullpointerworks.tokenscanner.builder.Modifier;
 import com.nullpointerworks.tokenscanner.builder.Package;
 import com.nullpointerworks.tokenscanner.builder.SourceType;
 import com.nullpointerworks.tokenscanner.builder.Visibility;
-
-import com.nullpointerworks.tokenscanner.parsers.AbstractSourceParser;
+import com.nullpointerworks.tokenscanner.factory.IParserFactory;
+import com.nullpointerworks.tokenscanner.factory.ParserFactory;
+import com.nullpointerworks.tokenscanner.util.JavaSyntax;
 import com.nullpointerworks.util.Log;
 import exp.nullpointerworks.xml.Document;
 import exp.nullpointerworks.xml.Element;

@@ -1,4 +1,4 @@
-package com.nullpointerworks.tokenscanner;
+package com.nullpointerworks.tokenscanner.util;
 
 public final class JavaSyntax 
 {

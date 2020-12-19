@@ -2,6 +2,8 @@ package com.nullpointerworks.tokenscanner;
 
 import java.io.FileNotFoundException;
 
+import com.nullpointerworks.tokenscanner.parsers.ISourceParser;
+import com.nullpointerworks.tokenscanner.parsers.PrimarySourceParser;
 import com.nullpointerworks.util.FileUtil;
 import com.nullpointerworks.util.file.textfile.TextFile;
 import com.nullpointerworks.util.file.textfile.TextFileParser;
