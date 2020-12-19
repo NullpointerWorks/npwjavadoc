@@ -8,13 +8,13 @@ import com.nullpointerworks.tokenscanner.builder.Modifier;
 import com.nullpointerworks.tokenscanner.builder.Package;
 import com.nullpointerworks.tokenscanner.builder.SourceType;
 import com.nullpointerworks.tokenscanner.builder.Visibility;
+
 import com.nullpointerworks.tokenscanner.parsers.AbstractSourceParser;
-import com.nullpointerworks.tokenscanner.parsers.ISourceParser;
 import com.nullpointerworks.util.Log;
 import exp.nullpointerworks.xml.Document;
 import exp.nullpointerworks.xml.Element;
 
-public class SourceParser extends AbstractSourceParser
+public class PrimarySourceParser extends AbstractSourceParser
 {
 	/*
 	 * document building
@@ -22,15 +22,17 @@ public class SourceParser extends AbstractSourceParser
 	private Document doc;
 	private Element root;
 	private final String file;
+	private IParserFactory parserFactory = null;
 	private ISourceParser parser = null;
 	private SourceType sourceType = SourceType.NULL;
 	
-	public SourceParser(String file) 
+	public PrimarySourceParser(String file) 
 	{
 		super();
 		this.file = file;
 		this.doc = new Document();
 		this.root = doc.getRootElement("source");
+		parserFactory = new ParserFactory();
 	}
 	
 	private boolean equals(String s, String c)
@@ -390,29 +392,7 @@ public class SourceParser extends AbstractSourceParser
 		{
 			parseBuilder(builder);
 			resetBuilder();
-			
-			switch(sourceType)
-			{
-			case INTERFACE:
-				parser = ParserFactory.getInterfaceParser(doc, file);
-				break;
-			case CLASS:
-				parser = ParserFactory.getClassParser(doc, file);
-				break;
-			case ENUM:
-				parser = ParserFactory.getEnumParser(doc, file);
-				break;
-			case ANNOTATION:
-				parser = ParserFactory.getAnnotationParser(doc, file);
-				break;
-			case MODULE:
-				parser = ParserFactory.getModuleParser(doc, file);
-				break;
-			default:
-				parser = ParserFactory.getEmptyParser();
-				break;
-			}
-			
+			parser = parserFactory.getSourceParser( sourceType, doc, file );
 			return;
 		}
 		

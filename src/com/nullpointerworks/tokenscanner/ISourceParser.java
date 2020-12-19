@@ -1,4 +1,4 @@
-package com.nullpointerworks.tokenscanner.parsers;
+package com.nullpointerworks.tokenscanner;
 
 /**
  * 

@@ -2,7 +2,6 @@ package com.nullpointerworks.tokenscanner;
 
 import java.io.FileNotFoundException;
 
-import com.nullpointerworks.tokenscanner.parsers.ISourceParser;
 import com.nullpointerworks.util.FileUtil;
 import com.nullpointerworks.util.file.textfile.TextFile;
 import com.nullpointerworks.util.file.textfile.TextFileParser;
@@ -28,7 +27,7 @@ public class MainParser
 			 * prepare
 			 */
 			String n = FileUtil.getFileNameFromPath(f);
-			ISourceParser parser = new SourceParser(n);
+			ISourceParser parser = new PrimarySourceParser(n);
 			
 			/*
 			 * read text file

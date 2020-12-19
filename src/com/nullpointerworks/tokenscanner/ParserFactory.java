@@ -1,63 +1,44 @@
 package com.nullpointerworks.tokenscanner;
 
+import com.nullpointerworks.tokenscanner.builder.SourceType;
 import com.nullpointerworks.tokenscanner.parsers.AnnotationParser;
 import com.nullpointerworks.tokenscanner.parsers.ClassParser;
 import com.nullpointerworks.tokenscanner.parsers.EmptyParser;
 import com.nullpointerworks.tokenscanner.parsers.EnumParser;
-import com.nullpointerworks.tokenscanner.parsers.ISourceParser;
 import com.nullpointerworks.tokenscanner.parsers.InterfaceParser;
 import com.nullpointerworks.tokenscanner.parsers.ModuleParser;
 
 import exp.nullpointerworks.xml.Document;
 
-public final class ParserFactory 
+/*
+ * factory method
+ */
+public final class ParserFactory implements IParserFactory
 {
-	/**
-	 * 
-	 */
-	public static ISourceParser getEmptyParser() 
+	@Override
+	public ISourceParser getSourceParser(SourceType sourceType, Document doc, String file) 
 	{
-		return new EmptyParser();
-	}
-	
-	/**
-	 * 
-	 */
-	public static ISourceParser getInterfaceParser(Document doc, String file) 
-	{
-		return new InterfaceParser(doc, file);
-	}
-	
-	/**
-	 * 
-	 */
-	public static ISourceParser getClassParser(Document doc, String file) 
-	{
-		return new ClassParser(doc, file);
-	}
-	
-	/**
-	 * 
-	 */
-	public static ISourceParser getEnumParser(Document doc, String file) 
-	{
-		return new EnumParser(doc, file);
-	}
-	
-	/**
-	 * 
-	 */
-	public static ISourceParser getAnnotationParser(Document doc, String file) 
-	{
-		return new AnnotationParser(doc, file);
-	}
-	
-	/**
-	 * 
-	 */
-	public static ISourceParser getModuleParser(Document doc, String file) 
-	{
-		return new ModuleParser(doc, file);
+		switch(sourceType)
+		{
+		case INTERFACE:
+			return new InterfaceParser(doc, file);
+			
+		case CLASS:
+			return new ClassParser(doc, file);
+			
+		case ENUM:
+			return new EnumParser(doc, file);
+			
+		case ANNOTATION:
+			return new AnnotationParser(doc, file);
+			
+		case MODULE:
+			return new ModuleParser(doc, file);
+			
+		default:
+			return new EmptyParser();
+			
+		}
 	}
 	
 }
