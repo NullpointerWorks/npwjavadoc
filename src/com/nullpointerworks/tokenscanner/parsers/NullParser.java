@@ -3,12 +3,12 @@ package com.nullpointerworks.tokenscanner.parsers;
 /**
  * 
  */
-public class EmptyParser implements ISourceParser
+public class NullParser implements ISourceParser
 {
 	/**
 	 * 
 	 */
-	public EmptyParser()
+	public NullParser()
 	{
 		
 	}
