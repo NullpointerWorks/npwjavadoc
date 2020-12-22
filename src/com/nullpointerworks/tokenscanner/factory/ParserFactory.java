@@ -4,7 +4,7 @@ import com.nullpointerworks.tokenscanner.codebuilder.SourceType;
 import com.nullpointerworks.tokenscanner.parsers.AnnotationParser;
 import com.nullpointerworks.tokenscanner.parsers.ClassParser;
 import com.nullpointerworks.tokenscanner.parsers.NullParser;
-import com.nullpointerworks.tokenscanner.parsers.EnumParser;
+import com.nullpointerworks.tokenscanner.parsers.enums.EnumParser;
 import com.nullpointerworks.tokenscanner.parsers.ISourceParser;
 import com.nullpointerworks.tokenscanner.parsers.InterfaceParser;
 import com.nullpointerworks.tokenscanner.parsers.ModuleParser;
