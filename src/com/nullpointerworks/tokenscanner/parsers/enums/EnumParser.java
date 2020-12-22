@@ -126,27 +126,30 @@ public class EnumParser extends AbstractSourceParser
 		for (TokenGroup tg : tbuilders)
 		{
 			Log.out( "> " + tg.getString() );
-			
-			
-			
-			
-			
-			
-			
-			
+			List<String> tokens = tg.getTokens();
+			for (String t : tokens) nextGroupToken(t);
+			nextGroupToken("\n");
 			
 			
 		}
 	}
 	
-	
-	
-	
-	
-	
-	
-	
-	
+	public void nextGroupToken(String token) 
+	{
+		if (equals(token,"\n"))
+		{
+			
+			return;
+		}
+		
+		
+		
+		
+		
+		
+		
+		
+	}
 	
 	private void writeToFile(Document doc, String outFile) 
 	{
