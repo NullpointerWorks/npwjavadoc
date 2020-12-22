@@ -22,8 +22,3 @@ public enum ExampleEnum3 implements ExampleEnumInterface
 		return "";
 	}
 }
-
-interface ExampleEnumInterface
-{
-	String getName();
-}

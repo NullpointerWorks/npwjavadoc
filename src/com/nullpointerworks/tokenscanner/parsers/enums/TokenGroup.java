@@ -3,17 +3,17 @@ package com.nullpointerworks.tokenscanner.parsers.enums;
 import java.util.List;
 import java.util.ArrayList;
 
-public class TokenBuilder 
+public class TokenGroup 
 {
-	private TokenBuilder parent = null;
+	private TokenGroup parent = null;
 	private List<String> tokens;
 	
-	public TokenBuilder()
+	public TokenGroup()
 	{
 		this(null);
 	}
 	
-	public TokenBuilder(TokenBuilder parent)
+	public TokenGroup(TokenGroup parent)
 	{
 		this.parent=parent;
 		tokens = new ArrayList<String>();
@@ -36,7 +36,7 @@ public class TokenBuilder
 		return r;
 	}
 	
-	public TokenBuilder getParent()
+	public TokenGroup getParent()
 	{
 		return parent;
 	}

@@ -31,7 +31,6 @@ public class EnumParser extends AbstractSourceParser
 	private Document doc;
 	private Element root;
 	private final String file;
-	private int curlyBraceCount = 1;
 	
 	/**
 	 * 
@@ -42,7 +41,107 @@ public class EnumParser extends AbstractSourceParser
 		this.file = file;
 		this.doc = doc;
 		this.root = doc.getRootElement();
+		tbuilders = new ArrayList<TokenGroup>();
+		tbuilder = new TokenGroup();
+		curlyBraceCount = 1;
 	}
+	
+	// ============================================================================================
+	
+	private List<TokenGroup> tbuilders;
+	private TokenGroup tbuilder;
+	private int curlyBraceCount;
+	
+	@Override
+	public void nextToken(String token) 
+	{
+		if (equals(token,"{")) curlyBraceCount++;
+		if (equals(token,"}")) curlyBraceCount--;
+		
+		if (equals(token,"}") && curlyBraceCount==0)
+		{
+			parseBuilder();
+			resetBuilder();
+			parseBuilderList();
+			return;
+		}
+		
+		if (curlyBraceCount>1) return;
+		
+		if (equals(token,C_BLOCK_START))
+		{
+			resetBuilder();
+			return;
+		}
+		
+		if (equals(token,C_END))
+		{
+			resetBuilder();
+			return;
+		}
+		
+		if (equals(token,"}"))
+		{
+			parseBuilder();
+			resetBuilder();
+			return;
+		}
+		
+		if (equals(token,","))
+		{
+			parseBuilder();
+			resetBuilder();
+			return;
+		}
+		
+		if (equals(token,";"))
+		{
+			parseBuilder();
+			resetBuilder();
+			return;
+		}
+		
+		tbuilder.addToken(token);
+	}
+	
+	private void parseBuilder() 
+	{
+		if (tbuilder.getSize()>0) tbuilders.add(tbuilder);
+	}
+	
+	private void resetBuilder() 
+	{
+		tbuilder = new TokenGroup();
+	}
+	
+	private boolean equals(String s, String c)
+	{
+		return s.equalsIgnoreCase(c);
+	}
+	
+	// ============================================================================================
+	
+	private void parseBuilderList() 
+	{
+		for (TokenGroup tg : tbuilders)
+		{
+			Log.out( "> " + tg.getString() );
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+		}
+	}
+	
+	
+	
+	
 	
 	
 	
@@ -64,77 +163,5 @@ public class EnumParser extends AbstractSourceParser
 		{
 			e.printStackTrace();
 		}
-	}
-	
-	// ============================================================================================
-	
-	private List<TokenBuilder> tbuilders = new ArrayList<TokenBuilder>();
-	private TokenBuilder tbuilder = new TokenBuilder();
-	
-	@Override
-	public void nextToken(String token) 
-	{
-		if (equals(token,"{")) curlyBraceCount++;
-		if (equals(token,"}")) curlyBraceCount--;
-		
-		if (equals(token,"}") && curlyBraceCount==0)
-		{
-			parseBuilder();
-			parseBuilderList();
-			return;
-		}
-		
-		if (curlyBraceCount>1) return;
-		
-		if (equals(token,C_BLOCK_START))
-		{
-			parseBuilder();
-			return;
-		}
-		
-		if (equals(token,C_END))
-		{
-			parseBuilder();
-			return;
-		}
-		
-		if (equals(token,"}"))
-		{
-			parseBuilder();
-			return;
-		}
-		
-		if (equals(token,","))
-		{
-			parseBuilder();
-			return;
-		}
-		
-		if (equals(token,";"))
-		{
-			parseBuilder();
-			return;
-		}
-		
-		tbuilder.addToken(token);
-	}
-
-	private void parseBuilder() 
-	{
-		if (tbuilder.getSize()>0) tbuilders.add(tbuilder);
-		tbuilder = new TokenBuilder();
-	}
-	
-	private void parseBuilderList() 
-	{
-		for (TokenBuilder tb : tbuilders)
-		{
-			Log.out( "> " + tb.getString() );
-		}
-	}
-	
-	private boolean equals(String s, String c)
-	{
-		return s.equalsIgnoreCase(c);
 	}
 }
