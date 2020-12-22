@@ -1,6 +1,6 @@
 package com.nullpointerworks.tokenscanner.factory;
 
-import com.nullpointerworks.tokenscanner.builder.SourceType;
+import com.nullpointerworks.tokenscanner.codebuilder.SourceType;
 import com.nullpointerworks.tokenscanner.parsers.AnnotationParser;
 import com.nullpointerworks.tokenscanner.parsers.ClassParser;
 import com.nullpointerworks.tokenscanner.parsers.NullParser;

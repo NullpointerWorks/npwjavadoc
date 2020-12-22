@@ -1,4 +1,4 @@
-package com.nullpointerworks.tokenscanner.builder;
+package com.nullpointerworks.tokenscanner.codebuilder;
 
 import java.util.List;
 

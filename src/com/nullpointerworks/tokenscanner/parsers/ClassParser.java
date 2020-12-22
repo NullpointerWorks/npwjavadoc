@@ -3,11 +3,11 @@ package com.nullpointerworks.tokenscanner.parsers;
 import java.io.IOException;
 import java.util.List;
 
-import com.nullpointerworks.tokenscanner.builder.Annotation;
-import com.nullpointerworks.tokenscanner.builder.CodeBuilder;
-import com.nullpointerworks.tokenscanner.builder.ItemType;
-import com.nullpointerworks.tokenscanner.builder.Modifier;
-import com.nullpointerworks.tokenscanner.builder.Visibility;
+import com.nullpointerworks.tokenscanner.codebuilder.Annotation;
+import com.nullpointerworks.tokenscanner.codebuilder.CodeBuilder;
+import com.nullpointerworks.tokenscanner.codebuilder.ItemType;
+import com.nullpointerworks.tokenscanner.codebuilder.Modifier;
+import com.nullpointerworks.tokenscanner.codebuilder.Visibility;
 import com.nullpointerworks.tokenscanner.util.JavaSyntax;
 import com.nullpointerworks.util.FileUtil;
 import exp.nullpointerworks.xml.Document;
@@ -302,7 +302,7 @@ public class ClassParser extends AbstractSourceParser
 		 */
 		if (vis != Visibility.NULL)
 		{
-			String v = builder.getVisibility().toString();
+			String v = vis.toString();
 			elField.addChild( new Element("visibility").setText(v) );
 		}
 		

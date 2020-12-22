@@ -1,8 +1,12 @@
 package com.nullpointerworks.tokenscanner.parsers;
 
 import java.io.IOException;
+import java.util.List;
 
-import com.nullpointerworks.tokenscanner.builder.CodeBuilder;
+import com.nullpointerworks.tokenscanner.codebuilder.CodeBuilder;
+import com.nullpointerworks.tokenscanner.codebuilder.ItemType;
+import com.nullpointerworks.tokenscanner.codebuilder.Modifier;
+import com.nullpointerworks.tokenscanner.codebuilder.Visibility;
 import com.nullpointerworks.util.FileUtil;
 import com.nullpointerworks.util.Log;
 
@@ -44,15 +48,60 @@ public class EnumParser extends AbstractSourceParser
 	
 	private void parseBuilder(CodeBuilder builder) 
 	{
+		builder.inferTypeInfo();
+		
+		if (builder.getItemType() == ItemType.ENUM)
+		{
+			isEnumValue(builder, root);
+			return;
+		}
+		
+		if (builder.getItemType() == ItemType.FIELD)
+		{
+			return;
+		}
+		
 		
 		
 		
 	}
 	
+	private void isEnumValue(CodeBuilder builder, Element root) 
+	{
+		Element elEnum = new Element("enum");
+		
+		if (builder.getVisibility() != Visibility.NULL)
+		{
+			String v = builder.getVisibility().toString();
+			elEnum.addChild( new Element("visibility").setText(v) );
+		}
+		
+		List<Modifier> mods = builder.getModifier();
+		if (mods.size()>0)
+		{
+			for (Modifier mod : mods)
+			{
+				String m = mod.toString();
+				elEnum.addChild( new Element("modifier").setText(m) );
+			}
+		}
+		
+		List<String> uid = builder.getUnidentified();
+		int leng = uid.size();
+		if (leng>0)
+		{
+			String n = uid.get(0);
+			elEnum.addChild( new Element("name").setText(n) );
+		}
+		
+		
+		
+		
+		
+		root.addChild(elEnum);
+	}
 	
-	
-	
-	
+
 	// ============================================================================================
 	
 	/*
@@ -61,26 +110,21 @@ public class EnumParser extends AbstractSourceParser
 	CodeBuilder parambuilder = new CodeBuilder();
 	CodeBuilder builder = new CodeBuilder();
 	boolean hasCommentBranch = false;
+	boolean hasParameterBranch = false;
 	
 	private void resetBuilder(CodeBuilder builder) 
 	{
 		builder.reset();
 		hasCommentBranch = false;
+		hasParameterBranch = false;
 	}
 	
 	@Override
 	public void nextToken(String token) 
 	{
-		/*
-		 * keep track of embedded code blocks
-		 */
 		if (equals(token,"{")) curlyBraceCount++;
 		if (equals(token,"}")) curlyBraceCount--;
 		
-		/*
-		 * if the end of a piece of code has been detected, parse the CodeBuilder.
-		 * if the end of the file has been detected, write the XML file
-		 */
 		if (isEndOfDeclaration(token))
 		{
 			parseBuilder(builder);
@@ -89,21 +133,14 @@ public class EnumParser extends AbstractSourceParser
 		}
 		if (isEndOfSource(token))
 		{
-			writeToFile(doc, file);
+			parseBuilder(builder);
 			resetBuilder(builder);
+			writeToFile(doc, file);
 			return;
 		}
 		
-		/*
-		 * detect when parsing code inside a code block. skip code inside code blocks
-		 */
 		if (curlyBraceCount>1) return;
 		
-		/*
-		 * detect commentary blocks. check this before checking other code. 
-		 * commentary can contain code examples. we don't want to falsely 
-		 * trigger the CodeBuilder.
-		 */
 		if (equals(token,C_BLOCK_START))
 		{
 			hasCommentBranch = true;
@@ -117,9 +154,6 @@ public class EnumParser extends AbstractSourceParser
 		}
 		else
 		{
-			/*
-			 * end of comment markers outside of the commentary block get a reset. Skip parsing
-			 */
 			if (equals(token,C_END))
 			{
 				resetBuilder(builder);
@@ -127,9 +161,6 @@ public class EnumParser extends AbstractSourceParser
 			}
 		}
 		
-		/*
-		 * detect end of an instruction ;
-		 */
 		if (isEndOfInstruction(token))
 		{
 			parseBuilder(builder);
@@ -137,26 +168,44 @@ public class EnumParser extends AbstractSourceParser
 			return;
 		}
 		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		/*
-		 * check for array or miscellaneous markers
-		 */
-		if (equals(token,"["))
+		if (equals(token,","))
 		{
-			builder.setArray(true);
+			builder.setItemType(ItemType.ENUM);
+			builder.setVisibility(Visibility.PUBLIC);
+			builder.setModifier(Modifier.STATIC);
+			builder.setModifier(Modifier.FINAL);
+			
+			parseBuilder(builder);
+			resetBuilder(builder);
 			return;
 		}
-		if (equals(token,"]")) return;
+		
+		if (equals(token,"("))
+		{
+			builder.setParameterCapable(true);
+			hasParameterBranch = true;
+			return;
+		}
+		if (equals(token,")"))
+		{
+			hasParameterBranch = false;
+			return;
+		}
+		if (hasParameterBranch)
+		{
+			
+			return;
+		}
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
 		if (equals(token,"}")) return;
 		
 		Log.out(token);

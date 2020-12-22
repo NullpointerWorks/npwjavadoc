@@ -1,4 +1,4 @@
-package com.nullpointerworks.tokenscanner.builder;
+package com.nullpointerworks.tokenscanner.codebuilder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -209,9 +209,6 @@ public class CodeBuilder
 	 */
 	public void inferTypeInfo() 
 	{
-		/*
-		 * 
-		 */
 		if (itemType == ItemType.NULL)
 		{
 			if (!parameterCapable)
@@ -238,6 +235,7 @@ public class CodeBuilder
 				}
 			}
 		}
+		
 	}
 	
 }

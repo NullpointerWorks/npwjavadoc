@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<source>
+	<package>com.nullpointerworks.examples</package>
+	<source>
+		<visibility>PUBLIC</visibility>
+		<sourcetype>ENUM</sourcetype>
+		<name>ExampleEnum2</name>
+	</source>
+</source>

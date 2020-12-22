@@ -41,7 +41,7 @@ public abstract class AbstractSourceParser implements ISourceParser
 		leng = preproc.length();
 		
 		/*
-		 * feed all characters in the line
+		 * feed all tokens in the line
 		 */
 		for (int i=0; i<leng; i++)
 		{

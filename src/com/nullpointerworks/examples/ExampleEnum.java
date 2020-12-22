@@ -2,9 +2,8 @@ package com.nullpointerworks.examples;
 
 /**
  * 
- * @author Michiel
  */
-public enum ExampleEnum 
+public enum ExampleEnum
 {
 	/**
 	 * some value commentary
@@ -15,5 +14,7 @@ public enum ExampleEnum
 	 * more commentary
 	 * @since 1.0.0
 	 */
-	VALUE2
+	VALUE2,
+	
+	VALUE3
 }

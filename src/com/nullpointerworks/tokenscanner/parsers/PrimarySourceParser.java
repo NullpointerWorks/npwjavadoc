@@ -2,12 +2,12 @@ package com.nullpointerworks.tokenscanner.parsers;
 
 import java.util.List;
 
-import com.nullpointerworks.tokenscanner.builder.Annotation;
-import com.nullpointerworks.tokenscanner.builder.CodeBuilder;
-import com.nullpointerworks.tokenscanner.builder.Modifier;
-import com.nullpointerworks.tokenscanner.builder.Package;
-import com.nullpointerworks.tokenscanner.builder.SourceType;
-import com.nullpointerworks.tokenscanner.builder.Visibility;
+import com.nullpointerworks.tokenscanner.codebuilder.Annotation;
+import com.nullpointerworks.tokenscanner.codebuilder.CodeBuilder;
+import com.nullpointerworks.tokenscanner.codebuilder.Modifier;
+import com.nullpointerworks.tokenscanner.codebuilder.Package;
+import com.nullpointerworks.tokenscanner.codebuilder.SourceType;
+import com.nullpointerworks.tokenscanner.codebuilder.Visibility;
 import com.nullpointerworks.tokenscanner.factory.IParserFactory;
 import com.nullpointerworks.tokenscanner.factory.ParserFactory;
 import com.nullpointerworks.tokenscanner.util.JavaSyntax;
@@ -260,7 +260,7 @@ public class PrimarySourceParser extends AbstractSourceParser
 	public void nextToken(String token) 
 	{
 		/*
-		 * redirect token to parser
+		 * redirect token to parser if available
 		 */
 		if (parser != null)
 		{
@@ -299,9 +299,6 @@ public class PrimarySourceParser extends AbstractSourceParser
 		}
 		else
 		{
-			/*
-			 * end of comment markers outside of the commentary block get a reset. Skip parsing
-			 */
 			if (equals(token,C_END))
 			{
 				resetBuilder();
@@ -309,9 +306,6 @@ public class PrimarySourceParser extends AbstractSourceParser
 			}
 		}
 		
-		/*
-		 * detect end of an instruction ;
-		 */
 		if (equals(token,";"))
 		{
 			parseBuilder(builder);
@@ -319,36 +313,24 @@ public class PrimarySourceParser extends AbstractSourceParser
 			return;
 		}
 		
-		/*
-		 * started a new file
-		 */
 		if (equals(token,"package"))
 		{
 			builder.setPackage(Package.PACKAGE);
 			return;
 		}
 		
-		/*
-		 * the file imports classes
-		 */
 		if (equals(token,"import"))
 		{
 			builder.setPackage(Package.IMPORT);
 			return;
 		}
 		
-		/*
-		 * something visible has been detected
-		 */
 		if (JavaSyntax.isVisibility(token))
 		{
 			builder.setVisibility(token);
 			return;
 		}
 		
-		/*
-		 * detect java source file type
-		 */
 		if (JavaSyntax.isSourceType(token))
 		{
 			builder.setSourceType(token);
@@ -366,21 +348,21 @@ public class PrimarySourceParser extends AbstractSourceParser
 			return;
 		}
 		
-		/*
-		 * check template
-		 */
 		if (equals(token,"<"))
 		{
 			hasTemplateBranch = true;
 			return;
 		}
 		
-		/*
-		 * check extending
-		 */
 		if (equals(token,"extends"))
 		{
 			isExtending = true;
+			return;
+		}
+		
+		if (equals(token,"implements"))
+		{
+			isImplementing = true;
 			return;
 		}
 		
