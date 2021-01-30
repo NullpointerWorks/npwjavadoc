@@ -3,7 +3,7 @@ package com.nullpointerworks.xmlmaker.tokenscanner.parsers;
 import java.io.IOException;
 import java.util.List;
 
-import com.nullpointerworks.java.AbstractSourceParser;
+import com.nullpointerworks.parse.java.AbstractSourceParser;
 import com.nullpointerworks.util.FileUtil;
 import com.nullpointerworks.util.Log;
 import com.nullpointerworks.xmlmaker.tokenscanner.codebuilder.CodeBuilder;

@@ -1,6 +1,6 @@
 package com.nullpointerworks.xmlmaker.tokenscanner.parsers;
 
-import com.nullpointerworks.java.AbstractSourceParser;
+import com.nullpointerworks.parse.java.AbstractSourceParser;
 
 import exp.nullpointerworks.xml.Document;
 import exp.nullpointerworks.xml.Element;

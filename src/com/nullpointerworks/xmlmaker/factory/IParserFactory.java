@@ -1,6 +1,6 @@
-package com.nullpointerworks.java.factory;
+package com.nullpointerworks.xmlmaker.factory;
 
-import com.nullpointerworks.java.ISourceParser;
+import com.nullpointerworks.parse.java.ISourceParser;
 import com.nullpointerworks.xmlmaker.tokenscanner.codebuilder.SourceType;
 
 import exp.nullpointerworks.xml.Document;

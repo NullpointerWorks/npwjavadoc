@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.nullpointerworks.java.AbstractSourceParser;
+import com.nullpointerworks.parse.java.AbstractSourceParser;
 import com.nullpointerworks.util.FileUtil;
 import com.nullpointerworks.util.Log;
 

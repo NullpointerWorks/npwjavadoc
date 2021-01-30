@@ -1,6 +1,6 @@
 package com.nullpointerworks.xmlmaker.tokenscanner.parsers;
 
-import com.nullpointerworks.java.ISourceParser;
+import com.nullpointerworks.parse.java.ISourceParser;
 
 /**
  * 

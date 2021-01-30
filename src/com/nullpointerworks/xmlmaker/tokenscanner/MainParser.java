@@ -2,7 +2,7 @@ package com.nullpointerworks.xmlmaker.tokenscanner;
 
 import java.io.FileNotFoundException;
 
-import com.nullpointerworks.java.ISourceParser;
+import com.nullpointerworks.parse.java.ISourceParser;
 import com.nullpointerworks.util.FileUtil;
 import com.nullpointerworks.util.file.textfile.TextFile;
 import com.nullpointerworks.util.file.textfile.TextFileParser;

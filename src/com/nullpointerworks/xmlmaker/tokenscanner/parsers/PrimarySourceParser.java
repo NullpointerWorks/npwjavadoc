@@ -2,13 +2,12 @@ package com.nullpointerworks.xmlmaker.tokenscanner.parsers;
 
 import java.util.List;
 
-import com.nullpointerworks.java.AbstractSourceParser;
-import com.nullpointerworks.java.ISourceParser;
-import com.nullpointerworks.java.JavaSyntax;
-import com.nullpointerworks.java.factory.IParserFactory;
-import com.nullpointerworks.java.factory.ParserFactory;
+import com.nullpointerworks.parse.java.AbstractSourceParser;
+import com.nullpointerworks.parse.java.ISourceParser;
+import com.nullpointerworks.parse.java.JavaSyntax;
 import com.nullpointerworks.util.Log;
-
+import com.nullpointerworks.xmlmaker.factory.IParserFactory;
+import com.nullpointerworks.xmlmaker.factory.ParserFactory;
 import com.nullpointerworks.xmlmaker.tokenscanner.codebuilder.Annotation;
 import com.nullpointerworks.xmlmaker.tokenscanner.codebuilder.CodeBuilder;
 import com.nullpointerworks.xmlmaker.tokenscanner.codebuilder.Modifier;

@@ -1,4 +1,4 @@
-package com.nullpointerworks.java;
+package com.nullpointerworks.parse.java;
 
 public final class JavaSyntax 
 {
