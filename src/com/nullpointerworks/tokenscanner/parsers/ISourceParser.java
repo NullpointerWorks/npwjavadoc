@@ -5,7 +5,6 @@ package com.nullpointerworks.tokenscanner.parsers;
  */
 public interface ISourceParser 
 {
-	
 	/**
 	 * 
 	 */

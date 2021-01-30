@@ -15,10 +15,10 @@ public class MainParser
 		args = new String[] 
 		{
 			//"src/com/nullpointerworks/examples/ExampleInterface.java"
-			//,"src/com/nullpointerworks/examples/ExampleClass.java"
-			"src/com/nullpointerworks/examples/ExampleEnum.java"
-			,"src/com/nullpointerworks/examples/ExampleEnum2.java"
-			,"src/com/nullpointerworks/examples/ExampleEnum3.java"
+			"src/com/nullpointerworks/examples/ExampleClass.java"
+			//"src/com/nullpointerworks/examples/ExampleEnum.java"
+			//,"src/com/nullpointerworks/examples/ExampleEnum2.java"
+			//,"src/com/nullpointerworks/examples/ExampleEnum3.java"
 		};
 		new MainParser(args);
 	}

@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<file>
+<source>
 	<package>com.nullpointerworks.examples</package>
 	<import>java.util.List</import>
 	<source>
 		<visibility>PUBLIC</visibility>
 		<sourcetype>CLASS</sourcetype>
-		<name>abstract</name>
+		<modifier>ABSTRACT</modifier>
+		<name>ExampleClass</name>
 		<extends>Object</extends>
 		<implements>ExampleInterface</implements>
 		<implements>Runnable</implements>
@@ -78,4 +79,4 @@
 			<name>i</name>
 		</param>
 	</method>
-</file>
+</source>

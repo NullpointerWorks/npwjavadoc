@@ -331,6 +331,12 @@ public class PrimarySourceParser extends AbstractSourceParser
 			return;
 		}
 		
+		if (JavaSyntax.isModifier(token))
+		{
+			builder.setModifier(token);
+			return;
+		}
+		
 		if (JavaSyntax.isSourceType(token))
 		{
 			builder.setSourceType(token);
@@ -381,7 +387,7 @@ public class PrimarySourceParser extends AbstractSourceParser
 		
 		/*
 		 * add an unidentified token. 
-		 * these are usually names from;
+		 * these are usually names for;
 		 * - method
 		 * - field
 		 * - import
