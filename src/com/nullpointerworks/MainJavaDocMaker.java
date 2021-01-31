@@ -1,22 +1,28 @@
-package com.nullpointerworks.xmlmaker.tokenscanner;
+package com.nullpointerworks;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.nullpointerworks.htmlmaker.generator.FileMaker;
 import com.nullpointerworks.parse.java.ISourceParser;
 import com.nullpointerworks.util.FileUtil;
 import com.nullpointerworks.util.file.textfile.TextFile;
 import com.nullpointerworks.util.file.textfile.TextFileParser;
 import com.nullpointerworks.xmlmaker.tokenscanner.parsers.PrimarySourceParser;
 
-public class MainParser 
+import exp.nullpointerworks.xml.Document;
+import exp.nullpointerworks.xml.XMLParseException;
+import exp.nullpointerworks.xml.io.DocumentIO;
+
+public class MainJavaDocMaker 
 {
 	private static final String GIT_CORE = "D:\\Development\\Java\\workspaces\\git\\libcore\\src\\";
-	public static void main(String[] args) {new MainParser(args);}
+	public static void main(String[] args) {new MainJavaDocMaker(args);}
 	
-	public MainParser(String[] args) 
+	public MainJavaDocMaker(String[] args) 
 	{
 
 		/*
@@ -31,34 +37,75 @@ public class MainParser
 		//*/
 		
 		List<String> list = new ArrayList<String>();
-		parseDirectory(GIT_CORE, list);
-		parseFiles(list);
 		
-	}
-	
-	private void parseDirectory(String args, List<String> list) 
-	{
-		File f = new File(args);
+		File f = new File(GIT_CORE);
 		if (!f.exists()) return;
 		if (!f.isDirectory()) return;
-		
-		parseDirectory(f, list);
+		parseDirectory(f, list, true);
 		
 		for (String file : list)
 		{
 			System.out.println(file);
 		}
+		
+		//parseFiles(list);
+		
+		generateHTML("xml/", "html/");
+		
 	}
 	
-	private void parseDirectory(File dir, List<String> list) 
+	private void generateHTML(String src, String dst) 
+	{
+		File f = new File(src);
+		if (!f.exists()) return;
+		if (!f.isDirectory()) return;
+		
+		File[] files = f.listFiles();
+		for (int i=0,l=files.length; i<l; i++)
+		{
+			File file = files[i];
+			System.out.println( file.getAbsolutePath() );
+			
+			Document doc = null;
+			try 
+			{
+				doc = DocumentIO.read( file.getAbsolutePath() );
+			} 
+			catch (XMLParseException | IOException ex) 
+			{
+				ex.printStackTrace();
+				continue;
+			}
+			if (doc==null) continue;
+			
+			
+			
+			
+			
+			
+			FileMaker fm = new FileMaker();
+			
+			
+			try 
+			{
+				fm.save(dst+file.getName()+".html");
+			} 
+			catch (IOException e) 
+			{
+				e.printStackTrace();
+			}
+		}
+	}
+
+	private void parseDirectory(File dir, List<String> list, boolean traverseSub) 
 	{
 		File[] files = dir.listFiles();
 		for (int i=0,l=files.length; i<l; i++)
 		{
 			File file = files[i];
-			if (file.isDirectory()) 
+			if (traverseSub && file.isDirectory()) 
 			{
-				parseDirectory(file, list);
+				parseDirectory(file, list, traverseSub);
 			}
 			else
 			{
@@ -74,9 +121,6 @@ public class MainParser
 			String n = FileUtil.getFileNameFromPath(f);
 			ISourceParser parser = new PrimarySourceParser(n);
 			
-			/*
-			 * read text file
-			 */
 			TextFile tf = null;
 			try
 			{
@@ -90,17 +134,11 @@ public class MainParser
 			if (tf==null) continue;
 			String[] lines = tf.getLines();
 			
-			/*
-			 * parse text
-			 */
 			for (int i=0,l=lines.length; i<l; i++)
 			{
 				String line = lines[i];
 				parser.nextLine(line);
 			}
-			
-			
-			
 		}
 	}
 }
