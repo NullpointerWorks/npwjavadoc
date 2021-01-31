@@ -5,7 +5,9 @@ import java.util.List;
 import com.nullpointerworks.parse.java.AbstractSourceParser;
 import com.nullpointerworks.parse.java.ISourceParser;
 import com.nullpointerworks.parse.java.JavaSyntax;
+
 import com.nullpointerworks.util.Log;
+
 import com.nullpointerworks.xmlmaker.factory.IParserFactory;
 import com.nullpointerworks.xmlmaker.factory.ParserFactory;
 import com.nullpointerworks.xmlmaker.tokenscanner.codebuilder.Annotation;
@@ -237,18 +239,18 @@ public class PrimarySourceParser extends AbstractSourceParser
 	/*
 	 * comment block signifier
 	 */
-	final String C_BLOCK_START = "/**";
-	final String C_START = "/*";
-	final String C_END = "*/";
+	private final String C_BLOCK_START = "/**";
+	private final String C_START = "/*";
+	private final String C_END = "*/";
 	
 	/*
 	 * code builder
 	 */
-	CodeBuilder builder = new CodeBuilder();
-	boolean hasCommentBranch = false;
-	boolean hasTemplateBranch = false;
-	boolean isImplementing = false;
-	boolean isExtending = false;
+	private CodeBuilder builder = new CodeBuilder();
+	private boolean hasCommentBranch = false;
+	private boolean hasTemplateBranch = false;
+	private boolean isImplementing = false;
+	private boolean isExtending = false;
 
 	private void resetBuilder() 
 	{
@@ -270,6 +272,10 @@ public class PrimarySourceParser extends AbstractSourceParser
 			parser.nextToken(token);
 			return;
 		}
+		
+		/*
+		 * choose a branch
+		 */
 		if (hasTemplateBranch)
 		{
 			doTemplateBranch(builder, token);
@@ -404,7 +410,7 @@ public class PrimarySourceParser extends AbstractSourceParser
 	/*
 	 * 
 	 */
-	boolean skipTemplate = false;
+	private boolean skipTemplate = false;
 	private boolean doImplementingBranch(CodeBuilder builder, String token) 
 	{
 		if (equals(token,"{")) 

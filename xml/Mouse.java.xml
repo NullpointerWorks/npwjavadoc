@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<source>
+	<package>com.nullpointerworks.core.input</package>
+	<import>java.awt.event.MouseEvent</import>
+	<source>
+		<visibility>PUBLIC</visibility>
+		<sourcetype>CLASS</sourcetype>
+		<name>Mouse</name>
+	</source>
+	<field>
+		<visibility>PUBLIC</visibility>
+		<modifier>STATIC</modifier>
+		<modifier>FINAL</modifier>
+		<type>int</type>
+		<name>NONE</name>
+		<value>MouseEvent.NOBUTTON</value>
+	</field>
+	<field>
+		<visibility>PUBLIC</visibility>
+		<modifier>STATIC</modifier>
+		<modifier>FINAL</modifier>
+		<type>int</type>
+		<name>LEFT</name>
+		<value>MouseEvent.BUTTON1</value>
+	</field>
+	<field>
+		<visibility>PUBLIC</visibility>
+		<modifier>STATIC</modifier>
+		<modifier>FINAL</modifier>
+		<type>int</type>
+		<name>MIDDLE</name>
+		<value>MouseEvent.BUTTON2</value>
+	</field>
+	<field>
+		<visibility>PUBLIC</visibility>
+		<modifier>STATIC</modifier>
+		<modifier>FINAL</modifier>
+		<type>int</type>
+		<name>RIGHT</name>
+		<value>MouseEvent.BUTTON3</value>
+	</field>
+</source>

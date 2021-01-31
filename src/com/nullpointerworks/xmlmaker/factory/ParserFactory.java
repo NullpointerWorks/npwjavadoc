@@ -38,7 +38,6 @@ public final class ParserFactory implements IParserFactory
 			
 		default:
 			return new NullParser();
-			
 		}
 	}
 	

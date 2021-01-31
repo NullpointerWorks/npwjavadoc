@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<source>
+	<package>com.nullpointerworks.core</package>
+	<import>java.awt.Component</import>
+	<source>
+		<visibility>PUBLIC</visibility>
+		<sourcetype>INTERFACE</sourcetype>
+		<name>DrawCanvas</name>
+	</source>
+	<method>
+		<visibility>PUBLIC</visibility>
+		<modifier>ABSTRACT</modifier>
+		<type>int</type>
+		<name>width</name>
+	</method>
+	<method>
+		<visibility>PUBLIC</visibility>
+		<modifier>ABSTRACT</modifier>
+		<type>int</type>
+		<name>height</name>
+	</method>
+	<method>
+		<visibility>PUBLIC</visibility>
+		<modifier>ABSTRACT</modifier>
+		<type>void</type>
+		<name>swap</name>
+		<param>
+			<type>int</type>
+			<name>[</name>
+		</param>
+	</method>
+	<field/>
+	<method>
+		<visibility>PUBLIC</visibility>
+		<modifier>ABSTRACT</modifier>
+		<type>Component</type>
+		<name>component</name>
+	</method>
+</source>

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<source>
+	<package>exp.nullpointerworks.core.window</package>
+	<import>java.awt.AWTException</import>
+	<import>java.awt.Robot</import>
+	<import>java.awt.event.MouseEvent</import>
+	<import>java.awt.event.MouseMotionListener</import>
+	<import>javax.swing.JWindow</import>
+	<source>
+		<visibility>PUBLIC</visibility>
+		<sourcetype>CLASS</sourcetype>
+		<name>BackWindow</name>
+		<extends>JWindow</extends>
+		<implements>MouseMotionListener</implements>
+	</source>
+	<constructor>
+		<visibility>PUBLIC</visibility>
+		<name>BackWindow</name>
+	</constructor>
+	<method>
+		<visibility>PUBLIC</visibility>
+		<type>void</type>
+		<name>setMouseLocation</name>
+		<param>
+			<type>int</type>
+			<name>x</name>
+		</param>
+		<param>
+			<type>int</type>
+			<name>y</name>
+		</param>
+	</method>
+	<method>
+		<annotation>@Override(MouseEvent,e)</annotation>
+		<visibility>PUBLIC</visibility>
+		<type>void</type>
+		<name>mouseDragged</name>
+	</method>
+	<method>
+		<annotation>@Override(MouseEvent,e)</annotation>
+		<visibility>PUBLIC</visibility>
+		<type>void</type>
+		<name>mouseMoved</name>
+	</method>
+</source>

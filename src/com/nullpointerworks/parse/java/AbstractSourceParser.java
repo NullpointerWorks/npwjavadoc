@@ -16,7 +16,7 @@ public abstract class AbstractSourceParser implements ISourceParser
 	}
 	
 	@Override
-	public void nextLine(String line) 
+	public final void nextLine(String line) 
 	{
 		/*
 		 * trim whitespace
@@ -96,7 +96,7 @@ public abstract class AbstractSourceParser implements ISourceParser
 	}
 	
 	@Override
-	public void nextCharacter(String character) 
+	public final void nextCharacter(String character) 
 	{
 		boolean newLine = character.equalsIgnoreCase("\n");
 		boolean whiteSpace = character.equalsIgnoreCase(" ");
